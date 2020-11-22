@@ -1,7 +1,6 @@
 package biz
 
 import (
-	"errors"
 	"fmt"
 	"neophora/cli"
 	"neophora/var/stderr"
@@ -21,8 +20,8 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 		case float64:
 			var result map[string]interface{}
 			uri := &url.URL{
-				Scheme: "bin",
-				Host:   "block",
+				Scheme: "block",
+				Host:   "height",
 				Path:   fmt.Sprintf("/%.0f", key),
 			}
 			uristring := uri.String()
@@ -32,11 +31,25 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 			}
 			*ret = result[uristring]
 			return nil
+		case string:
+			var result map[string]interface{}
+			uri := &url.URL{
+				Scheme: "block",
+				Host:   "hash",
+				Path:   fmt.Sprintf("/%s", key),
+			}
+			uristring := uri.String()
+			err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
+			if err != nil {
+				return stderr.ErrUnknown
+			}
+			*ret = result[uristring]
+			return nil
 		default:
-			return errors.New("invalid args")
+			return stderr.ErrInvalidArgs
 		}
 	default:
-		return errors.New("invalid args")
+		return stderr.ErrInvalidArgs
 	}
 }
 

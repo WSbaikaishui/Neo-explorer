@@ -27,7 +27,7 @@ func TestWriteRead(t *testing.T) {
 		}
 		var ret interface{}
 		err = client.Call("DB.PutInHexValue", map[string]interface{}{
-			"bin://block/1": "11111111",
+			"block://height/1": "11111111",
 		}, &ret)
 		if err != nil {
 			t.Error(err)
@@ -43,12 +43,12 @@ func TestWriteRead(t *testing.T) {
 		}
 		var ret map[string]interface{}
 		err = client.Call("DB.GetInHexValue", []interface{}{
-			"bin://block/1",
+			"block://height/1",
 		}, &ret)
 		if err != nil {
 			t.Error(err)
 		}
-		if ret["bin://block/1"] != "11111111" {
+		if ret["block://height/1"] != "11111111" {
 			t.Error(ret)
 		}
 	}
