@@ -225,3 +225,78 @@ func (me *NeoCli) DUMPPRIVKEY(arg []interface{}, ret *interface{}) error {
 func (me *NeoCli) GETBALANCE(arg []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
+
+// GETCONNECTIONCOUNT ...
+func (me *NeoCli) GETCONNECTIONCOUNT(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETMETRICBLOCKTIMESTAMP ...
+func (me *NeoCli) GETMETRICBLOCKTIMESTAMP(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETNEP5TRANSFERS ...
+func (me *NeoCli) GETNEP5TRANSFERS(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETNEWADDRESS ...
+func (me *NeoCli) GETNEWADDRESS(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETRAWMEMPOOL ...
+func (me *NeoCli) GETRAWMEMPOOL(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETPEERS ...
+func (me *NeoCli) GETPEERS(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETUNCLAIMEDGAS ...
+func (me *NeoCli) GETUNCLAIMEDGAS(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETVERSION ...
+func (me *NeoCli) GETVERSION(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETWALLETHEIGHT ...
+func (me *NeoCli) GETWALLETHEIGHT(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// IMPORTPRIVKEY ...
+func (me *NeoCli) IMPORTPRIVKEY(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// LISTPLUGINS ...
+func (me *NeoCli) LISTPLUGINS(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// LISTADDRESS ...
+func (me *NeoCli) LISTADDRESS(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// SENDFROM ...
+func (me *NeoCli) SENDFROM(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// SENDTOADDRESS ...
+func (me *NeoCli) SENDTOADDRESS(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// SENDMANY ...
+func (me *NeoCli) SENDMANY(arg []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}

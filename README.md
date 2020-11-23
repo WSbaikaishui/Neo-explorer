@@ -39,11 +39,16 @@ value is in binary form.
 - `header://height/{NUM}`
 - `header://hash/{HASH}`
 - `hash://height/{NUM}`
+- `tx://hash/{HASH}`
+- `adhocstateroot://height/{NUM}`
+- `adhocstateroot://hash/{HASH}`
+- `adhoclog://tx/{HASH}`
 - `adhocblockinfo://height/{NUM}`
 - `adhocblockinfo://hash/{HASH}`
 - `adhocheaderinfo://height/{NUM}`
 - `adhocheaderinfo://hash/{HASH}`
 - `adhocsysfee://height/{NUM}`
+- `adhoctxinfo://hash/{HASH}`
 
 ## todo
 
@@ -52,39 +57,23 @@ value is in binary form.
 - [ ] getassetstate ; const
 - [ ] getbestblockhash ; top
 - [ ] getblockcount ; top
-- [ ] getblocksysfee
-- [ ] getclaimable
-- [ ] getconnectioncount
-- [ ] getcontractstate
-- [ ] getmetricblocktimestamp
-- [ ] getnep5balances
-- [ ] getnep5transfers
-- [ ] getnewaddress
-- [ ] getrawmempool
+- [ ] getclaimable ; top
+- [ ] getcontractstate ; top
+- [ ] getnep5balances ; top
 - [ ] getrawtransaction
-- [ ] getstateheight
+- [ ] getstateheight ; top
 - [ ] getstateroot
-- [ ] getstorage
+- [ ] getstorage ; top
 - [ ] gettransactionheight
 - [ ] gettxout
-- [ ] getpeers
 - [ ] getproof
-- [ ] getunclaimedgas
-- [ ] getunclaimed
-- [ ] getunspents
-- [ ] getutxotransfers
-- [ ] getvalidators
-- [ ] getversion
-- [ ] getwalletheight
-- [ ] importprivkey
+- [ ] getunclaimed ; top
+- [ ] getunspents ; top
+- [ ] getutxotransfers ; top
+- [ ] getvalidators ; top
 - [ ] invokefunction
 - [ ] invokescript
-- [ ] listplugins
-- [ ] listaddress
-- [ ] sendfrom
 - [ ] sendrawtransaction
-- [ ] sendtoaddress
-- [ ] sendmany
 - [ ] submitblock
 - [ ] validateaddress
 - [ ] verifyproof
