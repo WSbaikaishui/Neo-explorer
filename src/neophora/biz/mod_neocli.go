@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"encoding/json"
 	"fmt"
 	"neophora/cli"
 	"neophora/var/stderr"
@@ -30,7 +31,6 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 		arg = append(arg, 0)
 	}
 
-	var scheme string
 	var host string
 	var path string
 
@@ -46,26 +46,36 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 	}
 
 	switch arg[1] {
-	case 0:
-		scheme = "block"
-	case 1:
-		scheme = "blockinfo"
+	case 0.0:
+		var result map[string]interface{}
+		uri := &url.URL{
+			Scheme: "block",
+			Host:   host,
+			Path:   fmt.Sprintf(path, arg[0]),
+		}
+		uristring := uri.String()
+		err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
+		if err != nil {
+			return stderr.ErrUnknown
+		}
+		*ret = result[uristring]
+	case 1.0:
+		var result map[string]string
+		uri := &url.URL{
+			Scheme: "adhocblockinfo",
+			Host:   host,
+			Path:   fmt.Sprintf(path, arg[0]),
+		}
+		uristring := uri.String()
+		err := me.Client.Call("DB.GetInStringValue", []string{uristring}, &result)
+		if err != nil {
+			return stderr.ErrUnknown
+		}
+		*ret = json.RawMessage(result[uristring])
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	var result map[string]interface{}
-	uri := &url.URL{
-		Scheme: scheme,
-		Host:   host,
-		Path:   fmt.Sprintf(path, arg[0]),
-	}
-	uristring := uri.String()
-	err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-	*ret = result[uristring]
 	return nil
 }
 
@@ -81,7 +91,6 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 		arg = append(arg, 0)
 	}
 
-	var scheme string
 	var host string
 	var path string
 
@@ -94,26 +103,36 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 	}
 
 	switch arg[1] {
-	case 0:
-		scheme = "header"
-	case 1:
-		scheme = "headerinfo"
+	case 0.0:
+		var result map[string]interface{}
+		uri := &url.URL{
+			Scheme: "header",
+			Host:   host,
+			Path:   fmt.Sprintf(path, arg[0]),
+		}
+		uristring := uri.String()
+		err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
+		if err != nil {
+			return stderr.ErrUnknown
+		}
+		*ret = result[uristring]
+	case 1.0:
+		var result map[string]string
+		uri := &url.URL{
+			Scheme: "adhocheaderinfo",
+			Host:   host,
+			Path:   fmt.Sprintf(path, arg[0]),
+		}
+		uristring := uri.String()
+		err := me.Client.Call("DB.GetInStringValue", []string{uristring}, &result)
+		if err != nil {
+			return stderr.ErrUnknown
+		}
+		*ret = json.RawMessage(result[uristring])
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	var result map[string]interface{}
-	uri := &url.URL{
-		Scheme: scheme,
-		Host:   host,
-		Path:   fmt.Sprintf(path, arg[0]),
-	}
-	uristring := uri.String()
-	err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-	*ret = result[uristring]
 	return nil
 }
 
@@ -128,7 +147,7 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 
 	switch arg[0].(type) {
 	case float64:
-		host = "block-height"
+		host = "height"
 		path = "/%.0f"
 	default:
 		return stderr.ErrInvalidArgs
@@ -137,6 +156,38 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 	var result map[string]interface{}
 	uri := &url.URL{
 		Scheme: "hash",
+		Host:   host,
+		Path:   fmt.Sprintf(path, arg[0]),
+	}
+	uristring := uri.String()
+	err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
+	if err != nil {
+		return stderr.ErrUnknown
+	}
+	*ret = result[uristring]
+	return nil
+}
+
+// GETBLOCKSYSFEE ...
+func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
+	if len(arg) != 1 {
+		return stderr.ErrInvalidArgs
+	}
+
+	var host string
+	var path string
+
+	switch arg[0].(type) {
+	case float64:
+		host = "height"
+		path = "/%.0f"
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var result map[string]string
+	uri := &url.URL{
+		Scheme: "adhocsysfee",
 		Host:   host,
 		Path:   fmt.Sprintf(path, arg[0]),
 	}

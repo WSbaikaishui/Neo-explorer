@@ -10,6 +10,32 @@ type DB struct {
 	DB *dat.T
 }
 
+// PutInStringValue ...
+func (me *DB) PutInStringValue(arg map[string]string, ret *interface{}) error {
+	for k, v := range arg {
+		err := me.DB.Put([]byte(k), []byte(v))
+		if err != nil {
+			return err
+		}
+	}
+	*ret = "ok"
+	return nil
+}
+
+// GetInStringValue ...
+func (me *DB) GetInStringValue(arg []string, ret *interface{}) error {
+	result := make(map[string]interface{})
+	for _, k := range arg {
+		value, err := me.DB.Get([]byte(k))
+		if err != nil {
+			return err
+		}
+		result[k] = string(value)
+	}
+	*ret = result
+	return nil
+}
+
 // PutInHexValue ...
 func (me *DB) PutInHexValue(arg map[string]string, ret *interface{}) error {
 	for k, v := range arg {

@@ -36,13 +36,14 @@ value is in binary form.
 
 - `block://height/{NUM}`
 - `block://hash/{HASH}`
-- `blockinfo://height/{NUM}`
-- `blockinfo://hash/{HASH}`
 - `header://height/{NUM}`
 - `header://hash/{HASH}`
-- `headerinfo://height/{NUM}`
-- `headerinfo://hash/{HASH}`
-- `hash://block-height/{NUM}`
+- `hash://height/{NUM}`
+- `adhocblockinfo://height/{NUM}`
+- `adhocblockinfo://hash/{HASH}`
+- `adhocheaderinfo://height/{NUM}`
+- `adhocheaderinfo://hash/{HASH}`
+- `adhocsysfee://height/{NUM}`
 
 ## todo
 
@@ -51,8 +52,6 @@ value is in binary form.
 - [ ] getassetstate ; const
 - [ ] getbestblockhash ; top
 - [ ] getblockcount ; top
-- [ ] getblockheader
-- [ ] getblockhash
 - [ ] getblocksysfee
 - [ ] getclaimable
 - [ ] getconnectioncount
