@@ -7,3 +7,6 @@ var ErrUnknown = errors.New("unknown error")
 
 // ErrInvalidArgs ...
 var ErrInvalidArgs = errors.New("invalid args")
+
+// ErrUnsupportedMethod ...
+var ErrUnsupportedMethod = errors.New("unsupported method")
