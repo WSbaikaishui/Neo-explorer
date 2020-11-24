@@ -3,6 +3,7 @@ package biz
 import (
 	"encoding/hex"
 	"fmt"
+	"log"
 	"neophora/cli"
 	"neophora/var/stderr"
 	"net/url"
@@ -63,6 +64,7 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 	}
 	uristring := uri.String()
 	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
+		log.Println("[BIZ][NEOCLI][GETBLOCK]", uristring, err)
 		return stderr.ErrUnknown
 	}
 
