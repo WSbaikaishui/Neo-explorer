@@ -1,7 +1,7 @@
 package biz
 
 import (
-	"encoding/json"
+	"encoding/hex"
 	"fmt"
 	"neophora/cli"
 	"neophora/var/stderr"
@@ -28,11 +28,13 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 	if len(arg) == 1 {
-		arg = append(arg, 0)
+		arg = append(arg, 0.0)
 	}
 
+	var scheme string
 	var host string
 	var path string
+	var result []byte
 
 	switch arg[0].(type) {
 	case float64:
@@ -47,33 +49,28 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 
 	switch arg[1] {
 	case 0.0:
-		var result map[string]interface{}
-		uri := &url.URL{
-			Scheme: "block",
-			Host:   host,
-			Path:   fmt.Sprintf(path, arg[0]),
-		}
-		uristring := uri.String()
-		err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
-		if err != nil {
-			return stderr.ErrUnknown
-		}
-		*ret = result[uristring]
+		scheme = "block"
 	case 1.0:
-		var result map[string]string
-		uri := &url.URL{
-			Scheme: "adhocblockinfo",
-			Host:   host,
-			Path:   fmt.Sprintf(path, arg[0]),
-		}
-		uristring := uri.String()
-		err := me.Client.Call("DB.GetInStringValue", []string{uristring}, &result)
-		if err != nil {
-			return stderr.ErrUnknown
-		}
-		*ret = json.RawMessage(result[uristring])
+		scheme = "adhocblockinfo"
 	default:
 		return stderr.ErrInvalidArgs
+	}
+
+	uri := &url.URL{
+		Scheme: scheme,
+		Host:   host,
+		Path:   fmt.Sprintf(path, arg[0]),
+	}
+	uristring := uri.String()
+	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	switch arg[1] {
+	case 0.0:
+		*ret = hex.EncodeToString(result)
+	case 1.0:
+		*ret = string(result)
 	}
 
 	return nil
@@ -88,13 +85,18 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 	if len(arg) == 1 {
-		arg = append(arg, 0)
+		arg = append(arg, 0.0)
 	}
 
+	var scheme string
 	var host string
 	var path string
+	var result []byte
 
 	switch arg[0].(type) {
+	case float64:
+		host = "height"
+		path = "/%.0f"
 	case string:
 		host = "hash"
 		path = "/%s"
@@ -104,33 +106,28 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 
 	switch arg[1] {
 	case 0.0:
-		var result map[string]interface{}
-		uri := &url.URL{
-			Scheme: "header",
-			Host:   host,
-			Path:   fmt.Sprintf(path, arg[0]),
-		}
-		uristring := uri.String()
-		err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
-		if err != nil {
-			return stderr.ErrUnknown
-		}
-		*ret = result[uristring]
+		scheme = "header"
 	case 1.0:
-		var result map[string]string
-		uri := &url.URL{
-			Scheme: "adhocheaderinfo",
-			Host:   host,
-			Path:   fmt.Sprintf(path, arg[0]),
-		}
-		uristring := uri.String()
-		err := me.Client.Call("DB.GetInStringValue", []string{uristring}, &result)
-		if err != nil {
-			return stderr.ErrUnknown
-		}
-		*ret = json.RawMessage(result[uristring])
+		scheme = "adhocheaderinfo"
 	default:
 		return stderr.ErrInvalidArgs
+	}
+
+	uri := &url.URL{
+		Scheme: scheme,
+		Host:   host,
+		Path:   fmt.Sprintf(path, arg[0]),
+	}
+	uristring := uri.String()
+	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	switch arg[1] {
+	case 0.0:
+		*ret = hex.EncodeToString(result)
+	case 1.0:
+		*ret = string(result)
 	}
 
 	return nil
@@ -144,6 +141,7 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 
 	var host string
 	var path string
+	var result []byte
 
 	switch arg[0].(type) {
 	case float64:
@@ -153,18 +151,17 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	var result map[string]interface{}
 	uri := &url.URL{
 		Scheme: "hash",
 		Host:   host,
 		Path:   fmt.Sprintf(path, arg[0]),
 	}
 	uristring := uri.String()
-	err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
-	if err != nil {
+	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
 		return stderr.ErrUnknown
 	}
-	*ret = result[uristring]
+
+	*ret = hex.EncodeToString(result)
 	return nil
 }
 
@@ -176,6 +173,7 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 
 	var host string
 	var path string
+	var result []byte
 
 	switch arg[0].(type) {
 	case float64:
@@ -185,18 +183,17 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	var result map[string]string
 	uri := &url.URL{
 		Scheme: "adhocsysfee",
 		Host:   host,
 		Path:   fmt.Sprintf(path, arg[0]),
 	}
 	uristring := uri.String()
-	err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
-	if err != nil {
+	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
 		return stderr.ErrUnknown
 	}
-	*ret = result[uristring]
+
+	*ret = string(result)
 	return nil
 }
 

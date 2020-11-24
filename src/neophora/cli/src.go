@@ -1,8 +1,6 @@
 package cli
 
-import (
-	"net/rpc/jsonrpc"
-)
+import "net/rpc"
 
 // T ...
 type T struct {
@@ -11,7 +9,7 @@ type T struct {
 
 // Call ...
 func (me *T) Call(method string, args interface{}, res interface{}) error {
-	client, err := jsonrpc.Dial("tcp", me.Address)
+	client, err := rpc.Dial("tcp", me.Address)
 	if err != nil {
 		return err
 	}
