@@ -122,6 +122,7 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 	}
 	uristring := uri.String()
 	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
+		log.Println("[BIZ][NEOCLI][GETBLOCKHEADER]", uristring, err)
 		return stderr.ErrUnknown
 	}
 
@@ -160,6 +161,7 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 	}
 	uristring := uri.String()
 	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
+		log.Println("[BIZ][NEOCLI][GETBLOCKHASH]", uristring, err)
 		return stderr.ErrUnknown
 	}
 
@@ -192,6 +194,7 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 	}
 	uristring := uri.String()
 	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
+		log.Println("[BIZ][NEOCLI][GETBLOCKSYSFEE]", uristring, err)
 		return stderr.ErrUnknown
 	}
 
