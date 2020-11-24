@@ -12,13 +12,16 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	var ret bool
-	err = client.Call("DB.Put", struct {
-		Key   []byte
-		Value []byte
+	var ret []interface{}
+	err = client.Call("DB.Batch", struct {
+		Method string
+		Args   []interface{}
 	}{
-		Key:   []byte(os.Args[1]),
-		Value: []byte(os.Args[2]),
+		Method: "Get",
+		Args: []interface{}{
+			[]byte("block://height/1"),
+			[]byte("block://height/10"),
+		},
 	}, &ret)
 	if err != nil {
 		log.Fatalln(err)

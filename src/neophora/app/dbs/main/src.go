@@ -6,7 +6,6 @@ import (
 	"neophora/dat"
 	"net"
 	"net/rpc"
-	"net/rpc/jsonrpc"
 	"os"
 )
 
@@ -28,13 +27,5 @@ func main() {
 	}
 
 	log.Println("[MAIN][Listen]", address)
-
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Println("[MAIN][Accept]", err)
-			continue
-		}
-		go jsonrpc.ServeConn(conn)
-	}
+	rpc.DefaultServer.Accept(listener)
 }
