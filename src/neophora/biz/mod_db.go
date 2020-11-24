@@ -21,20 +21,6 @@ func (me *DB) Put(data struct {
 	return nil
 }
 
-// Puts ...
-func (me *DB) Puts(data []struct {
-	Key   []byte
-	Value []byte
-}, ret *bool) error {
-	for _, v := range data {
-		if err := me.DB.Put(v.Key, v.Value); err != nil {
-			return err
-		}
-	}
-	*ret = true
-	return nil
-}
-
 // Get ...
 func (me *DB) Get(data []byte, ret *[]byte) error {
 	value, err := me.DB.Get(data)
@@ -42,20 +28,6 @@ func (me *DB) Get(data []byte, ret *[]byte) error {
 		return err
 	}
 	*ret = value
-	return nil
-}
-
-// Gets ...
-func (me *DB) Gets(data [][]byte, ret *[][]byte) error {
-	result := make([][]byte, len(data))
-	for i, v := range data {
-		value, err := me.DB.Get(v)
-		if err != nil {
-			return err
-		}
-		result[i] = value
-	}
-	*ret = result
 	return nil
 }
 

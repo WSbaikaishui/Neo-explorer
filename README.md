@@ -2,6 +2,12 @@
 
 NEOPHORA
 
+# requirements
+
+```sh
+GOPATH=$(pwd) go get github.com/tecbot/gorocksdb
+```
+
 # services
 
 ## cli
