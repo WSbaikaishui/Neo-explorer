@@ -40,7 +40,7 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 	switch key := arg[0].(type) {
 	case float64:
 		host = "height"
-		path = fmt.Sprintf("/%064X", uint64(key))
+		path = fmt.Sprintf("/%016X", uint64(key))
 	case string:
 		host = "hash"
 		path = fmt.Sprintf("/%s", key)
@@ -98,7 +98,7 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 	switch key := arg[0].(type) {
 	case float64:
 		host = "height"
-		path = fmt.Sprintf("/%064X", uint64(key))
+		path = fmt.Sprintf("/%016X", uint64(key))
 	case string:
 		host = "hash"
 		path = fmt.Sprintf("/%s", key)
@@ -149,7 +149,7 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 	switch key := arg[0].(type) {
 	case float64:
 		host = "height"
-		path = fmt.Sprintf("/%064X", uint64(key))
+		path = fmt.Sprintf("/%016X", uint64(key))
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -182,7 +182,7 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 	switch key := arg[0].(type) {
 	case float64:
 		host = "height"
-		path = fmt.Sprintf("/%064X", uint64(key))
+		path = fmt.Sprintf("/%016X", uint64(key))
 	default:
 		return stderr.ErrInvalidArgs
 	}
