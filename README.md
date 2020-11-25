@@ -40,21 +40,23 @@ value is in binary form.
 
 ## key
 
-- `block://height/{NUM}`
+- `block://height/{UINT64}`
 - `block://hash/{HASH}`
-- `header://height/{NUM}`
+- `header://height/{UINT64}`
 - `header://hash/{HASH}`
-- `hash://height/{NUM}`
+- `hash://height/{UINT64}`
 - `tx://hash/{HASH}`
-- `adhocstateroot://height/{NUM}`
+- `adhocstateroot://height/{UINT64}`
 - `adhocstateroot://hash/{HASH}`
 - `adhoclog://tx/{HASH}`
-- `adhocblockinfo://height/{NUM}`
+- `adhocblockinfo://height/{UINT64}`
 - `adhocblockinfo://hash/{HASH}`
-- `adhocheaderinfo://height/{NUM}`
+- `adhocheaderinfo://height/{UINT64}`
 - `adhocheaderinfo://hash/{HASH}`
-- `adhocsysfee://height/{NUM}`
+- `adhocsysfee://height/{UINT64}`
 - `adhoctxinfo://hash/{HASH}`
+
+- `nep5://asset-account-height/{HASH}/{HASH}/{UINT64}`
 
 ## todo
 

@@ -37,13 +37,13 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch arg[0].(type) {
+	switch key := arg[0].(type) {
 	case float64:
 		host = "height"
-		path = "/%.0f"
+		path = fmt.Sprintf("/%064X", uint64(key))
 	case string:
 		host = "hash"
-		path = "/%s"
+		path = fmt.Sprintf("/%s", key)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -60,7 +60,7 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 	uri := &url.URL{
 		Scheme: scheme,
 		Host:   host,
-		Path:   fmt.Sprintf(path, arg[0]),
+		Path:   path,
 	}
 	uristring := uri.String()
 	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
@@ -95,13 +95,13 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch arg[0].(type) {
+	switch key := arg[0].(type) {
 	case float64:
 		host = "height"
-		path = "/%.0f"
+		path = fmt.Sprintf("/%064X", uint64(key))
 	case string:
 		host = "hash"
-		path = "/%s"
+		path = fmt.Sprintf("/%s", key)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -118,7 +118,7 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 	uri := &url.URL{
 		Scheme: scheme,
 		Host:   host,
-		Path:   fmt.Sprintf(path, arg[0]),
+		Path:   path,
 	}
 	uristring := uri.String()
 	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
@@ -146,10 +146,10 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch arg[0].(type) {
+	switch key := arg[0].(type) {
 	case float64:
 		host = "height"
-		path = "/%.0f"
+		path = fmt.Sprintf("/%064X", uint64(key))
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -157,7 +157,7 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 	uri := &url.URL{
 		Scheme: "hash",
 		Host:   host,
-		Path:   fmt.Sprintf(path, arg[0]),
+		Path:   path,
 	}
 	uristring := uri.String()
 	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
@@ -179,10 +179,10 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch arg[0].(type) {
+	switch key := arg[0].(type) {
 	case float64:
 		host = "height"
-		path = "/%.0f"
+		path = fmt.Sprintf("/%064X", uint64(key))
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -190,7 +190,7 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 	uri := &url.URL{
 		Scheme: "adhocsysfee",
 		Host:   host,
-		Path:   fmt.Sprintf(path, arg[0]),
+		Path:   path,
 	}
 	uristring := uri.String()
 	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {

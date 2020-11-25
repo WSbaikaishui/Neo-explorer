@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"neophora/biz"
 	"neophora/cli"
@@ -9,6 +10,7 @@ import (
 	"net/http"
 	"net/rpc"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -18,6 +20,9 @@ func main() {
 		Codec: func(rwc io.ReadWriteCloser) rpc.ServerCodec {
 			ret := &scex.T{}
 			ret.Init(rwc)
+			ret.SetF(func(v string) string {
+				return fmt.Sprintf("NeoCli.%s", strings.ToUpper(v))
+			})
 			return ret
 		},
 	})
