@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	listener, err := net.Listen("tcp", os.ExpandEnv("0.0.0.0:${PORT}"))
+	listener, err := net.Listen("tcp", os.ExpandEnv("0.0.0.0:${RPC_PORT}"))
 	if err != nil {
 		log.Fatalln(err)
 	}

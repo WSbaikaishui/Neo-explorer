@@ -46,6 +46,23 @@ func (me *T) Get(k []byte) ([]byte, error) {
 	return me.db.GetBytes(me.ro, k)
 }
 
+// GetLast ...
+func (me *T) GetLast(k []byte, p int) []byte {
+	iter := me.db.NewIterator(me.ro)
+	defer iter.Close()
+	iter.SeekForPrev(k)
+	if iter.ValidForPrefix(k[:p]) == false {
+		return nil
+	}
+
+	val := iter.Value()
+	defer val.Free()
+	data := val.Data()
+	ret := make([]byte, len(data))
+	copy(ret, data)
+	return ret
+}
+
 // Close ...
 func (me *T) Close() {
 	me.wo.Destroy()

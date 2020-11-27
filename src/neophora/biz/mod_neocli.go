@@ -3,7 +3,6 @@ package biz
 import (
 	"encoding/hex"
 	"fmt"
-	"log"
 	"neophora/cli"
 	"neophora/var/stderr"
 	"net/url"
@@ -63,8 +62,7 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 		Path:   path,
 	}
 	uristring := uri.String()
-	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
-		log.Println("[BIZ][NEOCLI][GETBLOCK]", uristring, err)
+	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -121,8 +119,7 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 		Path:   path,
 	}
 	uristring := uri.String()
-	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
-		log.Println("[BIZ][NEOCLI][GETBLOCKHEADER]", uristring, err)
+	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -132,6 +129,147 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 	case 1.0:
 		*ret = string(result)
 	}
+
+	return nil
+}
+
+// GETRAWTRANSACTION ...
+func (me *NeoCli) GETRAWTRANSACTION(arg []interface{}, ret *interface{}) error {
+	if len(arg) == 0 {
+		return stderr.ErrInvalidArgs
+	}
+	if len(arg) > 2 {
+		return stderr.ErrInvalidArgs
+	}
+	if len(arg) == 1 {
+		arg = append(arg, 0.0)
+	}
+
+	var scheme string
+	var host string
+	var path string
+	var result []byte
+
+	switch key := arg[0].(type) {
+	case string:
+		host = "hash"
+		path = fmt.Sprintf("/%s", key)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	switch arg[1] {
+	case 0.0:
+		scheme = "tx"
+	case 1.0:
+		scheme = "adhoctxinfo"
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	uri := &url.URL{
+		Scheme: scheme,
+		Host:   host,
+		Path:   path,
+	}
+	uristring := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	switch arg[1] {
+	case 0.0:
+		*ret = hex.EncodeToString(result)
+	case 1.0:
+		*ret = string(result)
+	}
+
+	return nil
+}
+
+// GETAPPLICATIONLOG ...
+func (me *NeoCli) GETAPPLICATIONLOG(arg []interface{}, ret *interface{}) error {
+	if len(arg) == 0 {
+		return stderr.ErrInvalidArgs
+	}
+	if len(arg) > 2 {
+		return stderr.ErrInvalidArgs
+	}
+	if len(arg) == 1 {
+		arg = append(arg, 0.0)
+	}
+
+	var scheme string
+	var host string
+	var path string
+	var result []byte
+
+	switch key := arg[0].(type) {
+	case string:
+		host = "hash"
+		path = fmt.Sprintf("/%s", key)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	scheme = "adhoclog"
+
+	uri := &url.URL{
+		Scheme: scheme,
+		Host:   host,
+		Path:   path,
+	}
+	uristring := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	*ret = string(result)
+
+	return nil
+}
+
+// GETSTATEROOT ...
+func (me *NeoCli) GETSTATEROOT(arg []interface{}, ret *interface{}) error {
+	if len(arg) == 0 {
+		return stderr.ErrInvalidArgs
+	}
+	if len(arg) > 2 {
+		return stderr.ErrInvalidArgs
+	}
+	if len(arg) == 1 {
+		arg = append(arg, 0.0)
+	}
+
+	var scheme string
+	var host string
+	var path string
+	var result []byte
+
+	switch key := arg[0].(type) {
+	case float64:
+		host = "height"
+		path = fmt.Sprintf("/%016X", uint64(key))
+	case string:
+		host = "hash"
+		path = fmt.Sprintf("/%s", key)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	scheme = "adhocstateroot"
+
+	uri := &url.URL{
+		Scheme: scheme,
+		Host:   host,
+		Path:   path,
+	}
+	uristring := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	*ret = string(result)
 
 	return nil
 }
@@ -160,12 +298,12 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 		Path:   path,
 	}
 	uristring := uri.String()
-	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
-		log.Println("[BIZ][NEOCLI][GETBLOCKHASH]", uristring, err)
+	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
-	*ret = hex.EncodeToString(result)
+	hash := hex.EncodeToString(result)
+	*ret = fmt.Sprintf("0x%s", hash)
 	return nil
 }
 
@@ -193,18 +331,11 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 		Path:   path,
 	}
 	uristring := uri.String()
-	if err := me.Client.Call("DB.Get", []byte(uristring), &result); err != nil {
-		log.Println("[BIZ][NEOCLI][GETBLOCKSYSFEE]", uristring, err)
+	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
 	*ret = string(result)
-	return nil
-}
-
-// GETAPPLICATIONLOG ...
-func (me *NeoCli) GETAPPLICATIONLOG(arg []interface{}, ret *interface{}) error {
-	*ret = "pong"
 	return nil
 }
 

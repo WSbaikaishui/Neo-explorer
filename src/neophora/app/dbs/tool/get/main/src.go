@@ -4,15 +4,17 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
-	"net/rpc"
+	"neophora/cli"
 	"os"
+	"strings"
 )
 
 func main() {
 	address := os.ExpandEnv("${DBS_ADDRESS}")
-	client, err := rpc.Dial("tcp", address)
-	if err != nil {
-		log.Fatalln(err)
+	addresses := strings.Split(address, " ")
+	client := &cli.T{
+		Addresses: addresses,
+		TryTimes:  3,
 	}
 
 	key := []byte(os.Args[1])

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/hex"
+	"fmt"
 	"log"
 	"neophora/cli"
 	"os"
@@ -17,27 +18,24 @@ func main() {
 	}
 
 	key := []byte(os.Args[1])
-	value := []byte(os.Args[2])
-	var ret bool
-	var err error
+	prefix := len(os.Args[2])
+	var ret []byte
 
-	switch os.ExpandEnv("${DEC}") {
-	case "hex":
-		value, err = hex.DecodeString(os.Args[2])
-		if err != nil {
-			log.Fatalln(err)
-		}
-	}
-
-	if err := client.Call("DB.Put", struct {
-		Key   []byte
-		Value []byte
+	if err := client.Call("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
 	}{
-		Key:   key,
-		Value: value,
+		Key:    key,
+		Prefix: prefix,
 	}, &ret); err != nil {
 		log.Fatalln(err)
 	}
-
-	log.Println(ret)
+	switch os.ExpandEnv("${ENC}") {
+	case "hex":
+		fmt.Println(hex.EncodeToString(ret))
+	case "str":
+		fmt.Println(string(ret))
+	default:
+		fmt.Println(ret)
+	}
 }

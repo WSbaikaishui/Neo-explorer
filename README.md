@@ -56,6 +56,7 @@ value is in binary form.
 - `adhocsysfee://height/{UINT64}`
 - `adhoctxinfo://hash/{HASH}`
 
+- `adhocnep5balance://account-height/{HASH}/{UINT64}`
 - `nep5://asset-account-height/{HASH}/{HASH}/{UINT64}`
 
 ## todo

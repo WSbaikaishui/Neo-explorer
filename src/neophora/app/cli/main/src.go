@@ -30,7 +30,11 @@ func main() {
 
 func init() {
 	address := os.ExpandEnv("${DBS_ADDRESS}")
+	addresses := strings.Split(address, " ")
 	rpc.Register(&biz.NeoCli{
-		Client: &cli.T{Address: address},
+		Client: &cli.T{
+			Addresses: addresses,
+			TryTimes:  3,
+		},
 	})
 }
