@@ -15,15 +15,15 @@ type NeoCli struct {
 }
 
 // GETBLOCK ...
-func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
-	if len(arg) == 0 {
+func (me *NeoCli) GETBLOCK(args []interface{}, ret *interface{}) error {
+	if len(args) == 0 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) > 2 {
+	if len(args) > 2 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) == 1 {
-		arg = append(arg, 0.0)
+	if len(args) == 1 {
+		args = append(args, 0.0)
 	}
 
 	var scheme string
@@ -31,7 +31,7 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch key := arg[0].(type) {
+	switch key := args[0].(type) {
 	case float64:
 		host = "height"
 		path = fmt.Sprintf("/%016X", uint64(key))
@@ -42,7 +42,7 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	switch arg[1] {
+	switch args[1] {
 	case 0.0:
 		scheme = "block"
 	case 1.0:
@@ -61,7 +61,7 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
-	switch arg[1] {
+	switch args[1] {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
 	case 1.0:
@@ -72,15 +72,15 @@ func (me *NeoCli) GETBLOCK(arg []interface{}, ret *interface{}) error {
 }
 
 // GETBLOCKHEADER ...
-func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
-	if len(arg) == 0 {
+func (me *NeoCli) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
+	if len(args) == 0 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) > 2 {
+	if len(args) > 2 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) == 1 {
-		arg = append(arg, 0.0)
+	if len(args) == 1 {
+		args = append(args, 0.0)
 	}
 
 	var scheme string
@@ -88,7 +88,7 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch key := arg[0].(type) {
+	switch key := args[0].(type) {
 	case float64:
 		host = "height"
 		path = fmt.Sprintf("/%016X", uint64(key))
@@ -99,7 +99,7 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	switch arg[1] {
+	switch args[1] {
 	case 0.0:
 		scheme = "header"
 	case 1.0:
@@ -118,7 +118,7 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
-	switch arg[1] {
+	switch args[1] {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
 	case 1.0:
@@ -129,15 +129,15 @@ func (me *NeoCli) GETBLOCKHEADER(arg []interface{}, ret *interface{}) error {
 }
 
 // GETRAWTRANSACTION ...
-func (me *NeoCli) GETRAWTRANSACTION(arg []interface{}, ret *interface{}) error {
-	if len(arg) == 0 {
+func (me *NeoCli) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error {
+	if len(args) == 0 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) > 2 {
+	if len(args) > 2 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) == 1 {
-		arg = append(arg, 0.0)
+	if len(args) == 1 {
+		args = append(args, 0.0)
 	}
 
 	var scheme string
@@ -145,7 +145,7 @@ func (me *NeoCli) GETRAWTRANSACTION(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch key := arg[0].(type) {
+	switch key := args[0].(type) {
 	case string:
 		host = "hash"
 		path = fmt.Sprintf("/%s", key)
@@ -153,7 +153,7 @@ func (me *NeoCli) GETRAWTRANSACTION(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	switch arg[1] {
+	switch args[1] {
 	case 0.0:
 		scheme = "tx"
 	case 1.0:
@@ -172,7 +172,7 @@ func (me *NeoCli) GETRAWTRANSACTION(arg []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
-	switch arg[1] {
+	switch args[1] {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
 	case 1.0:
@@ -183,15 +183,15 @@ func (me *NeoCli) GETRAWTRANSACTION(arg []interface{}, ret *interface{}) error {
 }
 
 // GETAPPLICATIONLOG ...
-func (me *NeoCli) GETAPPLICATIONLOG(arg []interface{}, ret *interface{}) error {
-	if len(arg) == 0 {
+func (me *NeoCli) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error {
+	if len(args) == 0 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) > 2 {
+	if len(args) > 2 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) == 1 {
-		arg = append(arg, 0.0)
+	if len(args) == 1 {
+		args = append(args, 0.0)
 	}
 
 	var scheme string
@@ -199,7 +199,7 @@ func (me *NeoCli) GETAPPLICATIONLOG(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch key := arg[0].(type) {
+	switch key := args[0].(type) {
 	case string:
 		host = "hash"
 		path = fmt.Sprintf("/%s", key)
@@ -225,15 +225,15 @@ func (me *NeoCli) GETAPPLICATIONLOG(arg []interface{}, ret *interface{}) error {
 }
 
 // GETSTATEROOT ...
-func (me *NeoCli) GETSTATEROOT(arg []interface{}, ret *interface{}) error {
-	if len(arg) == 0 {
+func (me *NeoCli) GETSTATEROOT(args []interface{}, ret *interface{}) error {
+	if len(args) == 0 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) > 2 {
+	if len(args) > 2 {
 		return stderr.ErrInvalidArgs
 	}
-	if len(arg) == 1 {
-		arg = append(arg, 0.0)
+	if len(args) == 1 {
+		args = append(args, 0.0)
 	}
 
 	var scheme string
@@ -241,7 +241,7 @@ func (me *NeoCli) GETSTATEROOT(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch key := arg[0].(type) {
+	switch key := args[0].(type) {
 	case float64:
 		host = "height"
 		path = fmt.Sprintf("/%016X", uint64(key))
@@ -270,8 +270,8 @@ func (me *NeoCli) GETSTATEROOT(arg []interface{}, ret *interface{}) error {
 }
 
 // GETBLOCKHASH ...
-func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
-	if len(arg) != 1 {
+func (me *NeoCli) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
@@ -279,7 +279,7 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch key := arg[0].(type) {
+	switch key := args[0].(type) {
 	case float64:
 		host = "height"
 		path = fmt.Sprintf("/%016X", uint64(key))
@@ -303,8 +303,8 @@ func (me *NeoCli) GETBLOCKHASH(arg []interface{}, ret *interface{}) error {
 }
 
 // GETBLOCKSYSFEE ...
-func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
-	if len(arg) != 1 {
+func (me *NeoCli) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
@@ -312,7 +312,7 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch key := arg[0].(type) {
+	switch key := args[0].(type) {
 	case float64:
 		host = "height"
 		path = fmt.Sprintf("/%016X", uint64(key))
@@ -335,8 +335,8 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 }
 
 // GETACCOUNTSTATE ...
-func (me *NeoCli) GETACCOUNTSTATE(arg []interface{}, ret *interface{}) error {
-	if len(arg) != 1 {
+func (me *NeoCli) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
@@ -344,7 +344,7 @@ func (me *NeoCli) GETACCOUNTSTATE(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch key := arg[0].(type) {
+	switch key := args[0].(type) {
 	case string:
 		host = "account-height"
 		tr := &trans.T{
@@ -382,8 +382,8 @@ func (me *NeoCli) GETACCOUNTSTATE(arg []interface{}, ret *interface{}) error {
 }
 
 // GETASSETSTATE ...
-func (me *NeoCli) GETASSETSTATE(arg []interface{}, ret *interface{}) error {
-	if len(arg) != 1 {
+func (me *NeoCli) GETASSETSTATE(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
@@ -391,7 +391,7 @@ func (me *NeoCli) GETASSETSTATE(arg []interface{}, ret *interface{}) error {
 	var path string
 	var result []byte
 
-	switch key := arg[0].(type) {
+	switch key := args[0].(type) {
 	case string:
 		host = "hash-height"
 		path = fmt.Sprintf("/%s/FFFFFFFFFFFFFFFF", key)
@@ -420,97 +420,97 @@ func (me *NeoCli) GETASSETSTATE(arg []interface{}, ret *interface{}) error {
 }
 
 // PING ...
-func (me *NeoCli) PING(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) PING(args []interface{}, ret *interface{}) error {
 	*ret = "pong"
 	return nil
 }
 
 // CLAIMGAS ...
-func (me *NeoCli) CLAIMGAS(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) CLAIMGAS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // DUMPPRIVKEY ...
-func (me *NeoCli) DUMPPRIVKEY(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) DUMPPRIVKEY(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETBALANCE ...
-func (me *NeoCli) GETBALANCE(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETBALANCE(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETCONNECTIONCOUNT ...
-func (me *NeoCli) GETCONNECTIONCOUNT(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETCONNECTIONCOUNT(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETMETRICBLOCKTIMESTAMP ...
-func (me *NeoCli) GETMETRICBLOCKTIMESTAMP(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETMETRICBLOCKTIMESTAMP(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETNEP5TRANSFERS ...
-func (me *NeoCli) GETNEP5TRANSFERS(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETNEP5TRANSFERS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETNEWADDRESS ...
-func (me *NeoCli) GETNEWADDRESS(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETNEWADDRESS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETRAWMEMPOOL ...
-func (me *NeoCli) GETRAWMEMPOOL(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETRAWMEMPOOL(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETPEERS ...
-func (me *NeoCli) GETPEERS(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETPEERS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETUNCLAIMEDGAS ...
-func (me *NeoCli) GETUNCLAIMEDGAS(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETUNCLAIMEDGAS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETVERSION ...
-func (me *NeoCli) GETVERSION(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETVERSION(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // GETWALLETHEIGHT ...
-func (me *NeoCli) GETWALLETHEIGHT(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) GETWALLETHEIGHT(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // IMPORTPRIVKEY ...
-func (me *NeoCli) IMPORTPRIVKEY(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) IMPORTPRIVKEY(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // LISTPLUGINS ...
-func (me *NeoCli) LISTPLUGINS(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) LISTPLUGINS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // LISTADDRESS ...
-func (me *NeoCli) LISTADDRESS(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) LISTADDRESS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // SENDFROM ...
-func (me *NeoCli) SENDFROM(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) SENDFROM(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // SENDTOADDRESS ...
-func (me *NeoCli) SENDTOADDRESS(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) SENDTOADDRESS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
 // SENDMANY ...
-func (me *NeoCli) SENDMANY(arg []interface{}, ret *interface{}) error {
+func (me *NeoCli) SENDMANY(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
