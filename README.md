@@ -56,22 +56,26 @@ value is in binary form.
 - `adhocsysfee://height/{UINT64}`
 - `adhoctxinfo://hash/{HASH}`
 
+- `adhocaccountstate://account-height/{HASH}/{UINT64}`
+- `adhocassetstate://hash-height/{HASH}/{UINT64}`
+- `adhocclaimable://account-height/{HASH}/{UINT64}`
+- `adhoccontractstate://hash-height/{HASH}/{UINT64}`
 - `adhocnep5balance://account-height/{HASH}/{UINT64}`
+- `adhocstateheight://height/{UINT64}`
+- `adhoctxout://tx-n/{HASH}/{UINT64}`
+
+- `storage://script-key-height/{HASH}/{HASH}/{UINT64}`
 - `nep5://asset-account-height/{HASH}/{HASH}/{UINT64}`
+- `height://tx/{HASH}`
 
 ## todo
 
-- [ ] getaccountstate ; top
-- [ ] getapplicationlog
-- [ ] getassetstate ; const
 - [ ] getbestblockhash ; top
 - [ ] getblockcount ; top
 - [ ] getclaimable ; top
 - [ ] getcontractstate ; top
 - [ ] getnep5balances ; top
-- [ ] getrawtransaction
 - [ ] getstateheight ; top
-- [ ] getstateroot
 - [ ] getstorage ; top
 - [ ] gettransactionheight
 - [ ] gettxout

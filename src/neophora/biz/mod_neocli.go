@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"neophora/cli"
+	"neophora/lib/trans"
 	"neophora/var/stderr"
 	"net/url"
 )
@@ -11,12 +12,6 @@ import (
 // NeoCli ...
 type NeoCli struct {
 	Client *cli.T
-}
-
-// PING ...
-func (me *NeoCli) PING(arg []interface{}, ret *interface{}) error {
-	*ret = "pong"
-	return nil
 }
 
 // GETBLOCK ...
@@ -341,7 +336,93 @@ func (me *NeoCli) GETBLOCKSYSFEE(arg []interface{}, ret *interface{}) error {
 
 // GETACCOUNTSTATE ...
 func (me *NeoCli) GETACCOUNTSTATE(arg []interface{}, ret *interface{}) error {
-	return stderr.ErrUnsupportedMethod
+	if len(arg) != 1 {
+		return stderr.ErrInvalidArgs
+	}
+
+	var host string
+	var path string
+	var result []byte
+
+	switch key := arg[0].(type) {
+	case string:
+		host = "account-height"
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.AddressToHash(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		path = fmt.Sprintf("/%s/FFFFFFFFFFFFFFFF", tr.V)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	uri := &url.URL{
+		Scheme: "adhocaccountstate",
+		Host:   host,
+		Path:   path,
+	}
+	uristring := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(uristring),
+		Prefix: len(uristring) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	*ret = string(result)
+	return nil
+}
+
+// GETASSETSTATE ...
+func (me *NeoCli) GETASSETSTATE(arg []interface{}, ret *interface{}) error {
+	if len(arg) != 1 {
+		return stderr.ErrInvalidArgs
+	}
+
+	var host string
+	var path string
+	var result []byte
+
+	switch key := arg[0].(type) {
+	case string:
+		host = "hash-height"
+		path = fmt.Sprintf("/%s/FFFFFFFFFFFFFFFF", key)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	uri := &url.URL{
+		Scheme: "adhocassetstate",
+		Host:   host,
+		Path:   path,
+	}
+	uristring := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(uristring),
+		Prefix: len(uristring) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	*ret = string(result)
+	return nil
+}
+
+// PING ...
+func (me *NeoCli) PING(arg []interface{}, ret *interface{}) error {
+	*ret = "pong"
+	return nil
 }
 
 // CLAIMGAS ...
