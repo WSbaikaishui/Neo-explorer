@@ -532,5 +532,5 @@ func (me *NeoCli) SENDMANY(args []interface{}, ret *interface{}) error {
 }
 
 var (
-	modNeoCliVarRegHash = regexp.MustCompile(`^(0x)?([0-9A-F]]{64})$`)
+	modNeoCliVarRegHash = regexp.MustCompile(`^(0X)?([0-9A-F]{64})$`)
 )
