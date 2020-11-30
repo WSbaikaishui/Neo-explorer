@@ -709,6 +709,71 @@ func (me *NeoCli) GETSTATEHEIGHT(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
+// GETSTROAGE ...
+func (me *NeoCli) GETSTROAGE(args []interface{}, ret *interface{}) error {
+	switch len(args) {
+	case 2:
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var uri url.URL
+
+	uri.Scheme = "storage"
+	uri.Host = "script-key-height"
+
+	switch key := args[0].(type) {
+	case string:
+		key = strings.ToLower(key)
+		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
+		if len(matches) != 3 {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = matches[2]
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	switch key := args[1].(type) {
+	case string:
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHash(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s/%s/ffffffffffffffff", uri.Path, tr.V)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = hex.EncodeToString(result)
+	return nil
+}
+
 // PING ...
 func (me *NeoCli) PING(args []interface{}, ret *interface{}) error {
 	*ret = "pong"

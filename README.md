@@ -65,15 +65,12 @@ value is in binary form.
 - `adhoctxout://tx-n/{HASH}/{UINT64}`
 
 - `storage://script-key-height/{HASH}/{HASH}/{UINT64}`
+- `string://hash/{HASH}`
 - `nep5://asset-account-height/{HASH}/{HASH}/{UINT64}`
 - `height://tx/{HASH}`
 
 ## todo
 
-- [ ] getclaimable ; top
-- [ ] getcontractstate ; top
-- [ ] getnep5balances ; top
-- [ ] getstateheight ; top
 - [ ] getstorage ; top
 - [ ] gettransactionheight
 - [ ] gettxout
