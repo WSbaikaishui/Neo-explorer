@@ -6,6 +6,7 @@ import (
 	"neophora/cli"
 	"neophora/lib/run"
 	"neophora/srv/collector"
+	"neophora/srv/daemon"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
@@ -35,6 +36,7 @@ func init() {
 		Addresses: addresses,
 		TryTimes:  3,
 	}
+	dmn := &daemon.T{}
 	clt := &collector.T{
 		Queue: make(chan struct {
 			Key   []byte
@@ -50,5 +52,6 @@ func init() {
 	rpc.Register(&biz.Version{})
 	rpc.Register(&biz.Collector{
 		Service: clt,
+		Daemon:  dmn,
 	})
 }
