@@ -62,6 +62,10 @@ func (me *NeoCli) GETBLOCK(args []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
 	switch args[1] {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
@@ -117,6 +121,10 @@ func (me *NeoCli) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
 	switch args[1] {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
@@ -169,6 +177,10 @@ func (me *NeoCli) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error 
 		return stderr.ErrUnknown
 	}
 
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
 	switch args[1] {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
@@ -212,6 +224,10 @@ func (me *NeoCli) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error 
 		return stderr.ErrUnknown
 	}
 
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
 	*ret = json.RawMessage(result)
 
 	return nil
@@ -253,6 +269,10 @@ func (me *NeoCli) GETSTATEROOT(args []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
 	*ret = json.RawMessage(result)
 
 	return nil
@@ -283,6 +303,10 @@ func (me *NeoCli) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
 	urs := uri.String()
 	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
 	}
 
 	hash := hex.EncodeToString(result)
@@ -316,6 +340,10 @@ func (me *NeoCli) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
 	urs := uri.String()
 	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
 	}
 
 	*ret = string(result)
@@ -364,6 +392,10 @@ func (me *NeoCli) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
 	*ret = json.RawMessage(result)
 	return nil
 }
@@ -407,6 +439,10 @@ func (me *NeoCli) GETASSETSTATE(args []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
 	*ret = json.RawMessage(result)
 	return nil
 }
@@ -436,6 +472,10 @@ func (me *NeoCli) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
 		Prefix: len(urs) - 16,
 	}, &result); err != nil {
 		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
 	}
 
 	hash := hex.EncodeToString(result)

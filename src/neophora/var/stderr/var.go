@@ -10,3 +10,6 @@ var ErrInvalidArgs = errors.New("invalid args")
 
 // ErrUnsupportedMethod ...
 var ErrUnsupportedMethod = errors.New("unsupported method")
+
+// ErrNotFound ...
+var ErrNotFound = errors.New("not found")
