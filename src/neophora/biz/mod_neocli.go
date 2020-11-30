@@ -419,6 +419,35 @@ func (me *NeoCli) GETASSETSTATE(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
+// GETBESTBLOCKHASH ...
+func (me *NeoCli) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
+	if len(args) != 0 {
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+
+	uri := &url.URL{
+		Scheme: "hash",
+		Host:   "height",
+		Path:   "/FFFFFFFFFFFFFFFF",
+	}
+	uristring := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(uristring),
+		Prefix: len(uristring) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	hash := hex.EncodeToString(result)
+	*ret = fmt.Sprintf("0x%s", hash)
+	return nil
+}
+
 // PING ...
 func (me *NeoCli) PING(args []interface{}, ret *interface{}) error {
 	*ret = "pong"

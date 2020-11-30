@@ -41,6 +41,16 @@ func (me *DB) GetLast(data struct {
 	return nil
 }
 
+// GetLastKey ...
+func (me *DB) GetLastKey(data struct {
+	Key    []byte
+	Prefix int
+}, ret *[]byte) error {
+	value := me.DB.GetLastKey(data.Key, data.Prefix)
+	*ret = value
+	return nil
+}
+
 // Ping ...
 func (me *DB) Ping(arg []interface{}, ret *interface{}) error {
 	*ret = "pong"
