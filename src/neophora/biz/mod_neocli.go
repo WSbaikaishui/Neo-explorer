@@ -483,8 +483,8 @@ func (me *NeoCli) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// getblockcount ...
-func (me *NeoCli) getblockcount(args []interface{}, ret *interface{}) error {
+// GETBLOCKCOUNT ...
+func (me *NeoCli) GETBLOCKCOUNT(args []interface{}, ret *interface{}) error {
 	switch len(args) {
 	case 0:
 	default:
