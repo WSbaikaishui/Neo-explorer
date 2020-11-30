@@ -27,6 +27,7 @@ func (me *Collector) HeartBeat(args interface{}, ret *interface{}) error {
 
 // Write ...
 func (me *Collector) Write(args [2]string, ret *interface{}) error {
+	log.Println("RECIEVED")
 	k, v := args[0], args[1]
 	key := []byte(k)
 	value, err := hex.DecodeString(v)
@@ -35,5 +36,6 @@ func (me *Collector) Write(args [2]string, ret *interface{}) error {
 	}
 	me.Service.Add(key, value)
 	me.Daemon.Call()
+	log.Println("SUCCEED")
 	return nil
 }
