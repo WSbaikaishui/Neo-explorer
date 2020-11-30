@@ -40,10 +40,10 @@ func (me *NeoCli) GETBLOCK(args []interface{}, ret *interface{}) error {
 	switch key := args[0].(type) {
 	case float64:
 		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+		uri.Path = fmt.Sprintf("/%016x", uint64(key))
 	case string:
 		uri.Host = "hash"
-		key = strings.ToUpper(key)
+		key = strings.ToLower(key)
 		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
 		if len(matches) != 3 {
 			return stderr.ErrInvalidArgs
@@ -94,10 +94,10 @@ func (me *NeoCli) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 	switch key := args[0].(type) {
 	case float64:
 		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+		uri.Path = fmt.Sprintf("/%016x", uint64(key))
 	case string:
 		uri.Host = "hash"
-		key = strings.ToUpper(key)
+		key = strings.ToLower(key)
 		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
 		if len(matches) != 3 {
 			return stderr.ErrInvalidArgs
@@ -148,7 +148,7 @@ func (me *NeoCli) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error 
 	switch key := args[0].(type) {
 	case string:
 		uri.Host = "hash"
-		key = strings.ToUpper(key)
+		key = strings.ToLower(key)
 		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
 		if len(matches) != 3 {
 			return stderr.ErrInvalidArgs
@@ -190,7 +190,7 @@ func (me *NeoCli) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error 
 	switch key := args[0].(type) {
 	case string:
 		uri.Host = "hash"
-		key = strings.ToUpper(key)
+		key = strings.ToLower(key)
 		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
 		if len(matches) != 3 {
 			return stderr.ErrInvalidArgs
@@ -227,10 +227,10 @@ func (me *NeoCli) GETSTATEROOT(args []interface{}, ret *interface{}) error {
 	switch key := args[0].(type) {
 	case float64:
 		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+		uri.Path = fmt.Sprintf("/%016x", uint64(key))
 	case string:
 		uri.Host = "hash"
-		key = strings.ToUpper(key)
+		key = strings.ToLower(key)
 		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
 		if len(matches) != 3 {
 			return stderr.ErrInvalidArgs
@@ -267,7 +267,7 @@ func (me *NeoCli) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
 	switch key := args[0].(type) {
 	case float64:
 		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+		uri.Path = fmt.Sprintf("/%016x", uint64(key))
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -299,7 +299,7 @@ func (me *NeoCli) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
 	switch key := args[0].(type) {
 	case float64:
 		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+		uri.Path = fmt.Sprintf("/%016x", uint64(key))
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -338,7 +338,7 @@ func (me *NeoCli) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		uri.Path = fmt.Sprintf("/%s/FFFFFFFFFFFFFFFF", tr.V)
+		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -375,13 +375,13 @@ func (me *NeoCli) GETASSETSTATE(args []interface{}, ret *interface{}) error {
 	switch key := args[0].(type) {
 	case string:
 		uri.Host = "hash-height"
-		key = strings.ToUpper(key)
+		key = strings.ToLower(key)
 		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
 		if len(matches) != 3 {
 			return stderr.ErrInvalidArgs
 		}
 		key = matches[2]
-		uri.Path = fmt.Sprintf("/%s/FFFFFFFFFFFFFFFF", key)
+		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", key)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -415,7 +415,7 @@ func (me *NeoCli) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
 
 	uri.Scheme = "hash"
 	uri.Host = "height"
-	uri.Path = "/FFFFFFFFFFFFFFFF"
+	uri.Path = "/ffffffffffffffff"
 
 	var result []byte
 
@@ -532,5 +532,5 @@ func (me *NeoCli) SENDMANY(args []interface{}, ret *interface{}) error {
 }
 
 var (
-	modNeoCliVarRegHash = regexp.MustCompile(`^(0X)?([0-9A-F]{64})$`)
+	modNeoCliVarRegHash = regexp.MustCompile(`^(0x)?([0-9a-f]{64})$`)
 )
