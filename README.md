@@ -70,7 +70,6 @@ value is in binary form.
 
 ## todo
 
-- [ ] getbestblockhash ; top
 - [ ] getblockcount ; top
 - [ ] getclaimable ; top
 - [ ] getcontractstate ; top
