@@ -12,6 +12,7 @@ type T struct {
 
 // Run ...
 func (me *T) Run() {
+	log.Println("[LIB][RUN]", me.Slaves)
 	for i := 0; i <= me.Slaves; i++ {
 		go me.Thread()
 	}

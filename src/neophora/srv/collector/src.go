@@ -34,16 +34,3 @@ func (me *T) Task() {
 		me.Queue <- task
 	}
 }
-
-// Thread ...
-func (me *T) Thread() {
-	var result interface{}
-	for {
-
-		task := <-me.Queue
-		if err := me.Client.Calls("DB.Put", task, &result); err != nil {
-			log.Println("[!!!!][Call][DBS]", task)
-			me.Queue <- task
-		}
-	}
-}
