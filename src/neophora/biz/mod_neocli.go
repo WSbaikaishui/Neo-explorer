@@ -805,6 +805,11 @@ func (me *NeoCli) GETMETRICBLOCKTIMESTAMP(args []interface{}, ret *interface{}) 
 	return stderr.ErrUnsupportedMethod
 }
 
+// GETUTXOTRANSFERS ...
+func (me *NeoCli) GETUTXOTRANSFERS(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
 // GETNEP5TRANSFERS ...
 func (me *NeoCli) GETNEP5TRANSFERS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
