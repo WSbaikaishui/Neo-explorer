@@ -514,8 +514,16 @@ func (me *NeoCli) GETBLOCKCOUNT(args []interface{}, ret *interface{}) error {
 		return stderr.ErrNotFound
 	}
 
-	hash := hex.EncodeToString(result)
-	*ret = fmt.Sprintf("0x%s", hash)
+	key, err := url.Parse(string(result))
+	if err != nil {
+		return stderr.ErrUnknown
+	}
+
+	var count uint64
+
+	fmt.Sscanf(key.Path, "/%x", &count)
+
+	*ret = count
 	return nil
 }
 
