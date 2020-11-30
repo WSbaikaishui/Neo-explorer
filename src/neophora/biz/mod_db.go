@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"log"
 	"neophora/dat"
 )
 
@@ -14,6 +15,7 @@ func (me *DB) Put(data struct {
 	Key   []byte
 	Value []byte
 }, ret *bool) error {
+	log.Println("[REQUEST][Put]", string(data.Key))
 	if err := me.DB.Put(data.Key, data.Value); err != nil {
 		return err
 	}

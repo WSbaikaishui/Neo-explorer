@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"neophora/biz"
 	"neophora/cli"
 	"neophora/lib/joh"
@@ -31,6 +32,7 @@ func main() {
 func init() {
 	address := os.ExpandEnv("${DBS_ADDRESS}")
 	addresses := strings.Split(address, " ")
+	log.Println("[MAIN][INIT][DBS ADDRESS]", addresses)
 	rpc.Register(&biz.NeoCli{
 		Client: &cli.T{
 			Addresses: addresses,
