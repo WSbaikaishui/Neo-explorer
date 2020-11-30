@@ -363,7 +363,7 @@ func (me *NeoCli) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
 	uri.Scheme = "adhocaccountstate"
 
 	switch key := args[0].(type) {
-	case float64:
+	case string:
 		uri.Host = "account-height"
 		tr := &trans.T{
 			V: key,
@@ -524,6 +524,188 @@ func (me *NeoCli) GETBLOCKCOUNT(args []interface{}, ret *interface{}) error {
 	fmt.Sscanf(key.Path, "/%x", &count)
 
 	*ret = count
+	return nil
+}
+
+// GETCLAIMABLE ...
+func (me *NeoCli) GETCLAIMABLE(args []interface{}, ret *interface{}) error {
+	switch len(args) {
+	case 1:
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var uri url.URL
+
+	uri.Scheme = "adhocclaimable"
+
+	switch key := args[0].(type) {
+	case string:
+		uri.Host = "account-height"
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.AddressToHash(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", tr.V)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = json.RawMessage(result)
+	return nil
+}
+
+// GETCONTRACTSTATE ...
+func (me *NeoCli) GETCONTRACTSTATE(args []interface{}, ret *interface{}) error {
+	switch len(args) {
+	case 1:
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var uri url.URL
+
+	uri.Scheme = "adhoccontractstate"
+
+	switch key := args[0].(type) {
+	case string:
+		uri.Host = "hash-height"
+		key = strings.ToLower(key)
+		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
+		if len(matches) != 3 {
+			return stderr.ErrInvalidArgs
+		}
+		key = matches[2]
+		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", key)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = json.RawMessage(result)
+	return nil
+}
+
+// GETNEP5BALANCES ...
+func (me *NeoCli) GETNEP5BALANCES(args []interface{}, ret *interface{}) error {
+	switch len(args) {
+	case 1:
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var uri url.URL
+
+	uri.Scheme = "adhocnep5balance"
+
+	switch key := args[0].(type) {
+	case string:
+		uri.Host = "account-height"
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.AddressToHash(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", tr.V)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = json.RawMessage(result)
+	return nil
+}
+
+// GETSTATEHEIGHT ...
+func (me *NeoCli) GETSTATEHEIGHT(args []interface{}, ret *interface{}) error {
+	switch len(args) {
+	case 0:
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var uri url.URL
+
+	uri.Scheme = "adhocstateheight"
+	uri.Host = "height"
+	uri.Path = "/ffffffffffffffff"
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = json.RawMessage(result)
 	return nil
 }
 
