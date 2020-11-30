@@ -7,6 +7,8 @@ import (
 	"neophora/lib/trans"
 	"neophora/var/stderr"
 	"net/url"
+	"regexp"
+	"strings"
 )
 
 // NeoCli ...
@@ -16,48 +18,45 @@ type NeoCli struct {
 
 // GETBLOCK ...
 func (me *NeoCli) GETBLOCK(args []interface{}, ret *interface{}) error {
-	if len(args) == 0 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) > 2 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) == 1 {
+	switch len(args) {
+	case 1:
 		args = append(args, 0.0)
-	}
-
-	var scheme string
-	var host string
-	var path string
-	var result []byte
-
-	switch key := args[0].(type) {
-	case float64:
-		host = "height"
-		path = fmt.Sprintf("/%016X", uint64(key))
-	case string:
-		host = "hash"
-		path = fmt.Sprintf("/%s", key)
+	case 2:
 	default:
 		return stderr.ErrInvalidArgs
 	}
+
+	var uri url.URL
 
 	switch args[1] {
 	case 0.0:
-		scheme = "block"
+		uri.Scheme = "block"
 	case 1.0:
-		scheme = "adhocblockinfo"
+		uri.Scheme = "adhocblockinfo"
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	uri := &url.URL{
-		Scheme: scheme,
-		Host:   host,
-		Path:   path,
+	switch key := args[0].(type) {
+	case float64:
+		uri.Host = "height"
+		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+	case string:
+		uri.Host = "hash"
+		key = strings.ToUpper(key)
+		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
+		if len(matches) != 3 {
+			return stderr.ErrInvalidArgs
+		}
+		key = matches[2]
+		uri.Path = fmt.Sprintf("/%s", key)
+	default:
+		return stderr.ErrInvalidArgs
 	}
-	uristring := uri.String()
-	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+
+	var result []byte
+
+	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -73,48 +72,45 @@ func (me *NeoCli) GETBLOCK(args []interface{}, ret *interface{}) error {
 
 // GETBLOCKHEADER ...
 func (me *NeoCli) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
-	if len(args) == 0 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) > 2 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) == 1 {
+	switch len(args) {
+	case 1:
 		args = append(args, 0.0)
-	}
-
-	var scheme string
-	var host string
-	var path string
-	var result []byte
-
-	switch key := args[0].(type) {
-	case float64:
-		host = "height"
-		path = fmt.Sprintf("/%016X", uint64(key))
-	case string:
-		host = "hash"
-		path = fmt.Sprintf("/%s", key)
+	case 2:
 	default:
 		return stderr.ErrInvalidArgs
 	}
+
+	var uri url.URL
 
 	switch args[1] {
 	case 0.0:
-		scheme = "header"
+		uri.Scheme = "header"
 	case 1.0:
-		scheme = "adhocheaderinfo"
+		uri.Scheme = "adhocheaderinfo"
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	uri := &url.URL{
-		Scheme: scheme,
-		Host:   host,
-		Path:   path,
+	switch key := args[0].(type) {
+	case float64:
+		uri.Host = "height"
+		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+	case string:
+		uri.Host = "hash"
+		key = strings.ToUpper(key)
+		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
+		if len(matches) != 3 {
+			return stderr.ErrInvalidArgs
+		}
+		key = matches[2]
+		uri.Path = fmt.Sprintf("/%s", key)
+	default:
+		return stderr.ErrInvalidArgs
 	}
-	uristring := uri.String()
-	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+
+	var result []byte
+
+	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -130,45 +126,42 @@ func (me *NeoCli) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 
 // GETRAWTRANSACTION ...
 func (me *NeoCli) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error {
-	if len(args) == 0 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) > 2 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) == 1 {
+	switch len(args) {
+	case 1:
 		args = append(args, 0.0)
-	}
-
-	var scheme string
-	var host string
-	var path string
-	var result []byte
-
-	switch key := args[0].(type) {
-	case string:
-		host = "hash"
-		path = fmt.Sprintf("/%s", key)
+	case 2:
 	default:
 		return stderr.ErrInvalidArgs
 	}
+
+	var uri url.URL
 
 	switch args[1] {
 	case 0.0:
-		scheme = "tx"
+		uri.Scheme = "tx"
 	case 1.0:
-		scheme = "adhoctxinfo"
+		uri.Scheme = "adhoctxinfo"
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	uri := &url.URL{
-		Scheme: scheme,
-		Host:   host,
-		Path:   path,
+	switch key := args[0].(type) {
+	case string:
+		uri.Host = "hash"
+		key = strings.ToUpper(key)
+		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
+		if len(matches) != 3 {
+			return stderr.ErrInvalidArgs
+		}
+		key = matches[2]
+		uri.Path = fmt.Sprintf("/%s", key)
+	default:
+		return stderr.ErrInvalidArgs
 	}
-	uristring := uri.String()
-	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+
+	var result []byte
+
+	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -184,38 +177,33 @@ func (me *NeoCli) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error 
 
 // GETAPPLICATIONLOG ...
 func (me *NeoCli) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error {
-	if len(args) == 0 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) > 2 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) == 1 {
-		args = append(args, 0.0)
-	}
-
-	var scheme string
-	var host string
-	var path string
-	var result []byte
-
-	switch key := args[0].(type) {
-	case string:
-		host = "hash"
-		path = fmt.Sprintf("/%s", key)
+	switch len(args) {
+	case 1:
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	scheme = "adhoclog"
+	var uri url.URL
 
-	uri := &url.URL{
-		Scheme: scheme,
-		Host:   host,
-		Path:   path,
+	uri.Scheme = "adhoclog"
+
+	switch key := args[0].(type) {
+	case string:
+		uri.Host = "hash"
+		key = strings.ToUpper(key)
+		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
+		if len(matches) != 3 {
+			return stderr.ErrInvalidArgs
+		}
+		key = matches[2]
+		uri.Path = fmt.Sprintf("/%s", key)
+	default:
+		return stderr.ErrInvalidArgs
 	}
-	uristring := uri.String()
-	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+
+	var result []byte
+
+	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -226,41 +214,36 @@ func (me *NeoCli) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error 
 
 // GETSTATEROOT ...
 func (me *NeoCli) GETSTATEROOT(args []interface{}, ret *interface{}) error {
-	if len(args) == 0 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) > 2 {
-		return stderr.ErrInvalidArgs
-	}
-	if len(args) == 1 {
-		args = append(args, 0.0)
-	}
-
-	var scheme string
-	var host string
-	var path string
-	var result []byte
-
-	switch key := args[0].(type) {
-	case float64:
-		host = "height"
-		path = fmt.Sprintf("/%016X", uint64(key))
-	case string:
-		host = "hash"
-		path = fmt.Sprintf("/%s", key)
+	switch len(args) {
+	case 1:
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	scheme = "adhocstateroot"
+	var uri url.URL
 
-	uri := &url.URL{
-		Scheme: scheme,
-		Host:   host,
-		Path:   path,
+	uri.Scheme = "adhocstateroot"
+
+	switch key := args[0].(type) {
+	case float64:
+		uri.Host = "height"
+		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+	case string:
+		uri.Host = "hash"
+		key = strings.ToUpper(key)
+		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
+		if len(matches) != 3 {
+			return stderr.ErrInvalidArgs
+		}
+		key = matches[2]
+		uri.Path = fmt.Sprintf("/%s", key)
+	default:
+		return stderr.ErrInvalidArgs
 	}
-	uristring := uri.String()
-	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+
+	var result []byte
+
+	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -271,62 +254,59 @@ func (me *NeoCli) GETSTATEROOT(args []interface{}, ret *interface{}) error {
 
 // GETBLOCKHASH ...
 func (me *NeoCli) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
-	if len(args) != 1 {
-		return stderr.ErrInvalidArgs
-	}
-
-	var host string
-	var path string
-	var result []byte
-
-	switch key := args[0].(type) {
-	case float64:
-		host = "height"
-		path = fmt.Sprintf("/%016X", uint64(key))
+	switch len(args) {
+	case 1:
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	uri := &url.URL{
-		Scheme: "hash",
-		Host:   host,
-		Path:   path,
+	var uri url.URL
+
+	uri.Scheme = "hash"
+
+	switch key := args[0].(type) {
+	case float64:
+		uri.Host = "height"
+		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+	default:
+		return stderr.ErrInvalidArgs
 	}
-	uristring := uri.String()
-	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+
+	var result []byte
+
+	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
 	hash := hex.EncodeToString(result)
 	*ret = fmt.Sprintf("0x%s", hash)
+
 	return nil
 }
 
 // GETBLOCKSYSFEE ...
 func (me *NeoCli) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
-	if len(args) != 1 {
-		return stderr.ErrInvalidArgs
-	}
-
-	var host string
-	var path string
-	var result []byte
-
-	switch key := args[0].(type) {
-	case float64:
-		host = "height"
-		path = fmt.Sprintf("/%016X", uint64(key))
+	switch len(args) {
+	case 1:
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	uri := &url.URL{
-		Scheme: "adhocsysfee",
-		Host:   host,
-		Path:   path,
+	var uri url.URL
+
+	uri.Scheme = "adhocsysfee"
+
+	switch key := args[0].(type) {
+	case float64:
+		uri.Host = "height"
+		uri.Path = fmt.Sprintf("/%016X", uint64(key))
+	default:
+		return stderr.ErrInvalidArgs
 	}
-	uristring := uri.String()
-	if err := me.Client.Calls("DB.Get", []byte(uristring), &result); err != nil {
+
+	var result []byte
+
+	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -336,17 +316,19 @@ func (me *NeoCli) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
 
 // GETACCOUNTSTATE ...
 func (me *NeoCli) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
-	if len(args) != 1 {
+	switch len(args) {
+	case 1:
+	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	var host string
-	var path string
-	var result []byte
+	var uri url.URL
+
+	uri.Scheme = "adhocaccountstate"
 
 	switch key := args[0].(type) {
-	case string:
-		host = "account-height"
+	case float64:
+		uri.Host = "account-height"
 		tr := &trans.T{
 			V: key,
 		}
@@ -356,23 +338,20 @@ func (me *NeoCli) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		path = fmt.Sprintf("/%s/FFFFFFFFFFFFFFFF", tr.V)
+		uri.Path = fmt.Sprintf("/%s/FFFFFFFFFFFFFFFF", tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	uri := &url.URL{
-		Scheme: "adhocaccountstate",
-		Host:   host,
-		Path:   path,
-	}
-	uristring := uri.String()
+	var result []byte
+
+	urs := uri.String()
 	if err := me.Client.Calls("DB.GetLast", struct {
 		Key    []byte
 		Prefix int
 	}{
-		Key:    []byte(uristring),
-		Prefix: len(uristring) - 16,
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
 	}, &result); err != nil {
 		return stderr.ErrUnknown
 	}
@@ -383,34 +362,39 @@ func (me *NeoCli) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
 
 // GETASSETSTATE ...
 func (me *NeoCli) GETASSETSTATE(args []interface{}, ret *interface{}) error {
-	if len(args) != 1 {
-		return stderr.ErrInvalidArgs
-	}
-
-	var host string
-	var path string
-	var result []byte
-
-	switch key := args[0].(type) {
-	case string:
-		host = "hash-height"
-		path = fmt.Sprintf("/%s/FFFFFFFFFFFFFFFF", key)
+	switch len(args) {
+	case 1:
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
-	uri := &url.URL{
-		Scheme: "adhocassetstate",
-		Host:   host,
-		Path:   path,
+	var uri url.URL
+
+	uri.Scheme = "adhocassetstate"
+
+	switch key := args[0].(type) {
+	case string:
+		uri.Host = "hash-height"
+		key = strings.ToUpper(key)
+		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
+		if len(matches) != 3 {
+			return stderr.ErrInvalidArgs
+		}
+		key = matches[2]
+		uri.Path = fmt.Sprintf("/%s/FFFFFFFFFFFFFFFF", key)
+	default:
+		return stderr.ErrInvalidArgs
 	}
-	uristring := uri.String()
+
+	var result []byte
+
+	urs := uri.String()
 	if err := me.Client.Calls("DB.GetLast", struct {
 		Key    []byte
 		Prefix int
 	}{
-		Key:    []byte(uristring),
-		Prefix: len(uristring) - 16,
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
 	}, &result); err != nil {
 		return stderr.ErrUnknown
 	}
@@ -421,24 +405,27 @@ func (me *NeoCli) GETASSETSTATE(args []interface{}, ret *interface{}) error {
 
 // GETBESTBLOCKHASH ...
 func (me *NeoCli) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
-	if len(args) != 0 {
+	switch len(args) {
+	case 0:
+	default:
 		return stderr.ErrInvalidArgs
 	}
 
+	var uri url.URL
+
+	uri.Scheme = "hash"
+	uri.Host = "height"
+	uri.Path = "/FFFFFFFFFFFFFFFF"
+
 	var result []byte
 
-	uri := &url.URL{
-		Scheme: "hash",
-		Host:   "height",
-		Path:   "/FFFFFFFFFFFFFFFF",
-	}
-	uristring := uri.String()
+	urs := uri.String()
 	if err := me.Client.Calls("DB.GetLast", struct {
 		Key    []byte
 		Prefix int
 	}{
-		Key:    []byte(uristring),
-		Prefix: len(uristring) - 16,
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
 	}, &result); err != nil {
 		return stderr.ErrUnknown
 	}
@@ -543,3 +530,7 @@ func (me *NeoCli) SENDTOADDRESS(args []interface{}, ret *interface{}) error {
 func (me *NeoCli) SENDMANY(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
+
+var (
+	modNeoCliVarRegHash = regexp.MustCompile(`^(0x)?([0-9A-F]]{64})$`)
+)
