@@ -483,6 +483,42 @@ func (me *NeoCli) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
+// getblockcount ...
+func (me *NeoCli) getblockcount(args []interface{}, ret *interface{}) error {
+	switch len(args) {
+	case 0:
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var uri url.URL
+
+	uri.Scheme = "hash"
+	uri.Host = "height"
+	uri.Path = "/ffffffffffffffff"
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.GetLastKey", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	hash := hex.EncodeToString(result)
+	*ret = fmt.Sprintf("0x%s", hash)
+	return nil
+}
+
 // PING ...
 func (me *NeoCli) PING(args []interface{}, ret *interface{}) error {
 	*ret = "pong"
