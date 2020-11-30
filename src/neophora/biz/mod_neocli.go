@@ -2,6 +2,7 @@ package biz
 
 import (
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"neophora/cli"
 	"neophora/lib/trans"
@@ -56,7 +57,8 @@ func (me *NeoCli) GETBLOCK(args []interface{}, ret *interface{}) error {
 
 	var result []byte
 
-	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -64,7 +66,7 @@ func (me *NeoCli) GETBLOCK(args []interface{}, ret *interface{}) error {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
 	case 1.0:
-		*ret = string(result)
+		*ret = json.RawMessage(result)
 	}
 
 	return nil
@@ -110,7 +112,8 @@ func (me *NeoCli) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 
 	var result []byte
 
-	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -118,7 +121,7 @@ func (me *NeoCli) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
 	case 1.0:
-		*ret = string(result)
+		*ret = json.RawMessage(result)
 	}
 
 	return nil
@@ -161,7 +164,8 @@ func (me *NeoCli) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error 
 
 	var result []byte
 
-	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -169,7 +173,7 @@ func (me *NeoCli) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error 
 	case 0.0:
 		*ret = hex.EncodeToString(result)
 	case 1.0:
-		*ret = string(result)
+		*ret = json.RawMessage(result)
 	}
 
 	return nil
@@ -203,11 +207,12 @@ func (me *NeoCli) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error 
 
 	var result []byte
 
-	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
-	*ret = string(result)
+	*ret = json.RawMessage(result)
 
 	return nil
 }
@@ -243,11 +248,12 @@ func (me *NeoCli) GETSTATEROOT(args []interface{}, ret *interface{}) error {
 
 	var result []byte
 
-	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
-	*ret = string(result)
+	*ret = json.RawMessage(result)
 
 	return nil
 }
@@ -274,7 +280,8 @@ func (me *NeoCli) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
 
 	var result []byte
 
-	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -306,7 +313,8 @@ func (me *NeoCli) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
 
 	var result []byte
 
-	if err := me.Client.Calls("DB.Get", []byte(uri.String()), &result); err != nil {
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -356,7 +364,7 @@ func (me *NeoCli) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
-	*ret = string(result)
+	*ret = json.RawMessage(result)
 	return nil
 }
 
@@ -399,7 +407,7 @@ func (me *NeoCli) GETASSETSTATE(args []interface{}, ret *interface{}) error {
 		return stderr.ErrUnknown
 	}
 
-	*ret = string(result)
+	*ret = json.RawMessage(result)
 	return nil
 }
 
