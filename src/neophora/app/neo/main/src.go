@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"neophora/biz"
 	"neophora/cli"
@@ -36,7 +37,11 @@ func init() {
 		Addresses: addresses,
 		TryTimes:  3,
 	}
-	dmn := &daemon.T{}
+	dmn := &daemon.T{
+		IP:       os.ExpandEnv("${NEO_IP}"),
+		ExecPath: os.ExpandEnv("${NEO_EXEC}"),
+	}
+	fmt.Sscanf(os.ExpandEnv("${NEO_STARTHEIGHT}"), "%d", &dmn.StartFrom)
 	clt := &collector.T{
 		Queue: make(chan struct {
 			Key   []byte
@@ -44,11 +49,15 @@ func init() {
 		}, 1024),
 		Client: client,
 	}
-	runner := &run.T{
+	rCLT := &run.T{
 		Service: clt,
 		Slaves:  4,
 	}
-	runner.Run()
+	rCLT.Run()
+	rDMN := &run.T{
+		Service: dmn,
+	}
+	rDMN.Run()
 	rpc.Register(&biz.Version{})
 	rpc.Register(&biz.Collector{
 		Service: clt,
