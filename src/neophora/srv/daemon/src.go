@@ -68,7 +68,7 @@ func (me *T) Reset() {
 
 	exec.Command("bash", "-c", "rm -rf ")
 	port := os.ExpandEnv("${NEO_PORT}")
-	cmd := fmt.Sprintf("server=%s port=%s startFrom=%d %s", me.IP, port, me.StartFrom, me.ExecPath)
+	cmd := fmt.Sprintf("SERVER=%s PORT=%s STARTFROM=%d %s", me.IP, port, me.StartFrom, me.ExecPath)
 	me.exe = exec.Command("bash", "-c", cmd)
 	log.Println("[Service][Daemon][CMD]", cmd)
 }

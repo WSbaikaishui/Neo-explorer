@@ -46,6 +46,7 @@ value is in binary form.
 - `header://hash/{HASH}`
 - `hash://height/{UINT64}`
 - `tx://hash/{HASH}`
+- `height://tx/{HASH}`
 - `adhocstateroot://height/{UINT64}`
 - `adhocstateroot://hash/{HASH}`
 - `adhoclog://tx/{HASH}`
@@ -68,7 +69,6 @@ value is in binary form.
 - `storage://script-key-height/{HASH}/{HASH}/{UINT64}`
 - `string://hash/{HASH}`
 - `nep5://asset-account-height/{HASH}/{HASH}/{UINT64}`
-- `height://tx/{HASH}`
 - `validators://height/{UINT64}`
 
 ## todo
