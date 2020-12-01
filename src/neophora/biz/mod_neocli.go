@@ -8,7 +8,6 @@ import (
 	"neophora/lib/trans"
 	"neophora/var/stderr"
 	"net/url"
-	"regexp"
 	"strings"
 )
 
@@ -44,13 +43,25 @@ func (me *NeoCli) GETBLOCK(args []interface{}, ret *interface{}) error {
 		uri.Path = fmt.Sprintf("/%016x", uint64(key))
 	case string:
 		uri.Host = "hash"
-		key = strings.ToLower(key)
-		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
-		if len(matches) != 3 {
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		key = matches[2]
-		uri.Path = fmt.Sprintf("/%s", key)
+		if err := tr.Remove0xPrefix(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesReverse(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s", tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -103,13 +114,25 @@ func (me *NeoCli) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 		uri.Path = fmt.Sprintf("/%016x", uint64(key))
 	case string:
 		uri.Host = "hash"
-		key = strings.ToLower(key)
-		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
-		if len(matches) != 3 {
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		key = matches[2]
-		uri.Path = fmt.Sprintf("/%s", key)
+		if err := tr.Remove0xPrefix(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesReverse(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s", tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -159,13 +182,25 @@ func (me *NeoCli) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error 
 	switch key := args[0].(type) {
 	case string:
 		uri.Host = "hash"
-		key = strings.ToLower(key)
-		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
-		if len(matches) != 3 {
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		key = matches[2]
-		uri.Path = fmt.Sprintf("/%s", key)
+		if err := tr.Remove0xPrefix(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesReverse(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s", tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -206,13 +241,25 @@ func (me *NeoCli) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error 
 	switch key := args[0].(type) {
 	case string:
 		uri.Host = "hash"
-		key = strings.ToLower(key)
-		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
-		if len(matches) != 3 {
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		key = matches[2]
-		uri.Path = fmt.Sprintf("/%s", key)
+		if err := tr.Remove0xPrefix(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesReverse(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s", tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -251,13 +298,25 @@ func (me *NeoCli) GETSTATEROOT(args []interface{}, ret *interface{}) error {
 		uri.Path = fmt.Sprintf("/%016x", uint64(key))
 	case string:
 		uri.Host = "hash"
-		key = strings.ToLower(key)
-		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
-		if len(matches) != 3 {
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		key = matches[2]
-		uri.Path = fmt.Sprintf("/%s", key)
+		if err := tr.Remove0xPrefix(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesReverse(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s", tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -309,8 +368,17 @@ func (me *NeoCli) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
 		return stderr.ErrNotFound
 	}
 
-	hash := hex.EncodeToString(result)
-	*ret = fmt.Sprintf("0x%s", hash)
+	tr := &trans.T{
+		V: result,
+	}
+
+	if err := tr.BytesReverse(); err != nil {
+		return stderr.ErrUnknown
+	}
+	if err := tr.BytesToHex(); err != nil {
+		return stderr.ErrUnknown
+	}
+	*ret = fmt.Sprintf("0x%s", tr.V)
 
 	return nil
 }
@@ -415,13 +483,25 @@ func (me *NeoCli) GETASSETSTATE(args []interface{}, ret *interface{}) error {
 	switch key := args[0].(type) {
 	case string:
 		uri.Host = "hash-height"
-		key = strings.ToLower(key)
-		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
-		if len(matches) != 3 {
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		key = matches[2]
-		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", key)
+		if err := tr.Remove0xPrefix(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesReverse(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -478,8 +558,16 @@ func (me *NeoCli) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
 		return stderr.ErrNotFound
 	}
 
-	hash := hex.EncodeToString(result)
-	*ret = fmt.Sprintf("0x%s", hash)
+	tr := &trans.T{
+		V: result,
+	}
+	if err := tr.BytesReverse(); err != nil {
+		return stderr.ErrUnknown
+	}
+	if err := tr.BytesToHex(); err != nil {
+		return stderr.ErrUnknown
+	}
+	*ret = fmt.Sprintf("0x%s", tr.V)
 	return nil
 }
 
@@ -592,13 +680,25 @@ func (me *NeoCli) GETCONTRACTSTATE(args []interface{}, ret *interface{}) error {
 	switch key := args[0].(type) {
 	case string:
 		uri.Host = "hash-height"
-		key = strings.ToLower(key)
-		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
-		if len(matches) != 3 {
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		key = matches[2]
-		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", key)
+		if err := tr.Remove0xPrefix(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesReverse(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -725,11 +825,25 @@ func (me *NeoCli) GETSTROAGE(args []interface{}, ret *interface{}) error {
 	switch key := args[0].(type) {
 	case string:
 		key = strings.ToLower(key)
-		matches := modNeoCliVarRegHash.FindStringSubmatch(key)
-		if len(matches) != 3 {
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		uri.Path = matches[2]
+		if err := tr.Remove0xPrefix(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesReverse(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprint(tr.V)
 	default:
 		return stderr.ErrInvalidArgs
 	}
@@ -874,7 +988,3 @@ func (me *NeoCli) SENDTOADDRESS(args []interface{}, ret *interface{}) error {
 func (me *NeoCli) SENDMANY(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
-
-var (
-	modNeoCliVarRegHash = regexp.MustCompile(`^(0x)?([0-9a-f]{64})$`)
-)

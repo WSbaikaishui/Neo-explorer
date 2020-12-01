@@ -4,6 +4,8 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"neophora/var/stderr"
+	"regexp"
+	"strings"
 )
 
 // T ...
@@ -58,3 +60,44 @@ func (me *T) BytesToHash() error {
 		return stderr.ErrInvalidArgs
 	}
 }
+
+// BytesReverse ...
+func (me *T) BytesReverse() error {
+	switch bytes := me.V.(type) {
+	case []byte:
+		for i, j := 0, len(bytes)-1; i < j; i, j = i+1, j-1 {
+			bytes[i], bytes[j] = bytes[j], bytes[i]
+		}
+		return nil
+	default:
+		return stderr.ErrInvalidArgs
+	}
+}
+
+// StringToLowerCase ...
+func (me *T) StringToLowerCase() error {
+	switch str := me.V.(type) {
+	case string:
+		me.V = strings.ToLower(str)
+		return nil
+	default:
+		return stderr.ErrInvalidArgs
+	}
+}
+
+// Remove0xPrefix ...
+func (me *T) Remove0xPrefix() error {
+	switch str := me.V.(type) {
+	case string:
+		matches := libTransReg0x.FindStringSubmatch(str)
+		if len(matches) != 3 {
+			return stderr.ErrInvalidArgs
+		}
+		me.V = matches[2]
+		return nil
+	default:
+		return stderr.ErrInvalidArgs
+	}
+}
+
+var libTransReg0x = regexp.MustCompile(`^(0x)?([0-9a-f]{64})$`)
