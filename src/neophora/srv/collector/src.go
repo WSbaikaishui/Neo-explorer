@@ -31,6 +31,8 @@ func (me *T) Task() {
 	task := <-me.Queue
 	if err := me.Client.Calls("DB.Put", task, &result); err != nil {
 		log.Println("[!!!!][Call][DBS]", err, task)
-		me.Queue <- task
+		go func() {
+			me.Queue <- task
+		}()
 	}
 }
