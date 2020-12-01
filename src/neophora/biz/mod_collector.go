@@ -25,6 +25,13 @@ func (me *Collector) HeartBeat(args interface{}, ret *interface{}) error {
 	return nil
 }
 
+// Commit ...
+func (me *Collector) Commit(args int, ret *interface{}) error {
+	log.Println("[BIZ][COLLECTOR][COMMIT]", args)
+	me.Daemon.Commit(args)
+	return nil
+}
+
 // Write ...
 func (me *Collector) Write(args [2]string, ret *interface{}) error {
 	k, v := args[0], args[1]
