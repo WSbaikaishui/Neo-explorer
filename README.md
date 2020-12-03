@@ -47,6 +47,8 @@ value is in binary form.
 - `hash://height/{UINT64}`
 - `tx://hash/{HASH}`
 - `height://tx/{HASH}`
+- `storage://dbkey-height/{HEX}/{UINT64}`
+
 - `adhocstateroot://height/{UINT64}`
 - `adhocstateroot://hash/{HASH}`
 - `adhoclog://tx/{HASH}`
@@ -56,28 +58,24 @@ value is in binary form.
 - `adhocheaderinfo://hash/{HASH}`
 - `adhocsysfee://height/{UINT64}`
 - `adhoctxinfo://hash/{HASH}`
-
 - `adhocaccountstate://account-height/{HASH}/{UINT64}`
 - `adhocassetstate://hash-height/{HASH}/{UINT64}`
-- `adhocclaimable://account-height/{HASH}/{UINT64}`
 - `adhoccontractstate://hash-height/{HASH}/{UINT64}`
-- `adhocnep5balance://account-height/{HASH}/{UINT64}`
+- `adhocclaimable://account-height/{HASH}/{UINT64}`
 - `adhocunspents://account-height/{HASH}/{UINT64}`
+
+- `adhocnep5balance://account-height/{HASH}/{UINT64}`
 - `adhocstateheight://height/{UINT64}`
 - `adhoctxout://tx-n/{HASH}/{UINT64}`
-
-- `storage://script-key-height/{HASH}/{HASH}/{UINT64}`
-- `string://hash/{HASH}`
-- `nep5://asset-account-height/{HASH}/{HASH}/{UINT64}`
 - `validators://height/{UINT64}`
 
 ## todo
 
-- [ ] gettransactionheight
+- [x] gettransactionheight
 - [ ] gettxout
 - [ ] getproof
-- [ ] getunclaimed ; top
-- [ ] getunspents ; top
+- [x] getunclaimed ; top
+- [x] getunspents ; top
 - [ ] getvalidators ; top
 - [ ] invokefunction
 - [ ] invokescript
