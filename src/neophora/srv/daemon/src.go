@@ -13,7 +13,8 @@ import (
 // T ...
 type T struct {
 	IP        string
-	ExecPath  string
+	ExecDir   string
+	ExecCmd   string
 	StartFrom int
 	last      time.Time
 	lock      sync.Mutex
@@ -48,9 +49,8 @@ func (me *T) Task() {
 func (me *T) Reset() {
 	me.lock.Lock()
 	defer me.lock.Unlock()
-	dir := path.Dir(me.ExecPath)
 	{
-		d := path.Join(dir, "Chain_00746E41")
+		d := path.Join(me.ExecDir, "Chain_00746E41")
 		cmd := fmt.Sprintf("rm -rf %s", d)
 		log.Println("[Service][Daemon][CMD]", cmd)
 		if err := exec.Command("bash", "-c", cmd).Run(); err != nil {
@@ -58,7 +58,7 @@ func (me *T) Reset() {
 		}
 	}
 	{
-		d := path.Join(dir, "Index_00746E41")
+		d := path.Join(me.ExecDir, "Index_00746E41")
 		cmd := fmt.Sprintf("rm -rf %s", d)
 		log.Println("[Service][Daemon][CMD]", cmd)
 		if err := exec.Command("bash", "-c", cmd).Run(); err != nil {
@@ -66,9 +66,8 @@ func (me *T) Reset() {
 		}
 	}
 
-	exec.Command("bash", "-c", "rm -rf ")
 	port := os.ExpandEnv("${NEO_PORT}")
-	cmd := fmt.Sprintf("SERVER=%s PORT=%s STARTFROM=%d %s", me.IP, port, me.StartFrom, me.ExecPath)
+	cmd := fmt.Sprintf("cd %s && sleep 5 && SERVER=%s PORT=%s STARTFROM=%d %s", me.ExecDir, me.IP, port, me.StartFrom, me.ExecCmd)
 	me.exe = exec.Command("bash", "-c", cmd)
 	log.Println("[Service][Daemon][CMD]", cmd)
 }

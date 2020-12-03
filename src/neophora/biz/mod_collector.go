@@ -35,6 +35,7 @@ func (me *Collector) Commit(args int, ret *interface{}) error {
 // Write ...
 func (me *Collector) Write(args [2]string, ret *interface{}) error {
 	k, v := args[0], args[1]
+	log.Println("[REQUEST][Collector.Write]", k)
 	key := []byte(k)
 	value, err := hex.DecodeString(v)
 	if err != nil {

@@ -809,8 +809,8 @@ func (me *NeoCli) GETSTATEHEIGHT(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETSTROAGE ...
-func (me *NeoCli) GETSTROAGE(args []interface{}, ret *interface{}) error {
+// GETSTORAGE ...
+func (me *NeoCli) GETSTORAGE(args []interface{}, ret *interface{}) error {
 	switch len(args) {
 	case 2:
 	default:
@@ -820,7 +820,7 @@ func (me *NeoCli) GETSTROAGE(args []interface{}, ret *interface{}) error {
 	var uri url.URL
 
 	uri.Scheme = "storage"
-	uri.Host = "script-key-height"
+	uri.Host = "dbkey-height"
 
 	switch key := args[0].(type) {
 	case string:
@@ -850,19 +850,7 @@ func (me *NeoCli) GETSTROAGE(args []interface{}, ret *interface{}) error {
 
 	switch key := args[1].(type) {
 	case string:
-		tr := &trans.T{
-			V: key,
-		}
-		if err := tr.HexToBytes(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.BytesToHash(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.BytesToHex(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		uri.Path = fmt.Sprintf("/%s/%s/ffffffffffffffff", uri.Path, tr.V)
+		uri.Path = fmt.Sprintf("/%s%s/ffffffffffffffff", uri.Path, key)
 	default:
 		return stderr.ErrInvalidArgs
 	}
