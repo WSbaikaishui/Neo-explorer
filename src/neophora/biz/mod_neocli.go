@@ -862,7 +862,7 @@ func (me *NeoCli) GETBALANCE(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETTRANSACTIONHEIGHT is ...
+// GETTRANSACTIONHEIGHT ...
 func (me *NeoCli) GETTRANSACTIONHEIGHT(args []interface{}, ret *interface{}) error {
 	switch len(args) {
 	case 1:
@@ -876,7 +876,7 @@ func (me *NeoCli) GETTRANSACTIONHEIGHT(args []interface{}, ret *interface{}) err
 
 	switch key := args[0].(type) {
 	case string:
-		uri.Host = "hash"
+		uri.Host = "tx"
 		tr := &trans.T{
 			V: key,
 		}
@@ -917,7 +917,7 @@ func (me *NeoCli) GETTRANSACTIONHEIGHT(args []interface{}, ret *interface{}) err
 }
 
 // GETUNSPENTS is ...
-func (me *NeoCli) GETUNSPENTS(args []interface{}, ret *interface{}) {
+func (me *NeoCli) GETUNSPENTS(args []interface{}, ret *interface{}) error {
 	switch len(args) {
 	case 1:
 	default:
