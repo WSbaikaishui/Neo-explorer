@@ -734,7 +734,7 @@ func (me *NeoCli) GETNEP5BALANCES(args []interface{}, ret *interface{}) error {
 
 	var uri url.URL
 
-	uri.Scheme = "adhocnep5balance"
+	uri.Scheme = "adhocnep5balances"
 
 	switch key := args[0].(type) {
 	case string:
@@ -752,41 +752,6 @@ func (me *NeoCli) GETNEP5BALANCES(args []interface{}, ret *interface{}) error {
 	default:
 		return stderr.ErrInvalidArgs
 	}
-
-	var result []byte
-
-	urs := uri.String()
-	if err := me.Client.Calls("DB.GetLast", struct {
-		Key    []byte
-		Prefix int
-	}{
-		Key:    []byte(urs),
-		Prefix: len(urs) - 16,
-	}, &result); err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if len(result) == 0 {
-		return stderr.ErrNotFound
-	}
-
-	*ret = json.RawMessage(result)
-	return nil
-}
-
-// GETSTATEHEIGHT ...
-func (me *NeoCli) GETSTATEHEIGHT(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 0:
-	default:
-		return stderr.ErrInvalidArgs
-	}
-
-	var uri url.URL
-
-	uri.Scheme = "adhocstateheight"
-	uri.Host = "height"
-	uri.Path = "/ffffffffffffffff"
 
 	var result []byte
 
@@ -1078,5 +1043,25 @@ func (me *NeoCli) SENDTOADDRESS(args []interface{}, ret *interface{}) error {
 
 // SENDMANY ...
 func (me *NeoCli) SENDMANY(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETSTATEHEIGHT ...
+func (me *NeoCli) GETSTATEHEIGHT(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETTXOUT ...
+func (me *NeoCli) GETTXOUT(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// SUBMITBLOCK ...
+func (me *NeoCli) SUBMITBLOCK(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETVALIDATORS ...
+func (me *NeoCli) GETVALIDATORS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }

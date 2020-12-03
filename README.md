@@ -63,20 +63,11 @@ value is in binary form.
 - `adhoccontractstate://hash-height/{HASH}/{UINT64}`
 - `adhocclaimable://account-height/{HASH}/{UINT64}`
 - `adhocunspents://account-height/{HASH}/{UINT64}`
-
-- `adhocnep5balance://account-height/{HASH}/{UINT64}`
-- `adhocstateheight://height/{UINT64}`
-- `adhoctxout://tx-n/{HASH}/{UINT64}`
-- `validators://height/{UINT64}`
+- `adhocnep5balances://account-height/{HASH}/{UINT64}`
 
 ## todo
 
-- [x] gettransactionheight
-- [ ] gettxout
 - [ ] getproof
-- [x] getunclaimed ; top
-- [x] getunspents ; top
-- [ ] getvalidators ; top
 - [ ] invokefunction
 - [ ] invokescript
 - [ ] sendrawtransaction
