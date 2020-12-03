@@ -897,6 +897,110 @@ func (me *NeoCli) GETBALANCE(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
+// GETTRANSACTIONHEIGHT is ...
+func (me *NeoCli) GETTRANSACTIONHEIGHT(args []interface{}, ret *interface{}) error {
+	switch len(args) {
+	case 1:
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var uri url.URL
+
+	uri.Scheme = "height"
+
+	switch key := args[0].(type) {
+	case string:
+		uri.Host = "hash"
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.StringToLowerCase(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.Remove0xPrefix(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.HexToBytes(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesReverse(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s", tr.V)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = json.RawMessage(result)
+
+	return nil
+}
+
+// GETUNSPENTS is ...
+func (me *NeoCli) GETUNSPENTS(args []interface{}, ret *interface{}) {
+	switch len(args) {
+	case 1:
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var uri url.URL
+
+	uri.Scheme = "adhocunspents"
+
+	switch key := args[0].(type) {
+	case string:
+		uri.Host = "account-height"
+		tr := &trans.T{
+			V: key,
+		}
+		if err := tr.AddressToHash(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		if err := tr.BytesToHex(); err != nil {
+			return stderr.ErrInvalidArgs
+		}
+		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", tr.V)
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = json.RawMessage(result)
+	return nil
+}
+
 // GETCONNECTIONCOUNT ...
 func (me *NeoCli) GETCONNECTIONCOUNT(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
