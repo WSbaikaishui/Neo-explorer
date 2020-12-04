@@ -39,7 +39,6 @@ func init() {
 	}
 	dmn := &daemon.T{
 		IP:      os.ExpandEnv("${NEO_IP}"),
-		ExecDir: os.ExpandEnv("${NEO_EXECDIR}"),
 		ExecCmd: os.ExpandEnv("${NEO_EXECCMD}"),
 	}
 	fmt.Sscanf(os.ExpandEnv("${NEO_STARTHEIGHT}"), "%d", &dmn.StartFrom)
