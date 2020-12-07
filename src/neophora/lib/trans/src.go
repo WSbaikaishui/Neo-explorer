@@ -6,6 +6,8 @@ import (
 	"neophora/var/stderr"
 	"regexp"
 	"strings"
+
+	"github.com/btcsuite/btcutil/base58"
 )
 
 // T ...
@@ -17,8 +19,11 @@ type T struct {
 func (me *T) AddressToHash() error {
 	switch address := me.V.(type) {
 	case string:
-		_ = address
-		// TODO
+		data := base58.Decode(address)
+		if len(data) < 22 {
+			return stderr.ErrInvalidArgs
+		}
+		me.V = data[1:21]
 		return nil
 	default:
 		return stderr.ErrInvalidArgs
