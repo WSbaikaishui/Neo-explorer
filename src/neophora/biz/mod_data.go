@@ -14,16 +14,19 @@ type Data struct {
 }
 
 // Ping ...
-func (me *Data) Ping(arg interface{}, ret *interface{}) error {
+func (me *Data) Ping(arg struct {
+}, ret *interface{}) error {
 	*ret = "pong"
 	return nil
 }
 
 // GetDataInHex ...
-func (me *Data) GetDataInHex(key string, ret *string) error {
+func (me *Data) GetDataInHex(args struct {
+	Key string
+}, ret *string) error {
 	var result []byte
 
-	if err := me.Client.Calls("DB.Get", []byte(key), &result); err != nil {
+	if err := me.Client.Calls("DB.Get", []byte(args.Key), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -33,10 +36,12 @@ func (me *Data) GetDataInHex(key string, ret *string) error {
 }
 
 // GetDataInString ...
-func (me *Data) GetDataInString(key string, ret *string) error {
+func (me *Data) GetDataInString(args struct {
+	Key string
+}, ret *string) error {
 	var result []byte
 
-	if err := me.Client.Calls("DB.Get", []byte(key), &result); err != nil {
+	if err := me.Client.Calls("DB.Get", []byte(args.Key), &result); err != nil {
 		return stderr.ErrUnknown
 	}
 
@@ -46,11 +51,13 @@ func (me *Data) GetDataInString(key string, ret *string) error {
 }
 
 // GetBlockByHeightInHex ...
-func (me *Data) GetBlockByHeightInHex(index uint64, ret *string) error {
+func (me *Data) GetBlockByHeightInHex(args struct {
+	Index uint64
+}, ret *string) error {
 	uri := &url.URL{
 		Scheme: "block",
 		Host:   "height",
-		Path:   fmt.Sprintf("/%016x", index),
+		Path:   fmt.Sprintf("/%016x", args.Index),
 	}
 
 	var result []byte
@@ -66,11 +73,13 @@ func (me *Data) GetBlockByHeightInHex(index uint64, ret *string) error {
 }
 
 // GetBlockByHashInHex ...
-func (me *Data) GetBlockByHashInHex(hash string, ret *string) error {
+func (me *Data) GetBlockByHashInHex(args struct {
+	Hash string
+}, ret *string) error {
 	uri := &url.URL{
 		Scheme: "block",
 		Host:   "hash",
-		Path:   fmt.Sprintf("/%s", hash),
+		Path:   fmt.Sprintf("/%s", args.Hash),
 	}
 
 	var result []byte
@@ -86,11 +95,13 @@ func (me *Data) GetBlockByHashInHex(hash string, ret *string) error {
 }
 
 // GetHeaderByHeightInHex ...
-func (me *Data) GetHeaderByHeightInHex(index uint64, ret *string) error {
+func (me *Data) GetHeaderByHeightInHex(args struct {
+	Index uint64
+}, ret *string) error {
 	uri := &url.URL{
 		Scheme: "header",
 		Host:   "height",
-		Path:   fmt.Sprintf("/%016x", index),
+		Path:   fmt.Sprintf("/%016x", args.Index),
 	}
 
 	var result []byte
@@ -106,11 +117,13 @@ func (me *Data) GetHeaderByHeightInHex(index uint64, ret *string) error {
 }
 
 // GetHeaderByHashInHex ...
-func (me *Data) GetHeaderByHashInHex(hash string, ret *string) error {
+func (me *Data) GetHeaderByHashInHex(args struct {
+	Hash string
+}, ret *string) error {
 	uri := &url.URL{
 		Scheme: "header",
 		Host:   "hash",
-		Path:   fmt.Sprintf("/%s", hash),
+		Path:   fmt.Sprintf("/%s", args.Hash),
 	}
 
 	var result []byte
@@ -151,5 +164,44 @@ func (me *Data) GetStorageByDBKeyHeightInHex(args struct {
 
 	*ret = hex.EncodeToString(result)
 
+	return nil
+}
+
+// GetCountInUInt64 ...
+func (me *Data) GetCountInUInt64(args struct {
+}, ret *uint64) error {
+	var uri url.URL
+
+	uri.Scheme = "hash"
+	uri.Host = "height"
+	uri.Path = "/ffffffffffffffff"
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.GetLastKey", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	key, err := url.Parse(string(result))
+	if err != nil {
+		return stderr.ErrUnknown
+	}
+
+	var count uint64
+
+	fmt.Sscanf(key.Path, "/%x", &count)
+
+	*ret = count
 	return nil
 }
