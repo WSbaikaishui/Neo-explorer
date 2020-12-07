@@ -65,6 +65,66 @@ func (me *Data) GetBlockByHeightInHex(index uint64, ret *string) error {
 	return nil
 }
 
+// GetBlockByHashInHex ...
+func (me *Data) GetBlockByHashInHex(hash string, ret *string) error {
+	uri := &url.URL{
+		Scheme: "block",
+		Host:   "hash",
+		Path:   fmt.Sprintf("/%s", hash),
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	*ret = hex.EncodeToString(result)
+
+	return nil
+}
+
+// GetHeaderByHeightInHex ...
+func (me *Data) GetHeaderByHeightInHex(index uint64, ret *string) error {
+	uri := &url.URL{
+		Scheme: "header",
+		Host:   "height",
+		Path:   fmt.Sprintf("/%016x", index),
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	*ret = hex.EncodeToString(result)
+
+	return nil
+}
+
+// GetHeaderByHashInHex ...
+func (me *Data) GetHeaderByHashInHex(hash string, ret *string) error {
+	uri := &url.URL{
+		Scheme: "header",
+		Host:   "hash",
+		Path:   fmt.Sprintf("/%s", hash),
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	*ret = hex.EncodeToString(result)
+
+	return nil
+}
+
 // GetStorageByDBKeyHeightInHex ...
 func (me *Data) GetStorageByDBKeyHeightInHex(args struct {
 	DBKey  string
