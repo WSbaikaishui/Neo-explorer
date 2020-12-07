@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"encoding/hex"
 	"fmt"
 	"neophora/cli"
 	"neophora/var/stderr"
@@ -19,18 +20,21 @@ func (me *Data) Ping(arg interface{}, ret *interface{}) error {
 }
 
 // GetBlockByHeightInHex ...
-func (me *Data) GetBlockByHeightInHex(arg uint, ret *interface{}) error {
-	var result map[string]interface{}
+func (me *Data) GetBlockByHeightInHex(index uint64, ret *string) error {
 	uri := &url.URL{
 		Scheme: "block",
 		Host:   "height",
-		Path:   fmt.Sprintf("/%d", arg),
+		Path:   fmt.Sprintf("/%016x", index),
 	}
-	uristring := uri.String()
-	err := me.Client.Call("DB.GetInHexValue", []string{uristring}, &result)
-	if err != nil {
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
 		return stderr.ErrUnknown
 	}
-	*ret = result[uristring]
+
+	*ret = hex.EncodeToString(result)
+
 	return nil
 }

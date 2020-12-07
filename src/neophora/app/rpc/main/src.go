@@ -25,6 +25,6 @@ func main() {
 }
 
 func init() {
-	rpc.Register(&biz.NeoCli{})
 	rpc.Register(&biz.Version{})
+	rpc.Register(&biz.Data{})
 }

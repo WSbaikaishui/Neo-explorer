@@ -30,7 +30,7 @@ func (me *T) Task() {
 	var result bool
 	task := <-me.Queue
 	if err := me.Client.Calls("DB.Put", task, &result); err != nil {
-		log.Println("[!!!!][Call][DBS]", err, task)
+		log.Println("[!!!!][Call][DBS]", err, string(task.Key))
 		go func() {
 			me.Queue <- task
 		}()
