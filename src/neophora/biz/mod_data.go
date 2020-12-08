@@ -205,3 +205,54 @@ func (me *Data) GetCountInUInt64(args struct {
 	*ret = count
 	return nil
 }
+
+// GetContractByHashHeightInHex ...
+func (me *Data) GetContractByHashHeightInHex(args struct {
+	Hash   string
+	Height uint64
+}, ret *string) error {
+	uri := &url.URL{
+		Scheme: "contract",
+		Host:   "hash-height",
+		Path:   fmt.Sprintf("/%s/%016x", args.Hash, args.Height),
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.GetLast", struct {
+		Key    []byte
+		Prefix int
+	}{
+		Key:    []byte(urs),
+		Prefix: len(urs) - 16,
+	}, &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	*ret = hex.EncodeToString(result)
+
+	return nil
+}
+
+// GetHashByHeightInHex ...
+func (me *Data) GetHashByHeightInHex(args struct {
+	Index uint64
+}, ret *string) error {
+	uri := &url.URL{
+		Scheme: "hash",
+		Host:   "height",
+		Path:   fmt.Sprintf("/%016x", args.Index),
+	}
+
+	var result []byte
+
+	urs := uri.String()
+	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
+		return stderr.ErrUnknown
+	}
+
+	*ret = hex.EncodeToString(result)
+
+	return nil
+}
