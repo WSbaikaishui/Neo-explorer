@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"log"
 	"math/rand"
 	"neophora/var/stderr"
 	"net/rpc"
@@ -15,9 +16,11 @@ type T struct {
 // Calls ...
 func (me *T) Calls(method string, args interface{}, res interface{}) error {
 	for i := 0; i < me.TryTimes; i++ {
-		if err := me.Call(method, args, res); err == nil {
-			return nil
+		if err := me.Call(method, args, res); err != nil {
+			log.Println("[CLI][CALL]", method, err)
+			continue
 		}
+		return nil
 	}
 	return stderr.ErrUnknown
 }
