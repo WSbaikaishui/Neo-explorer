@@ -1,12 +1,16 @@
 package biz
 
 import (
+	"bytes"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"math/rand"
 	"neophora/cli"
 	"neophora/lib/trans"
 	"neophora/var/stderr"
+	"net/http"
 	"net/url"
 	"strings"
 )
@@ -240,7 +244,7 @@ func (me *NeoCli) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error 
 
 	switch key := args[0].(type) {
 	case string:
-		uri.Host = "hash"
+		uri.Host = "tx"
 		tr := &trans.T{
 			V: key,
 		}
@@ -1064,4 +1068,32 @@ func (me *NeoCli) SUBMITBLOCK(args []interface{}, ret *interface{}) error {
 // GETVALIDATORS ...
 func (me *NeoCli) GETVALIDATORS(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
+}
+
+// SENDRAWTRANSACTION ...
+func (me *NeoCli) SENDRAWTRANSACTION(args []interface{}, ret *interface{}) error {
+	data := map[string]interface{}{
+		"jsonrpc": "2.0",
+		"id":      rand.Uint32(),
+		"method":  "sendrawtransaction",
+		"params":  args,
+	}
+	body, err := json.Marshal(data)
+	if err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	resp, err := http.Post("", "application/json", bytes.NewReader(body))
+	if err != nil {
+		return stderr.ErrUnknown
+	}
+	defer resp.Body.Close()
+	decoder := json.NewDecoder(resp.Body)
+	if err := decoder.Decode(&data); err != nil {
+		return stderr.ErrUnknown
+	}
+	if err := data["error"]; err != nil {
+		return errors.New(fmt.Sprint(err))
+	}
+	*ret = data["result"]
+	return nil
 }

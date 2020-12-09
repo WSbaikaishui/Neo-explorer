@@ -52,12 +52,12 @@ func (me *Data) GetDataInString(args struct {
 
 // GetBlockByHeightInHex ...
 func (me *Data) GetBlockByHeightInHex(args struct {
-	Index uint64
+	Height uint64
 }, ret *string) error {
 	uri := &url.URL{
 		Scheme: "block",
 		Host:   "height",
-		Path:   fmt.Sprintf("/%016x", args.Index),
+		Path:   fmt.Sprintf("/%016x", args.Height),
 	}
 
 	var result []byte
@@ -96,12 +96,12 @@ func (me *Data) GetBlockByHashInHex(args struct {
 
 // GetHeaderByHeightInHex ...
 func (me *Data) GetHeaderByHeightInHex(args struct {
-	Index uint64
+	Height uint64
 }, ret *string) error {
 	uri := &url.URL{
 		Scheme: "header",
 		Host:   "height",
-		Path:   fmt.Sprintf("/%016x", args.Index),
+		Path:   fmt.Sprintf("/%016x", args.Height),
 	}
 
 	var result []byte
@@ -237,12 +237,12 @@ func (me *Data) GetContractByHashHeightInHex(args struct {
 
 // GetHashByHeightInHex ...
 func (me *Data) GetHashByHeightInHex(args struct {
-	Index uint64
+	Height uint64
 }, ret *string) error {
 	uri := &url.URL{
 		Scheme: "hash",
 		Host:   "height",
-		Path:   fmt.Sprintf("/%016x", args.Index),
+		Path:   fmt.Sprintf("/%016x", args.Height),
 	}
 
 	var result []byte
@@ -259,12 +259,12 @@ func (me *Data) GetHashByHeightInHex(args struct {
 
 // GetTransactionByHashInHex ...
 func (me *Data) GetTransactionByHashInHex(args struct {
-	Index uint64
+	Hash uint64
 }, ret *string) error {
 	uri := &url.URL{
 		Scheme: "tx",
 		Host:   "hash",
-		Path:   fmt.Sprintf("/%016x", args.Index),
+		Path:   fmt.Sprintf("/%016x", args.Hash),
 	}
 
 	var result []byte
