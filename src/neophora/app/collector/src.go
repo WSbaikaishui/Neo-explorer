@@ -58,7 +58,32 @@ func main() {
 		}
 
 		switch uri.Scheme {
-		case "block", "blockhashdata", "header", "hash", "tx":
+		case "hash":
+			switch uri.Host {
+			case "height":
+				var score uint64
+				if n, err := fmt.Sscanf(path.Base(uri.Path), "%016x", &score); err != nil || n != 1 {
+					log.Println("[!!!!][INDEX]", uri)
+					continue
+				}
+				urc := &url.URL{}
+				*urc = *uri
+				urc.Path = path.Join(path.Dir(urc.Path), "_")
+				key := &url.URL{
+					Scheme: "index",
+					Host:   "keys",
+					Path:   urc.String(),
+				}
+				for {
+					if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
+						log.Println("[!!!!][REQ]", err)
+					}
+					break
+				}
+			default:
+				log.Println("[!!!!][KEY]", uri)
+			}
+		case "block", "blockhashdata", "header", "tx":
 			switch uri.Host {
 			case "height", "hash":
 			default:
