@@ -3,10 +3,12 @@ package scex
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"neophora/lib/scex/req"
 	"neophora/lib/scex/resp"
 	"net/rpc"
+	"strings"
 	"sync"
 )
 
@@ -19,7 +21,6 @@ type T struct {
 	mutex   sync.Mutex
 	seq     uint64
 	pending map[uint64]*json.RawMessage
-	f       func(string) string
 }
 
 // Init ...
@@ -28,14 +29,6 @@ func (me *T) Init(conn io.ReadWriteCloser) {
 	me.enc = json.NewEncoder(conn)
 	me.c = conn
 	me.pending = make(map[uint64]*json.RawMessage)
-	me.f = func(v string) string {
-		return v
-	}
-}
-
-// SetF ...
-func (me *T) SetF(f func(string) string) {
-	me.f = f
 }
 
 // ReadRequestHeader ...
@@ -44,7 +37,8 @@ func (me *T) ReadRequestHeader(r *rpc.Request) error {
 	if err := me.dec.Decode(&me.req); err != nil {
 		return err
 	}
-	r.ServiceMethod = me.f(me.req.Method)
+
+	r.ServiceMethod = fmt.Sprintf("T.%s", strings.ToUpper(me.req.Method))
 
 	me.mutex.Lock()
 	me.seq++

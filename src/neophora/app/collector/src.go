@@ -22,22 +22,18 @@ func main() {
 		return redis.Dial(netowrk, address)
 	}, 2)
 	for {
-		line, prefix, err := reader.ReadLine()
+		line, err := reader.ReadString('\n')
 		if err == io.EOF {
 			return
 		}
 		if len(line) == 0 {
 			continue
 		}
-		if prefix {
-			log.Println("[!!!!][DATA]", "TOO LONG")
-			continue
-		}
 		var data struct {
 			Key string `json:"key"`
 			Val string `json:"val"`
 		}
-		if err := json.Unmarshal(line, &data); err != nil {
+		if err := json.Unmarshal([]byte(line), &data); err != nil {
 			log.Println("[????][Parse]", err, string(line))
 			continue
 		}
@@ -92,6 +88,7 @@ func main() {
 				var score uint64
 				if n, err := fmt.Sscanf(path.Base(uri.Path), "%016x", &score); err != nil || n != 1 {
 					log.Println("[!!!!][INDEX]", uri)
+					continue
 				}
 				urc := &url.URL{}
 				*urc = *uri
@@ -101,8 +98,11 @@ func main() {
 					Host:   "keys",
 					Path:   urc.String(),
 				}
-				if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
-					log.Println("[!!!!][REQ]", err)
+				for {
+					if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
+						log.Println("[!!!!][REQ]", err)
+					}
+					break
 				}
 			default:
 				log.Println("[!!!!][KEY]", uri)
@@ -113,6 +113,7 @@ func main() {
 				var score uint64
 				if n, err := fmt.Sscanf(path.Base(uri.Path), "%016x", &score); err != nil || n != 1 {
 					log.Println("[!!!!][INDEX]", uri)
+					continue
 				}
 				urc := &url.URL{}
 				*urc = *uri
@@ -122,8 +123,11 @@ func main() {
 					Host:   "keys",
 					Path:   urc.String(),
 				}
-				if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
-					log.Println("[!!!!][REQ]", err)
+				for {
+					if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
+						log.Println("[!!!!][REQ]", err)
+					}
+					break
 				}
 			default:
 				log.Println("[!!!!][KEY]", uri)
