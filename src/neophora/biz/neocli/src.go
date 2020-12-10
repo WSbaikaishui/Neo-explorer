@@ -1,19 +1,19 @@
 package neocli
 
 import (
+	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"neophora/biz/data"
 	"neophora/lib/trans"
 	"neophora/var/stderr"
 	"net/url"
-
-	"github.com/gomodule/redigo/redis"
 )
 
 // T ...
 type T struct {
-	DB *redis.Pool
+	Data *data.T
 }
 
 // GETBLOCK ...
@@ -26,23 +26,31 @@ func (me *T) GETBLOCK(args []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
+	var scheme string
 	switch args[1] {
 	case 0.0:
-		uri.Scheme = "block"
+		scheme = "block"
 	case 1.0:
-		uri.Scheme = "adhocblockinfo"
+		scheme = "adhocblockinfo"
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
+	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016x", uint64(key))
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: scheme,
+			Index:  "height",
+			Keys:   []string{fmt.Sprintf("%016x", uint64(key))},
+		}, &result); err != nil {
+			return err
+		}
 	case string:
-		uri.Host = "hash"
 		tr := &trans.T{
 			V: key,
 		}
@@ -61,23 +69,19 @@ func (me *T) GETBLOCK(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		uri.Path = fmt.Sprintf("/%s", tr.V)
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: scheme,
+			Index:  "hash",
+			Keys:   []string{tr.V.(string)},
+		}, &result); err != nil {
+			return err
+		}
 	default:
 		return stderr.ErrInvalidArgs
-	}
-
-	reply, err := me.DB.Get().Do("GET", uri.String())
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
 	}
 
 	if len(result) == 0 {
@@ -104,23 +108,31 @@ func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
+	var scheme string
 	switch args[1] {
 	case 0.0:
-		uri.Scheme = "header"
+		scheme = "header"
 	case 1.0:
-		uri.Scheme = "adhocheaderinfo"
+		scheme = "adhocheaderinfo"
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
+	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016x", uint64(key))
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: scheme,
+			Index:  "height",
+			Keys:   []string{fmt.Sprintf("%016x", uint64(key))},
+		}, &result); err != nil {
+			return err
+		}
 	case string:
-		uri.Host = "hash"
 		tr := &trans.T{
 			V: key,
 		}
@@ -139,23 +151,19 @@ func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		uri.Path = fmt.Sprintf("/%s", tr.V)
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: scheme,
+			Index:  "hash",
+			Keys:   []string{tr.V.(string)},
+		}, &result); err != nil {
+			return err
+		}
 	default:
 		return stderr.ErrInvalidArgs
-	}
-
-	reply, err := me.DB.Get().Do("GET", uri.String())
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
 	}
 
 	if len(result) == 0 {
@@ -182,20 +190,19 @@ func (me *T) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
+	var scheme string
 	switch args[1] {
 	case 0.0:
-		uri.Scheme = "tx"
+		scheme = "tx"
 	case 1.0:
-		uri.Scheme = "adhoctxinfo"
+		scheme = "adhoctxinfo"
 	default:
 		return stderr.ErrInvalidArgs
 	}
 
+	var result []byte
 	switch key := args[0].(type) {
 	case string:
-		uri.Host = "hash"
 		tr := &trans.T{
 			V: key,
 		}
@@ -214,23 +221,19 @@ func (me *T) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		uri.Path = fmt.Sprintf("/%s", tr.V)
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: scheme,
+			Index:  "hash",
+			Keys:   []string{tr.V.(string)},
+		}, &result); err != nil {
+			return err
+		}
 	default:
 		return stderr.ErrInvalidArgs
-	}
-
-	reply, err := me.DB.Get().Do("GET", uri.String())
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
 	}
 
 	if len(result) == 0 {
@@ -249,19 +252,13 @@ func (me *T) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error {
 
 // GETAPPLICATIONLOG ...
 func (me *T) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 1:
-	default:
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "adhoclog"
-
+	var result []byte
 	switch key := args[0].(type) {
 	case string:
-		uri.Host = "tx"
 		tr := &trans.T{
 			V: key,
 		}
@@ -280,23 +277,19 @@ func (me *T) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		uri.Path = fmt.Sprintf("/%s", tr.V)
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: "adhoclog",
+			Index:  "tx",
+			Keys:   []string{tr.V.(string)},
+		}, &result); err != nil {
+			return err
+		}
 	default:
 		return stderr.ErrInvalidArgs
-	}
-
-	reply, err := me.DB.Get().Do("GET", uri.String())
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
 	}
 
 	if len(result) == 0 {
@@ -304,28 +297,30 @@ func (me *T) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error {
 	}
 
 	*ret = json.RawMessage(result)
-
 	return nil
 }
 
 // GETSTATEROOT ...
 func (me *T) GETSTATEROOT(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 1:
-	default:
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "adhocstateroot"
-
+	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016x", uint64(key))
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: "adhocstateroot",
+			Index:  "height",
+			Keys:   []string{fmt.Sprintf("%016x", uint64(key))},
+		}, &result); err != nil {
+			return err
+		}
 	case string:
-		uri.Host = "hash"
 		tr := &trans.T{
 			V: key,
 		}
@@ -344,23 +339,19 @@ func (me *T) GETSTATEROOT(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		uri.Path = fmt.Sprintf("/%s", tr.V)
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: "adhocstateroot",
+			Index:  "hash",
+			Keys:   []string{tr.V.(string)},
+		}, &result); err != nil {
+			return err
+		}
 	default:
 		return stderr.ErrInvalidArgs
-	}
-
-	reply, err := me.DB.Get().Do("GET", uri.String())
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
 	}
 
 	if len(result) == 0 {
@@ -368,42 +359,31 @@ func (me *T) GETSTATEROOT(args []interface{}, ret *interface{}) error {
 	}
 
 	*ret = json.RawMessage(result)
-
 	return nil
 }
 
 // GETBLOCKHASH ...
 func (me *T) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 1:
-	default:
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "hash"
-
+	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016x", uint64(key))
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: "hash",
+			Index:  "height",
+			Keys:   []string{fmt.Sprintf("%016x", uint64(key))},
+		}, &result); err != nil {
+			return err
+		}
 	default:
 		return stderr.ErrInvalidArgs
-	}
-
-	reply, err := me.DB.Get().Do("GET", uri.String())
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
 	}
 
 	if len(result) == 0 {
@@ -427,36 +407,26 @@ func (me *T) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
 
 // GETBLOCKSYSFEE ...
 func (me *T) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 1:
-	default:
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "adhocsysfee"
-
+	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		uri.Host = "height"
-		uri.Path = fmt.Sprintf("/%016x", uint64(key))
+		if err := me.Data.GETARGS(struct {
+			Target string
+			Index  string
+			Keys   []string
+		}{
+			Target: "adhocsysfee",
+			Index:  "height",
+			Keys:   []string{fmt.Sprintf("%016x", uint64(key))},
+		}, &result); err != nil {
+			return err
+		}
 	default:
 		return stderr.ErrInvalidArgs
-	}
-
-	reply, err := me.DB.Get().Do("GET", uri.String())
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
 	}
 
 	if len(result) == 0 {
@@ -469,72 +439,31 @@ func (me *T) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
 
 // GETACCOUNTSTATE ...
 func (me *T) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 1:
-	default:
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "adhocaccountstate"
-
-	switch key := args[0].(type) {
-	case string:
-		uri.Host = "account-height"
-		tr := &trans.T{
-			V: key,
-		}
-		if err := tr.AddressToHash(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.BytesToHex(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		uri.Path = fmt.Sprintf("/%s/_", tr.V)
-	default:
+	tr := &trans.T{
+		V: args[0],
+	}
+	if err := tr.AddressToHash(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesToHex(); err != nil {
 		return stderr.ErrInvalidArgs
 	}
 
-	uri.Path = uri.String()
-	uri.Host = "keys"
-	uri.Scheme = "index"
-
-	reply, err := me.DB.Get().Do("ZRANGE", uri.String(), -1, -1)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	replies, ok := reply.([]interface{})
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	if len(replies) != 1 {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := replies[0].([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	reply, err = me.DB.Get().Do("GET", result)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok = reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
+	var result []byte
+	if err := me.Data.GETLAST(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "adhocaccountstate",
+		Index:  "account-height",
+		Keys:   []string{tr.V.(string), "_"},
+	}, &result); err != nil {
+		return err
 	}
 
 	if len(result) == 0 {
@@ -547,81 +476,40 @@ func (me *T) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
 
 // GETASSETSTATE ...
 func (me *T) GETASSETSTATE(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 1:
-	default:
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "adhocassetstate"
-
-	switch key := args[0].(type) {
-	case string:
-		uri.Host = "hash-height"
-		tr := &trans.T{
-			V: key,
-		}
-		if err := tr.StringToLowerCase(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.Remove0xPrefix(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.HexToBytes(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.BytesReverse(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.BytesToHex(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		uri.Path = fmt.Sprintf("/%s/_", tr.V)
-	default:
+	tr := &trans.T{
+		V: args[0],
+	}
+	if err := tr.StringToLowerCase(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.Remove0xPrefix(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.HexToBytes(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesReverse(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesToHex(); err != nil {
 		return stderr.ErrInvalidArgs
 	}
 
-	uri.Path = uri.String()
-	uri.Host = "keys"
-	uri.Scheme = "index"
-
-	reply, err := me.DB.Get().Do("ZRANGE", uri.String(), -1, -1)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	replies, ok := reply.([]interface{})
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	if len(replies) != 1 {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := replies[0].([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	reply, err = me.DB.Get().Do("GET", result)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok = reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
+	var result []byte
+	if err := me.Data.GETLAST(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "adhocassetstate",
+		Index:  "hash-height",
+		Keys:   []string{tr.V.(string), "_"},
+	}, &result); err != nil {
+		return err
 	}
 
 	if len(result) == 0 {
@@ -632,117 +520,249 @@ func (me *T) GETASSETSTATE(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETBESTBLOCKHASH ...
-func (me *T) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 0:
-	default:
+// GETCLAIMABLE ...
+func (me *T) GETCLAIMABLE(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "hash"
-	uri.Host = "height"
-	uri.Path = "/_"
-
-	uri.Path = uri.String()
-	uri.Host = "keys"
-	uri.Scheme = "index"
-
-	reply, err := me.DB.Get().Do("ZRANGE", uri.String(), -1, -1)
-	if err != nil {
-		return stderr.ErrUnknown
+	tr := &trans.T{
+		V: args[0],
+	}
+	if err := tr.AddressToHash(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesToHex(); err != nil {
+		return stderr.ErrInvalidArgs
 	}
 
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	replies, ok := reply.([]interface{})
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	if len(replies) != 1 {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := replies[0].([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	reply, err = me.DB.Get().Do("GET", result)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok = reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
+	var result []byte
+	if err := me.Data.GETLAST(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "adhocclaimable",
+		Index:  "account-height",
+		Keys:   []string{tr.V.(string), "_"},
+	}, &result); err != nil {
+		return err
 	}
 
 	if len(result) == 0 {
 		return stderr.ErrNotFound
 	}
 
-	tr := &trans.T{
-		V: result,
+	*ret = json.RawMessage(result)
+	return nil
+}
+
+// GETUNSPENTS ...
+func (me *T) GETUNSPENTS(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
+		return stderr.ErrInvalidArgs
 	}
-	if err := tr.BytesReverse(); err != nil {
-		return stderr.ErrUnknown
+
+	tr := &trans.T{
+		V: args[0],
+	}
+	if err := tr.AddressToHash(); err != nil {
+		return stderr.ErrInvalidArgs
 	}
 	if err := tr.BytesToHex(); err != nil {
-		return stderr.ErrUnknown
+		return stderr.ErrInvalidArgs
 	}
-	*ret = fmt.Sprintf("0x%s", tr.V)
+
+	var result []byte
+	if err := me.Data.GETLAST(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "adhocunspents",
+		Index:  "account-height",
+		Keys:   []string{tr.V.(string), "_"},
+	}, &result); err != nil {
+		return err
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = json.RawMessage(result)
+	return nil
+}
+
+// GETNEP5BALANCES ...
+func (me *T) GETNEP5BALANCES(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
+		return stderr.ErrInvalidArgs
+	}
+
+	tr := &trans.T{
+		V: args[0],
+	}
+	if err := tr.AddressToHash(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesToHex(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+	if err := me.Data.GETLAST(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "adhocnep5balances",
+		Index:  "account-height",
+		Keys:   []string{tr.V.(string), "_"},
+	}, &result); err != nil {
+		return err
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = json.RawMessage(result)
+	return nil
+}
+
+// GETCONTRACTSTATE ...
+func (me *T) GETCONTRACTSTATE(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
+		return stderr.ErrInvalidArgs
+	}
+
+	tr := &trans.T{
+		V: args[0],
+	}
+	if err := tr.StringToLowerCase(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.Remove0xPrefix(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.HexToBytes(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesReverse(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesToHex(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+	if err := me.Data.GETLAST(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "adhoccontractstate",
+		Index:  "hash-height",
+		Keys:   []string{tr.V.(string), "_"},
+	}, &result); err != nil {
+		return err
+	}
+
+	switch len(args) {
+	case 1:
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = json.RawMessage(result)
+	return nil
+}
+
+// GETSTORAGE ...
+func (me *T) GETSTORAGE(args []interface{}, ret *interface{}) error {
+	if len(args) != 2 {
+		return stderr.ErrInvalidArgs
+	}
+
+	tr := &trans.T{
+		V: args[0],
+	}
+	if err := tr.StringToLowerCase(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.Remove0xPrefix(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.HexToBytes(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesReverse(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesToHex(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+
+	switch key := args[1].(type) {
+	case string:
+		tr.V = tr.V.(string) + key
+	default:
+		return stderr.ErrInvalidArgs
+	}
+
+	if err := tr.HexToBytes(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesToHash(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesToHex(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+
+	var result []byte
+	if err := me.Data.GETLAST(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "storage",
+		Index:  "hash-height",
+		Keys:   []string{tr.V.(string), "_"},
+	}, &result); err != nil {
+		return err
+	}
+
+	if len(result) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = hex.EncodeToString(result)
 	return nil
 }
 
 // GETBLOCKCOUNT ...
 func (me *T) GETBLOCKCOUNT(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 0:
-	default:
+	if len(args) != 0 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "hash"
-	uri.Host = "height"
-	uri.Path = "/_"
-
-	uri.Path = uri.String()
-	uri.Host = "keys"
-	uri.Scheme = "index"
-
-	reply, err := me.DB.Get().Do("ZRANGE", uri.String(), -1, -1)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	replies, ok := reply.([]interface{})
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	if len(replies) != 1 {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := replies[0].([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
+	var result []byte
+	if err := me.Data.GETLASTKEY(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "hash",
+		Index:  "height",
+		Keys:   []string{"_"},
+	}, &result); err != nil {
+		return err
 	}
 
 	if len(result) == 0 {
@@ -762,407 +782,87 @@ func (me *T) GETBLOCKCOUNT(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETCLAIMABLE ...
-func (me *T) GETCLAIMABLE(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 1:
-	default:
+// GETBESTBLOCKHASH ...
+func (me *T) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
+	if len(args) != 0 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "adhocclaimable"
-
-	switch key := args[0].(type) {
-	case string:
-		uri.Host = "account-height"
-		tr := &trans.T{
-			V: key,
-		}
-		if err := tr.AddressToHash(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.BytesToHex(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		uri.Path = fmt.Sprintf("/%s/_", tr.V)
-	default:
-		return stderr.ErrInvalidArgs
-	}
-
-	uri.Path = uri.String()
-	uri.Host = "keys"
-	uri.Scheme = "index"
-
-	reply, err := me.DB.Get().Do("ZRANGE", uri.String(), -1, -1)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	replies, ok := reply.([]interface{})
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	if len(replies) != 1 {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := replies[0].([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	reply, err = me.DB.Get().Do("GET", result)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok = reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
+	var result []byte
+	if err := me.Data.GETLAST(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "hash",
+		Index:  "height",
+		Keys:   []string{"_"},
+	}, &result); err != nil {
+		return err
 	}
 
 	if len(result) == 0 {
 		return stderr.ErrNotFound
 	}
 
-	*ret = json.RawMessage(result)
+	tr := &trans.T{
+		V: result,
+	}
+	if err := tr.BytesReverse(); err != nil {
+		return stderr.ErrUnknown
+	}
+	if err := tr.BytesToHex(); err != nil {
+		return stderr.ErrUnknown
+	}
+	*ret = fmt.Sprintf("0x%s", tr.V)
 	return nil
 }
 
-// GETCONTRACTSTATE ...
-func (me *T) GETCONTRACTSTATE(args []interface{}, ret *interface{}) error {
-	switch len(args) {
-	case 1:
-	default:
+// GETTRANSACTIONHEIGHT ...
+func (me *T) GETTRANSACTIONHEIGHT(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
 
-	var uri url.URL
-
-	uri.Scheme = "adhoccontractstate"
-
-	switch key := args[0].(type) {
-	case string:
-		uri.Host = "hash-height"
-		tr := &trans.T{
-			V: key,
-		}
-		if err := tr.StringToLowerCase(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.Remove0xPrefix(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.HexToBytes(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.BytesReverse(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		if err := tr.BytesToHex(); err != nil {
-			return stderr.ErrInvalidArgs
-		}
-		uri.Path = fmt.Sprintf("/%s/_", tr.V)
-	default:
+	tr := &trans.T{
+		V: args[0],
+	}
+	if err := tr.StringToLowerCase(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.Remove0xPrefix(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.HexToBytes(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesReverse(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	if err := tr.BytesToHex(); err != nil {
 		return stderr.ErrInvalidArgs
 	}
 
-	uri.Path = uri.String()
-	uri.Host = "keys"
-	uri.Scheme = "index"
-
-	reply, err := me.DB.Get().Do("ZRANGE", uri.String(), -1, -1)
-	if err != nil {
-		return stderr.ErrUnknown
+	var result []byte
+	if err := me.Data.GETARGS(struct {
+		Target string
+		Index  string
+		Keys   []string
+	}{
+		Target: "height",
+		Index:  "tx",
+		Keys:   []string{tr.V.(string)},
+	}, &result); err != nil {
+		return err
 	}
 
-	if reply == nil {
+	if len(result) != 8 {
 		return stderr.ErrNotFound
 	}
 
-	replies, ok := reply.([]interface{})
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	if len(replies) != 1 {
-		return stderr.ErrNotFound
-	}
-
-	result, ok := replies[0].([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	reply, err = me.DB.Get().Do("GET", result)
-	if err != nil {
-		return stderr.ErrUnknown
-	}
-
-	if reply == nil {
-		return stderr.ErrNotFound
-	}
-
-	result, ok = reply.([]byte)
-	if ok == false {
-		return stderr.ErrUnknown
-	}
-
-	if len(result) == 0 {
-		return stderr.ErrNotFound
-	}
-
-	*ret = json.RawMessage(result)
+	*ret = binary.BigEndian.Uint64(result)
 	return nil
 }
-
-// // GETNEP5BALANCES ...
-// func (me *T) GETNEP5BALANCES(args []interface{}, ret *interface{}) error {
-// 	switch len(args) {
-// 	case 1:
-// 	default:
-// 		return stderr.ErrInvalidArgs
-// 	}
-
-// 	var uri url.URL
-
-// 	uri.Scheme = "adhocnep5balances"
-
-// 	switch key := args[0].(type) {
-// 	case string:
-// 		uri.Host = "account-height"
-// 		tr := &trans.T{
-// 			V: key,
-// 		}
-// 		if err := tr.AddressToHash(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.BytesToHex(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", tr.V)
-// 	default:
-// 		return stderr.ErrInvalidArgs
-// 	}
-
-// 	var result []byte
-
-// 	urs := uri.String()
-// 	if err := me.Client.Calls("DB.GetLast", struct {
-// 		Key    []byte
-// 		Prefix int
-// 	}{
-// 		Key:    []byte(urs),
-// 		Prefix: len(urs) - 16,
-// 	}, &result); err != nil {
-// 		return stderr.ErrUnknown
-// 	}
-
-// 	if len(result) == 0 {
-// 		return stderr.ErrNotFound
-// 	}
-
-// 	*ret = json.RawMessage(result)
-// 	return nil
-// }
-
-// // GETSTORAGE ...
-// func (me *T) GETSTORAGE(args []interface{}, ret *interface{}) error {
-// 	switch len(args) {
-// 	case 2:
-// 	default:
-// 		return stderr.ErrInvalidArgs
-// 	}
-
-// 	var uri url.URL
-
-// 	uri.Scheme = "storage"
-// 	uri.Host = "dbkey-height"
-
-// 	switch key := args[0].(type) {
-// 	case string:
-// 		key = strings.ToLower(key)
-// 		tr := &trans.T{
-// 			V: key,
-// 		}
-// 		if err := tr.StringToLowerCase(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.Remove0xPrefix(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.HexToBytes(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.BytesReverse(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.BytesToHex(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		uri.Path = fmt.Sprint(tr.V)
-// 	default:
-// 		return stderr.ErrInvalidArgs
-// 	}
-
-// 	switch key := args[1].(type) {
-// 	case string:
-// 		uri.Path = fmt.Sprintf("/%s%s/ffffffffffffffff", uri.Path, key)
-// 	default:
-// 		return stderr.ErrInvalidArgs
-// 	}
-
-// 	var result []byte
-
-// 	urs := uri.String()
-// 	if err := me.Client.Calls("DB.GetLast", struct {
-// 		Key    []byte
-// 		Prefix int
-// 	}{
-// 		Key:    []byte(urs),
-// 		Prefix: len(urs) - 16,
-// 	}, &result); err != nil {
-// 		return stderr.ErrUnknown
-// 	}
-
-// 	if len(result) == 0 {
-// 		return stderr.ErrNotFound
-// 	}
-
-// 	*ret = hex.EncodeToString(result)
-// 	return nil
-// }
-
-// // PING ...
-// func (me *T) PING(args []interface{}, ret *interface{}) error {
-// 	*ret = "pong"
-// 	return nil
-// }
-
-// // DUMPPRIVKEY ...
-// func (me *T) DUMPPRIVKEY(args []interface{}, ret *interface{}) error {
-// 	return stderr.ErrUnsupportedMethod
-// }
-
-// // GETBALANCE ...
-// func (me *T) GETBALANCE(args []interface{}, ret *interface{}) error {
-// 	return stderr.ErrUnsupportedMethod
-// }
-
-// // GETTRANSACTIONHEIGHT ...
-// func (me *T) GETTRANSACTIONHEIGHT(args []interface{}, ret *interface{}) error {
-// 	switch len(args) {
-// 	case 1:
-// 	default:
-// 		return stderr.ErrInvalidArgs
-// 	}
-
-// 	var uri url.URL
-
-// 	uri.Scheme = "height"
-
-// 	switch key := args[0].(type) {
-// 	case string:
-// 		uri.Host = "tx"
-// 		tr := &trans.T{
-// 			V: key,
-// 		}
-// 		if err := tr.StringToLowerCase(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.Remove0xPrefix(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.HexToBytes(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.BytesReverse(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.BytesToHex(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		uri.Path = fmt.Sprintf("/%s", tr.V)
-// 	default:
-// 		return stderr.ErrInvalidArgs
-// 	}
-
-// 	var result []byte
-
-// 	urs := uri.String()
-// 	if err := me.Client.Calls("DB.Get", []byte(urs), &result); err != nil {
-// 		return stderr.ErrUnknown
-// 	}
-
-// 	if len(result) == 0 {
-// 		return stderr.ErrNotFound
-// 	}
-
-// 	*ret = json.RawMessage(result)
-
-// 	return nil
-// }
-
-// // GETUNSPENTS is ...
-// func (me *T) GETUNSPENTS(args []interface{}, ret *interface{}) error {
-// 	switch len(args) {
-// 	case 1:
-// 	default:
-// 		return stderr.ErrInvalidArgs
-// 	}
-
-// 	var uri url.URL
-
-// 	uri.Scheme = "adhocunspents"
-
-// 	switch key := args[0].(type) {
-// 	case string:
-// 		uri.Host = "account-height"
-// 		tr := &trans.T{
-// 			V: key,
-// 		}
-// 		if err := tr.AddressToHash(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		if err := tr.BytesToHex(); err != nil {
-// 			return stderr.ErrInvalidArgs
-// 		}
-// 		uri.Path = fmt.Sprintf("/%s/ffffffffffffffff", tr.V)
-// 	default:
-// 		return stderr.ErrInvalidArgs
-// 	}
-
-// 	var result []byte
-
-// 	urs := uri.String()
-// 	if err := me.Client.Calls("DB.GetLast", struct {
-// 		Key    []byte
-// 		Prefix int
-// 	}{
-// 		Key:    []byte(urs),
-// 		Prefix: len(urs) - 16,
-// 	}, &result); err != nil {
-// 		return stderr.ErrUnknown
-// 	}
-
-// 	if len(result) == 0 {
-// 		return stderr.ErrNotFound
-// 	}
-
-// 	*ret = json.RawMessage(result)
-// 	return nil
-// }
 
 // // SENDRAWTRANSACTION ...
 // func (me *T) SENDRAWTRANSACTION(args []interface{}, ret *interface{}) error {
@@ -1191,6 +891,31 @@ func (me *T) GETCONTRACTSTATE(args []interface{}, ret *interface{}) error {
 // 	*ret = data["result"]
 // 	return nil
 // }
+
+// DUMPPRIVKEY ...
+func (me *T) DUMPPRIVKEY(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETPROOF ...
+func (me *T) GETPROOF(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETBALANCE ...
+func (me *T) GETBALANCE(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// INVOKESCRIPT ...
+func (me *T) INVOKESCRIPT(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// INVOKEFUNCTION ...
+func (me *T) INVOKEFUNCTION(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
 
 // CLAIMGAS ...
 func (me *T) CLAIMGAS(args []interface{}, ret *interface{}) error {
@@ -1234,6 +959,11 @@ func (me *T) GETPEERS(args []interface{}, ret *interface{}) error {
 
 // GETUNCLAIMEDGAS ...
 func (me *T) GETUNCLAIMEDGAS(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// GETUNCLAIMED ...
+func (me *T) GETUNCLAIMED(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
@@ -1294,5 +1024,15 @@ func (me *T) SUBMITBLOCK(args []interface{}, ret *interface{}) error {
 
 // GETVALIDATORS ...
 func (me *T) GETVALIDATORS(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// ValidateAddress ...
+func (me *T) ValidateAddress(args []interface{}, ret *interface{}) error {
+	return stderr.ErrUnsupportedMethod
+}
+
+// VerifyProof ...
+func (me *T) VerifyProof(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }

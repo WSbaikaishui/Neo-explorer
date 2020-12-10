@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"neophora/biz/data"
-	"neophora/biz/neocli"
 	"neophora/lib/joh"
 	"net/http"
 	"net/rpc"
@@ -14,7 +13,7 @@ import (
 )
 
 func main() {
-	address := os.ExpandEnv("0.0.0.0:${NEORPC_PORT}")
+	address := os.ExpandEnv("0.0.0.0:${SERVER_PORT}")
 	log.Println("[LISTEN]", address)
 	http.ListenAndServe(address, &joh.T{})
 }
@@ -29,9 +28,7 @@ func init() {
 	db := redis.NewPool(func() (redis.Conn, error) {
 		return redis.Dial(netowrk, address)
 	}, maxidle)
-	rpc.Register(&neocli.T{
-		Data: &data.T{
-			DB: db,
-		},
+	rpc.Register(&data.T{
+		DB: db,
 	})
 }
