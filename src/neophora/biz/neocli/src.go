@@ -6,17 +6,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"neophora/biz/data"
+	"neophora/lib/bq"
 	"neophora/lib/trans"
 	"neophora/var/stderr"
 	"net/url"
-	"sync"
 )
 
 // T ...
 type T struct {
 	Data *data.T
-	txs  [][]byte
-	lock sync.Mutex
+	BQ   *bq.T
 }
 
 // Getblock ...
@@ -878,34 +877,10 @@ func (me *T) Sendrawtransaction(args []interface{}, ret *interface{}) error {
 	if err := tr.HexToBytes(); err != nil {
 		return stderr.ErrInvalidArgs
 	}
-	tx := tr.V.([]byte)
-	if len(tx) > 0x10000 {
-		return stderr.ErrInvalidArgs
+	if err := me.BQ.Push(tr.V.([]byte)); err != nil {
+		return err
 	}
-	me.lock.Lock()
-	defer me.lock.Unlock()
-	if len(me.txs) >= 0x10000 {
-		return stderr.ErrUnknown
-	}
-
-	me.txs = append(me.txs, tx)
 	*ret = "ok"
-	return nil
-}
-
-// Poprawtransaction ...
-func (me *T) Poprawtransaction(args []interface{}, ret *interface{}) error {
-	if len(args) != 0 {
-		return stderr.ErrInvalidArgs
-	}
-	me.lock.Lock()
-	defer me.lock.Unlock()
-	if len(me.txs) == 0 {
-		return stderr.ErrNotFound
-	}
-
-	*ret = me.txs[0]
-	me.txs = me.txs[1:]
 	return nil
 }
 

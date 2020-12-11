@@ -4,6 +4,8 @@ import (
 	"log"
 	"neophora/biz/data"
 	"neophora/biz/neocli"
+	"neophora/biz/popper"
+	"neophora/lib/bq"
 	"neophora/lib/joh"
 	"net/http"
 	"net/rpc"
@@ -29,9 +31,15 @@ func init() {
 	db := redis.NewPool(func() (redis.Conn, error) {
 		return redis.Dial(netowrk, address)
 	}, maxidle)
+	txs := &bq.T{}
 	rpc.Register(&neocli.T{
 		Data: &data.T{
 			DB: db,
 		},
+		BQ: txs,
+	})
+
+	go http.ListenAndServe(os.ExpandEnv("0.0.0.0:${NEORPC_POPPERPORT}"), &popper.T{
+		BQ: txs,
 	})
 }
