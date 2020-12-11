@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"time"
 
 	"github.com/gomodule/redigo/redis"
 )
@@ -53,6 +54,7 @@ func main() {
 		for {
 			if _, err := db.Get().Do("SET", uri.String(), value); err != nil {
 				log.Println("[!!!!][REQ]", err)
+				time.Sleep(1 * time.Second)
 				continue
 			}
 			break
@@ -78,6 +80,7 @@ func main() {
 				for {
 					if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
 						log.Println("[!!!!][REQ]", err)
+						time.Sleep(1 * time.Second)
 						continue
 					}
 					break
@@ -115,6 +118,7 @@ func main() {
 				var score uint64
 				if n, err := fmt.Sscanf(path.Base(uri.Path), "%016x", &score); err != nil || n != 1 {
 					log.Println("[!!!!][INDEX]", uri)
+					time.Sleep(1 * time.Second)
 					continue
 				}
 				urc := &url.URL{}
@@ -154,6 +158,7 @@ func main() {
 				for {
 					if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
 						log.Println("[!!!!][REQ]", err)
+						time.Sleep(1 * time.Second)
 						continue
 					}
 					break
