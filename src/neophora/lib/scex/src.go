@@ -39,7 +39,7 @@ func (me *T) ReadRequestHeader(r *rpc.Request) error {
 	}
 	methods := strings.Split(me.req.Method, "_")
 	for i := range methods {
-		methods[i] = strings.ToTitle(methods[i])
+		methods[i] = strings.Title(methods[i])
 	}
 	r.ServiceMethod = fmt.Sprintf("T.%s", strings.Join(methods, ""))
 

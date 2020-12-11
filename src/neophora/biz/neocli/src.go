@@ -42,7 +42,7 @@ func (me *T) Getblock(args []interface{}, ret *interface{}) error {
 	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -72,7 +72,7 @@ func (me *T) Getblock(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -124,7 +124,7 @@ func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -154,7 +154,7 @@ func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -224,7 +224,7 @@ func (me *T) Getrawtransaction(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -280,7 +280,7 @@ func (me *T) Getapplicationlog(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -312,7 +312,7 @@ func (me *T) Getstateroot(args []interface{}, ret *interface{}) error {
 	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -342,7 +342,7 @@ func (me *T) Getstateroot(args []interface{}, ret *interface{}) error {
 		if err := tr.BytesToHex(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -374,7 +374,7 @@ func (me *T) Getblockhash(args []interface{}, ret *interface{}) error {
 	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -417,7 +417,7 @@ func (me *T) Getblocksysfee(args []interface{}, ret *interface{}) error {
 	var result []byte
 	switch key := args[0].(type) {
 	case float64:
-		if err := me.Data.GETARGS(struct {
+		if err := me.Data.GetArgs(struct {
 			Target string
 			Index  string
 			Keys   []string
@@ -457,7 +457,7 @@ func (me *T) Getaccountstate(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETLAST(struct {
+	if err := me.Data.GetLast(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -503,7 +503,7 @@ func (me *T) Getassetstate(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETLAST(struct {
+	if err := me.Data.GetLast(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -540,7 +540,7 @@ func (me *T) Getclaimable(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETLAST(struct {
+	if err := me.Data.GetLast(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -577,7 +577,7 @@ func (me *T) Getunspents(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETLAST(struct {
+	if err := me.Data.GetLast(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -614,7 +614,7 @@ func (me *T) Getnep5balances(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETLAST(struct {
+	if err := me.Data.GetLast(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -660,7 +660,7 @@ func (me *T) Getcontractstate(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETLAST(struct {
+	if err := me.Data.GetLast(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -729,7 +729,7 @@ func (me *T) Getstorage(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETLAST(struct {
+	if err := me.Data.GetLast(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -756,7 +756,7 @@ func (me *T) Getblockcount(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETLASTKEY(struct {
+	if err := me.Data.GetLastKey(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -792,7 +792,7 @@ func (me *T) Getbestblockhash(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETLAST(struct {
+	if err := me.Data.GetLast(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -847,7 +847,7 @@ func (me *T) Gettransactionheight(args []interface{}, ret *interface{}) error {
 	}
 
 	var result []byte
-	if err := me.Data.GETARGS(struct {
+	if err := me.Data.GetArgs(struct {
 		Target string
 		Index  string
 		Keys   []string
