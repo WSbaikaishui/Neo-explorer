@@ -53,6 +53,7 @@ func main() {
 		for {
 			if _, err := db.Get().Do("SET", uri.String(), value); err != nil {
 				log.Println("[!!!!][REQ]", err)
+				continue
 			}
 			break
 		}
@@ -77,6 +78,7 @@ func main() {
 				for {
 					if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
 						log.Println("[!!!!][REQ]", err)
+						continue
 					}
 					break
 				}
@@ -126,6 +128,7 @@ func main() {
 				for {
 					if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
 						log.Println("[!!!!][REQ]", err)
+						continue
 					}
 					break
 				}
@@ -151,6 +154,7 @@ func main() {
 				for {
 					if _, err := db.Get().Do("ZADD", key.String(), score, uri.String()); err != nil {
 						log.Println("[!!!!][REQ]", err)
+						continue
 					}
 					break
 				}
