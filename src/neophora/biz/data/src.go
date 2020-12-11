@@ -14,8 +14,8 @@ type T struct {
 	DB *redis.Pool
 }
 
-// GET ...
-func (me *T) GET(args struct {
+// Get ...
+func (me *T) Get(args struct {
 	Key string
 }, ret *[]byte) error {
 	reply, err := me.DB.Get().Do("GET", args.Key)
@@ -36,8 +36,8 @@ func (me *T) GET(args struct {
 	return nil
 }
 
-// GETARGS ...
-func (me *T) GETARGS(args struct {
+// GetArgs ...
+func (me *T) GetArgs(args struct {
 	Target string
 	Index  string
 	Keys   []string
@@ -65,8 +65,8 @@ func (me *T) GETARGS(args struct {
 	return nil
 }
 
-// GETLASTKEYEX ...
-func (me *T) GETLASTKEYEX(args struct {
+// GetLastKeyEx ...
+func (me *T) GetLastKeyEx(args struct {
 	Target string
 	Index  string
 	Keys   []string
@@ -109,8 +109,8 @@ func (me *T) GETLASTKEYEX(args struct {
 	return nil
 }
 
-// GETLASTEX ...
-func (me *T) GETLASTEX(args struct {
+// GetLastEx ...
+func (me *T) GetLastEx(args struct {
 	Target string
 	Index  string
 	Keys   []string
@@ -118,7 +118,7 @@ func (me *T) GETLASTEX(args struct {
 	Min    uint64
 }, ret *[]byte) error {
 	var result []byte
-	if err := me.GETLASTKEYEX(args, &result); err != nil {
+	if err := me.GetLastKeyEx(args, &result); err != nil {
 		return err
 	}
 
@@ -145,13 +145,13 @@ func (me *T) GETLASTEX(args struct {
 	return nil
 }
 
-// GETLASTKEY ...
-func (me *T) GETLASTKEY(args struct {
+// GetLastKey ...
+func (me *T) GetLastKey(args struct {
 	Target string
 	Index  string
 	Keys   []string
 }, ret *[]byte) error {
-	return me.GETLASTKEYEX(struct {
+	return me.GetLastKeyEx(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -166,13 +166,13 @@ func (me *T) GETLASTKEY(args struct {
 	}, ret)
 }
 
-// GETLAST ...
-func (me *T) GETLAST(args struct {
+// GetLast ...
+func (me *T) GetLast(args struct {
 	Target string
 	Index  string
 	Keys   []string
 }, ret *[]byte) error {
-	return me.GETLASTEX(struct {
+	return me.GetLastEx(struct {
 		Target string
 		Index  string
 		Keys   []string
@@ -187,34 +187,34 @@ func (me *T) GETLAST(args struct {
 	}, ret)
 }
 
-// GETHEX ...
-func (me *T) GETHEX(args struct {
+// GetHex ...
+func (me *T) GetHex(args struct {
 	Key string
 }, ret *string) error {
 	var result []byte
-	if err := me.GET(args, &result); err != nil {
+	if err := me.Get(args, &result); err != nil {
 		return err
 	}
 	*ret = hex.EncodeToString(result)
 	return nil
 }
 
-// GETARGSHEX ...
-func (me *T) GETARGSHEX(args struct {
+// GetArgsHex ...
+func (me *T) GetArgsHex(args struct {
 	Target string
 	Index  string
 	Keys   []string
 }, ret *string) error {
 	var result []byte
-	if err := me.GETARGS(args, &result); err != nil {
+	if err := me.GetArgs(args, &result); err != nil {
 		return err
 	}
 	*ret = hex.EncodeToString(result)
 	return nil
 }
 
-// GETLASTEXHEX ...
-func (me *T) GETLASTEXHEX(args struct {
+// GetLastExHex ...
+func (me *T) GetLastExHex(args struct {
 	Target string
 	Index  string
 	Keys   []string
@@ -222,21 +222,21 @@ func (me *T) GETLASTEXHEX(args struct {
 	Min    uint64
 }, ret *string) error {
 	var result []byte
-	if err := me.GETLASTEX(args, &result); err != nil {
+	if err := me.GetLastEx(args, &result); err != nil {
 		return err
 	}
 	*ret = hex.EncodeToString(result)
 	return nil
 }
 
-// GETLASTHEX ...
-func (me *T) GETLASTHEX(args struct {
+// GetLastHex ...
+func (me *T) GetLastHex(args struct {
 	Target string
 	Index  string
 	Keys   []string
 }, ret *string) error {
 	var result []byte
-	if err := me.GETLAST(args, &result); err != nil {
+	if err := me.GetLast(args, &result); err != nil {
 		return err
 	}
 	*ret = hex.EncodeToString(result)

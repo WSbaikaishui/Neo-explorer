@@ -37,8 +37,11 @@ func (me *T) ReadRequestHeader(r *rpc.Request) error {
 	if err := me.dec.Decode(&me.req); err != nil {
 		return err
 	}
-
-	r.ServiceMethod = fmt.Sprintf("T.%s", strings.ToUpper(me.req.Method))
+	methods := strings.Split(me.req.Method, "_")
+	for i := range methods {
+		methods[i] = strings.ToTitle(methods[i])
+	}
+	r.ServiceMethod = fmt.Sprintf("T.%s", strings.Join(methods, ""))
 
 	me.mutex.Lock()
 	me.seq++

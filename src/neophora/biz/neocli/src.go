@@ -9,15 +9,18 @@ import (
 	"neophora/lib/trans"
 	"neophora/var/stderr"
 	"net/url"
+	"sync"
 )
 
 // T ...
 type T struct {
 	Data *data.T
+	txs  [][]byte
+	lock sync.Mutex
 }
 
-// GETBLOCK ...
-func (me *T) GETBLOCK(args []interface{}, ret *interface{}) error {
+// Getblock ...
+func (me *T) Getblock(args []interface{}, ret *interface{}) error {
 	switch len(args) {
 	case 1:
 		args = append(args, 0.0)
@@ -180,8 +183,8 @@ func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETRAWTRANSACTION ...
-func (me *T) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error {
+// Getrawtransaction ...
+func (me *T) Getrawtransaction(args []interface{}, ret *interface{}) error {
 	switch len(args) {
 	case 1:
 		args = append(args, 0.0)
@@ -250,8 +253,8 @@ func (me *T) GETRAWTRANSACTION(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETAPPLICATIONLOG ...
-func (me *T) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error {
+// Getapplicationlog ...
+func (me *T) Getapplicationlog(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -300,8 +303,8 @@ func (me *T) GETAPPLICATIONLOG(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETSTATEROOT ...
-func (me *T) GETSTATEROOT(args []interface{}, ret *interface{}) error {
+// Getstateroot ...
+func (me *T) Getstateroot(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -362,8 +365,8 @@ func (me *T) GETSTATEROOT(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETBLOCKHASH ...
-func (me *T) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
+// Getblockhash ...
+func (me *T) Getblockhash(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -405,8 +408,8 @@ func (me *T) GETBLOCKHASH(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETBLOCKSYSFEE ...
-func (me *T) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
+// Getblocksysfee ...
+func (me *T) Getblocksysfee(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -437,8 +440,8 @@ func (me *T) GETBLOCKSYSFEE(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETACCOUNTSTATE ...
-func (me *T) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
+// Getaccountstate ...
+func (me *T) Getaccountstate(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -474,8 +477,8 @@ func (me *T) GETACCOUNTSTATE(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETASSETSTATE ...
-func (me *T) GETASSETSTATE(args []interface{}, ret *interface{}) error {
+// Getassetstate ...
+func (me *T) Getassetstate(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -520,8 +523,8 @@ func (me *T) GETASSETSTATE(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETCLAIMABLE ...
-func (me *T) GETCLAIMABLE(args []interface{}, ret *interface{}) error {
+// Getclaimable ...
+func (me *T) Getclaimable(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -557,8 +560,8 @@ func (me *T) GETCLAIMABLE(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETUNSPENTS ...
-func (me *T) GETUNSPENTS(args []interface{}, ret *interface{}) error {
+// Getunspents ...
+func (me *T) Getunspents(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -594,8 +597,8 @@ func (me *T) GETUNSPENTS(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETNEP5BALANCES ...
-func (me *T) GETNEP5BALANCES(args []interface{}, ret *interface{}) error {
+// Getnep5balances ...
+func (me *T) Getnep5balances(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -631,8 +634,8 @@ func (me *T) GETNEP5BALANCES(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETCONTRACTSTATE ...
-func (me *T) GETCONTRACTSTATE(args []interface{}, ret *interface{}) error {
+// Getcontractstate ...
+func (me *T) Getcontractstate(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -683,8 +686,8 @@ func (me *T) GETCONTRACTSTATE(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETSTORAGE ...
-func (me *T) GETSTORAGE(args []interface{}, ret *interface{}) error {
+// Getstorage ...
+func (me *T) Getstorage(args []interface{}, ret *interface{}) error {
 	if len(args) != 2 {
 		return stderr.ErrInvalidArgs
 	}
@@ -746,8 +749,8 @@ func (me *T) GETSTORAGE(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETBLOCKCOUNT ...
-func (me *T) GETBLOCKCOUNT(args []interface{}, ret *interface{}) error {
+// Getblockcount ...
+func (me *T) Getblockcount(args []interface{}, ret *interface{}) error {
 	if len(args) != 0 {
 		return stderr.ErrInvalidArgs
 	}
@@ -782,8 +785,8 @@ func (me *T) GETBLOCKCOUNT(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETBESTBLOCKHASH ...
-func (me *T) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
+// Getbestblockhash ...
+func (me *T) Getbestblockhash(args []interface{}, ret *interface{}) error {
 	if len(args) != 0 {
 		return stderr.ErrInvalidArgs
 	}
@@ -818,8 +821,8 @@ func (me *T) GETBESTBLOCKHASH(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// GETTRANSACTIONHEIGHT ...
-func (me *T) GETTRANSACTIONHEIGHT(args []interface{}, ret *interface{}) error {
+// Gettransactionheight ...
+func (me *T) Gettransactionheight(args []interface{}, ret *interface{}) error {
 	if len(args) != 1 {
 		return stderr.ErrInvalidArgs
 	}
@@ -892,147 +895,147 @@ func (me *T) GETTRANSACTIONHEIGHT(args []interface{}, ret *interface{}) error {
 // 	return nil
 // }
 
-// DUMPPRIVKEY ...
-func (me *T) DUMPPRIVKEY(args []interface{}, ret *interface{}) error {
+// Dumpprivkey ...
+func (me *T) Dumpprivkey(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETPROOF ...
-func (me *T) GETPROOF(args []interface{}, ret *interface{}) error {
+// Getproof ...
+func (me *T) Getproof(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETBALANCE ...
-func (me *T) GETBALANCE(args []interface{}, ret *interface{}) error {
+// Getbalance ...
+func (me *T) Getbalance(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// INVOKESCRIPT ...
-func (me *T) INVOKESCRIPT(args []interface{}, ret *interface{}) error {
+// Invokescript ...
+func (me *T) Invokescript(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// INVOKEFUNCTION ...
-func (me *T) INVOKEFUNCTION(args []interface{}, ret *interface{}) error {
+// Invokefunction ...
+func (me *T) Invokefunction(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// CLAIMGAS ...
-func (me *T) CLAIMGAS(args []interface{}, ret *interface{}) error {
+// Claimgas ...
+func (me *T) Claimgas(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETCONNECTIONCOUNT ...
-func (me *T) GETCONNECTIONCOUNT(args []interface{}, ret *interface{}) error {
+// Getconnectioncount ...
+func (me *T) Getconnectioncount(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETMETRICBLOCKTIMESTAMP ...
-func (me *T) GETMETRICBLOCKTIMESTAMP(args []interface{}, ret *interface{}) error {
+// Getmetricblocktimestamp ...
+func (me *T) Getmetricblocktimestamp(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETUTXOTRANSFERS ...
-func (me *T) GETUTXOTRANSFERS(args []interface{}, ret *interface{}) error {
+// Getutxotransfers ...
+func (me *T) Getutxotransfers(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETNEP5TRANSFERS ...
-func (me *T) GETNEP5TRANSFERS(args []interface{}, ret *interface{}) error {
+// Getnep5transfers ...
+func (me *T) Getnep5transfers(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETNEWADDRESS ...
-func (me *T) GETNEWADDRESS(args []interface{}, ret *interface{}) error {
+// Getnewaddress ...
+func (me *T) Getnewaddress(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETRAWMEMPOOL ...
-func (me *T) GETRAWMEMPOOL(args []interface{}, ret *interface{}) error {
+// Getrawmempool ...
+func (me *T) Getrawmempool(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETPEERS ...
-func (me *T) GETPEERS(args []interface{}, ret *interface{}) error {
+// Getpeers ...
+func (me *T) Getpeers(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETUNCLAIMEDGAS ...
-func (me *T) GETUNCLAIMEDGAS(args []interface{}, ret *interface{}) error {
+// Getunclaimedgas ...
+func (me *T) Getunclaimedgas(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETUNCLAIMED ...
-func (me *T) GETUNCLAIMED(args []interface{}, ret *interface{}) error {
+// Getunclaimed ...
+func (me *T) Getunclaimed(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETVERSION ...
-func (me *T) GETVERSION(args []interface{}, ret *interface{}) error {
+// Getversion ...
+func (me *T) Getversion(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETWALLETHEIGHT ...
-func (me *T) GETWALLETHEIGHT(args []interface{}, ret *interface{}) error {
+// Getwalletheight ...
+func (me *T) Getwalletheight(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// IMPORTPRIVKEY ...
-func (me *T) IMPORTPRIVKEY(args []interface{}, ret *interface{}) error {
+// Importprivkey ...
+func (me *T) Importprivkey(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// LISTPLUGINS ...
-func (me *T) LISTPLUGINS(args []interface{}, ret *interface{}) error {
+// Listplugins ...
+func (me *T) Listplugins(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// LISTADDRESS ...
-func (me *T) LISTADDRESS(args []interface{}, ret *interface{}) error {
+// Listaddress ...
+func (me *T) Listaddress(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// SENDFROM ...
-func (me *T) SENDFROM(args []interface{}, ret *interface{}) error {
+// Sendfrom ...
+func (me *T) Sendfrom(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// SENDTOADDRESS ...
-func (me *T) SENDTOADDRESS(args []interface{}, ret *interface{}) error {
+// Sendtoaddress ...
+func (me *T) Sendtoaddress(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// SENDMANY ...
-func (me *T) SENDMANY(args []interface{}, ret *interface{}) error {
+// Sendmany ...
+func (me *T) Sendmany(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETSTATEHEIGHT ...
-func (me *T) GETSTATEHEIGHT(args []interface{}, ret *interface{}) error {
+// Getstateheight ...
+func (me *T) Getstateheight(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETTXOUT ...
-func (me *T) GETTXOUT(args []interface{}, ret *interface{}) error {
+// Gettxout ...
+func (me *T) Gettxout(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// SUBMITBLOCK ...
-func (me *T) SUBMITBLOCK(args []interface{}, ret *interface{}) error {
+// Submitblock ...
+func (me *T) Submitblock(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// GETVALIDATORS ...
-func (me *T) GETVALIDATORS(args []interface{}, ret *interface{}) error {
+// Getvalidators ...
+func (me *T) Getvalidators(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// ValidateAddress ...
-func (me *T) ValidateAddress(args []interface{}, ret *interface{}) error {
+// Validateaddress ...
+func (me *T) Validateaddress(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }
 
-// VerifyProof ...
-func (me *T) VerifyProof(args []interface{}, ret *interface{}) error {
+// Verifyproof ...
+func (me *T) Verifyproof(args []interface{}, ret *interface{}) error {
 	return stderr.ErrUnsupportedMethod
 }

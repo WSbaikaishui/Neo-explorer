@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"neophora/biz/api"
+	"neophora/biz/data"
 	"neophora/lib/joh"
 	"net/http"
 	"net/rpc"
@@ -29,6 +30,8 @@ func init() {
 		return redis.Dial(netowrk, address)
 	}, maxidle)
 	rpc.Register(&api.T{
-		DB: db,
+		Data: &data.T{
+			DB: db,
+		},
 	})
 }
