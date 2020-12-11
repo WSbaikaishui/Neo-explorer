@@ -867,33 +867,47 @@ func (me *T) Gettransactionheight(args []interface{}, ret *interface{}) error {
 	return nil
 }
 
-// // SENDRAWTRANSACTION ...
-// func (me *T) SENDRAWTRANSACTION(args []interface{}, ret *interface{}) error {
-// 	data := map[string]interface{}{
-// 		"jsonrpc": "2.0",
-// 		"id":      rand.Uint32(),
-// 		"method":  "sendrawtransaction",
-// 		"params":  args,
-// 	}
-// 	body, err := json.Marshal(data)
-// 	if err != nil {
-// 		return stderr.ErrInvalidArgs
-// 	}
-// 	resp, err := http.Post("", "application/json", bytes.NewReader(body))
-// 	if err != nil {
-// 		return stderr.ErrUnknown
-// 	}
-// 	defer resp.Body.Close()
-// 	decoder := json.NewDecoder(resp.Body)
-// 	if err := decoder.Decode(&data); err != nil {
-// 		return stderr.ErrUnknown
-// 	}
-// 	if err := data["error"]; err != nil {
-// 		return errors.New(fmt.Sprint(err))
-// 	}
-// 	*ret = data["result"]
-// 	return nil
-// }
+// Sendrawtransaction ...
+func (me *T) Sendrawtransaction(args []interface{}, ret *interface{}) error {
+	if len(args) != 1 {
+		return stderr.ErrInvalidArgs
+	}
+	tr := &trans.T{
+		V: args[0],
+	}
+	if err := tr.HexToBytes(); err != nil {
+		return stderr.ErrInvalidArgs
+	}
+	tx := tr.V.([]byte)
+	if len(tx) > 0x10000 {
+		return stderr.ErrInvalidArgs
+	}
+	me.lock.Lock()
+	defer me.lock.Unlock()
+	if len(me.txs) >= 0x10000 {
+		return stderr.ErrUnknown
+	}
+
+	me.txs = append(me.txs, tx)
+	*ret = "ok"
+	return nil
+}
+
+// Poprawtransaction ...
+func (me *T) Poprawtransaction(args []interface{}, ret *interface{}) error {
+	if len(args) != 0 {
+		return stderr.ErrInvalidArgs
+	}
+	me.lock.Lock()
+	defer me.lock.Unlock()
+	if len(me.txs) == 0 {
+		return stderr.ErrNotFound
+	}
+
+	*ret = me.txs[0]
+	me.txs = me.txs[1:]
+	return nil
+}
 
 // Dumpprivkey ...
 func (me *T) Dumpprivkey(args []interface{}, ret *interface{}) error {
