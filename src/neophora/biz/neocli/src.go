@@ -457,7 +457,7 @@ func (me *T) Getaccountstate(args []interface{}, ret *interface{}) error {
 		Keys   []string
 	}{
 		Target: "adhocaccountstate",
-		Index:  "account-height",
+		Index:  "hash-height",
 		Keys:   []string{tr.V.(string), "_"},
 	}, &result); err != nil {
 		return err
@@ -540,7 +540,7 @@ func (me *T) Getclaimable(args []interface{}, ret *interface{}) error {
 		Keys   []string
 	}{
 		Target: "adhocclaimable",
-		Index:  "account-height",
+		Index:  "hash-height",
 		Keys:   []string{tr.V.(string), "_"},
 	}, &result); err != nil {
 		return err
@@ -577,7 +577,7 @@ func (me *T) Getunspents(args []interface{}, ret *interface{}) error {
 		Keys   []string
 	}{
 		Target: "adhocunspents",
-		Index:  "account-height",
+		Index:  "hash-height",
 		Keys:   []string{tr.V.(string), "_"},
 	}, &result); err != nil {
 		return err
@@ -614,7 +614,7 @@ func (me *T) Getnep5balances(args []interface{}, ret *interface{}) error {
 		Keys   []string
 	}{
 		Target: "adhocnep5balances",
-		Index:  "account-height",
+		Index:  "hash-height",
 		Keys:   []string{tr.V.(string), "_"},
 	}, &result); err != nil {
 		return err

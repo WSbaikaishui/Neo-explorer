@@ -110,12 +110,8 @@ func task(line string) {
 	case "hash://height",
 		"contract://hash-height",
 		"storage://hash-height",
-		"adhocassetstate://hash-height",
-		"adhoccontractstate://hash-height",
-		"adhocclaimable://account-height",
-		"adhocunspents://account-height",
-		"adhocnep5balances://account-height",
-		"adhocaccountstate://account-height":
+		"asset://hash-height",
+		"account://hash-height":
 		var score uint64
 		if n, err := fmt.Sscanf(path.Base(uri.Path), "%016x", &score); err != nil || n != 1 {
 			log.Println("[!!!!][INDEX]", uri)
