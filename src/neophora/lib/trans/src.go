@@ -105,4 +105,4 @@ func (me *T) Remove0xPrefix() error {
 	}
 }
 
-var libTransReg0x = regexp.MustCompile(`^(0x)?([0-9a-f]{64})$`)
+var libTransReg0x = regexp.MustCompile(`^(0x)?([0-9a-f]+)$`)

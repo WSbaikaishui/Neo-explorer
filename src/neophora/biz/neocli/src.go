@@ -8,6 +8,7 @@ import (
 	"neophora/biz/data"
 	"neophora/lib/bq"
 	"neophora/lib/trans"
+	"neophora/lib/transex"
 	"neophora/var/stderr"
 	"net/url"
 )
@@ -192,22 +193,12 @@ func (me *T) Getrawtransaction(args []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	var scheme string
-	switch args[1] {
-	case 0.0:
-		scheme = "tx"
-	case 1.0:
-		scheme = "adhoctxinfo"
-	default:
-		return stderr.ErrInvalidArgs
-	}
+	var tr transex.T
 
 	var result []byte
 	switch key := args[0].(type) {
 	case string:
-		tr := &trans.T{
-			V: key,
-		}
+		tr.V = key
 		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
@@ -228,7 +219,7 @@ func (me *T) Getrawtransaction(args []interface{}, ret *interface{}) error {
 			Index  string
 			Keys   []string
 		}{
-			Target: scheme,
+			Target: "tx",
 			Index:  "hash",
 			Keys:   []string{tr.V.(string)},
 		}, &result); err != nil {
@@ -246,7 +237,11 @@ func (me *T) Getrawtransaction(args []interface{}, ret *interface{}) error {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
 	case 1.0:
-		*ret = json.RawMessage(result)
+		tr.V = result
+		if err := tr.BytesToJSONViaTX(); err != nil {
+			return stderr.ErrNotFound
+		}
+		*ret = tr.V
 	}
 
 	return nil
