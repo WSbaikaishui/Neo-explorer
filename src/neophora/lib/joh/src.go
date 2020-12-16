@@ -1,7 +1,6 @@
 package joh
 
 import (
-	"io"
 	"neophora/lib/rwio"
 	"neophora/lib/scex"
 	"net/http"
@@ -10,7 +9,6 @@ import (
 
 // T ...
 type T struct {
-	Codec func(conn io.ReadWriteCloser) rpc.ServerCodec
 }
 
 func (me *T) ServeHTTP(w http.ResponseWriter, req *http.Request) {
