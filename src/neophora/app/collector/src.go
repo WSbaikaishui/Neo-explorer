@@ -86,6 +86,7 @@ func task(line string) {
 		Val string `json:"val"`
 	}
 	if err := json.Unmarshal([]byte(line), &data); err != nil {
+		log.Println("[!!!!][JSON]", string(line))
 		return
 	}
 	uri, err := url.Parse(data.Key)
