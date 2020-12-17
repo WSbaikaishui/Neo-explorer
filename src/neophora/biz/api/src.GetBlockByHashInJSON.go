@@ -23,6 +23,9 @@ func (me *T) GetBlockByHashInJSON(args struct {
 		return err
 	}
 	tr.V = result
-	// TODO
+	if err := tr.BytesToJSONViaBlock(); err != nil {
+		return err
+	}
+	*ret = tr.V.(json.RawMessage)
 	return nil
 }
