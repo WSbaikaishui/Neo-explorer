@@ -29,15 +29,7 @@ func (me *T) Getblock(args []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	var scheme string
-	switch args[1] {
-	case 0.0:
-		scheme = "block"
-	case 1.0:
-		scheme = "adhocblockinfo"
-	default:
-		return stderr.ErrInvalidArgs
-	}
+	var tr transex.T
 
 	var result []byte
 	switch key := args[0].(type) {
@@ -47,16 +39,14 @@ func (me *T) Getblock(args []interface{}, ret *interface{}) error {
 			Index  string
 			Keys   []string
 		}{
-			Target: scheme,
+			Target: "block",
 			Index:  "height",
 			Keys:   []string{fmt.Sprintf("%016x", uint64(key))},
 		}, &result); err != nil {
 			return err
 		}
 	case string:
-		tr := &trans.T{
-			V: key,
-		}
+		tr.V = key
 		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
@@ -77,7 +67,7 @@ func (me *T) Getblock(args []interface{}, ret *interface{}) error {
 			Index  string
 			Keys   []string
 		}{
-			Target: scheme,
+			Target: "block",
 			Index:  "hash",
 			Keys:   []string{tr.V.(string)},
 		}, &result); err != nil {
@@ -95,14 +85,18 @@ func (me *T) Getblock(args []interface{}, ret *interface{}) error {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
 	case 1.0:
-		*ret = json.RawMessage(result)
+		tr.V = result
+		if err := tr.BytesToJSONViaBlock(); err != nil {
+			return stderr.ErrNotFound
+		}
+		*ret = tr.V
 	}
 
 	return nil
 }
 
-// GETBLOCKHEADER ...
-func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
+// Getblockheader ...
+func (me *T) Getblockheader(args []interface{}, ret *interface{}) error {
 	switch len(args) {
 	case 1:
 		args = append(args, 0.0)
@@ -111,15 +105,7 @@ func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	var scheme string
-	switch args[1] {
-	case 0.0:
-		scheme = "header"
-	case 1.0:
-		scheme = "adhocheaderinfo"
-	default:
-		return stderr.ErrInvalidArgs
-	}
+	var tr transex.T
 
 	var result []byte
 	switch key := args[0].(type) {
@@ -129,16 +115,14 @@ func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 			Index  string
 			Keys   []string
 		}{
-			Target: scheme,
+			Target: "header",
 			Index:  "height",
 			Keys:   []string{fmt.Sprintf("%016x", uint64(key))},
 		}, &result); err != nil {
 			return err
 		}
 	case string:
-		tr := &trans.T{
-			V: key,
-		}
+		tr.V = key
 		if err := tr.StringToLowerCase(); err != nil {
 			return stderr.ErrInvalidArgs
 		}
@@ -159,7 +143,7 @@ func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 			Index  string
 			Keys   []string
 		}{
-			Target: scheme,
+			Target: "header",
 			Index:  "hash",
 			Keys:   []string{tr.V.(string)},
 		}, &result); err != nil {
@@ -177,7 +161,11 @@ func (me *T) GETBLOCKHEADER(args []interface{}, ret *interface{}) error {
 	case 0.0:
 		*ret = hex.EncodeToString(result)
 	case 1.0:
-		*ret = json.RawMessage(result)
+		tr.V = result
+		if err := tr.BytesToJSONViaHeader(); err != nil {
+			return stderr.ErrNotFound
+		}
+		*ret = tr.V
 	}
 
 	return nil
@@ -440,9 +428,8 @@ func (me *T) Getaccountstate(args []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	tr := &trans.T{
-		V: args[0],
-	}
+	var tr transex.T
+	tr.V = args[0]
 	if err := tr.AddressToHash(); err != nil {
 		return stderr.ErrInvalidArgs
 	}
@@ -456,7 +443,7 @@ func (me *T) Getaccountstate(args []interface{}, ret *interface{}) error {
 		Index  string
 		Keys   []string
 	}{
-		Target: "adhocaccountstate",
+		Target: "account",
 		Index:  "hash-height",
 		Keys:   []string{tr.V.(string), "_"},
 	}, &result); err != nil {
@@ -467,7 +454,11 @@ func (me *T) Getaccountstate(args []interface{}, ret *interface{}) error {
 		return stderr.ErrNotFound
 	}
 
-	*ret = json.RawMessage(result)
+	tr.V = result
+	if err := tr.BytesToJSONViaAccount(); err != nil {
+		return stderr.ErrNotFound
+	}
+	*ret = tr.V
 	return nil
 }
 
@@ -477,9 +468,8 @@ func (me *T) Getassetstate(args []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	tr := &trans.T{
-		V: args[0],
-	}
+	var tr transex.T
+	tr.V = args[0]
 	if err := tr.StringToLowerCase(); err != nil {
 		return stderr.ErrInvalidArgs
 	}
@@ -502,7 +492,7 @@ func (me *T) Getassetstate(args []interface{}, ret *interface{}) error {
 		Index  string
 		Keys   []string
 	}{
-		Target: "adhocassetstate",
+		Target: "asset",
 		Index:  "hash-height",
 		Keys:   []string{tr.V.(string), "_"},
 	}, &result); err != nil {
@@ -513,7 +503,11 @@ func (me *T) Getassetstate(args []interface{}, ret *interface{}) error {
 		return stderr.ErrNotFound
 	}
 
-	*ret = json.RawMessage(result)
+	tr.V = result
+	if err := tr.BytesToJSONViaAsset(); err != nil {
+		return stderr.ErrNotFound
+	}
+	*ret = tr.V
 	return nil
 }
 
@@ -634,9 +628,8 @@ func (me *T) Getcontractstate(args []interface{}, ret *interface{}) error {
 		return stderr.ErrInvalidArgs
 	}
 
-	tr := &trans.T{
-		V: args[0],
-	}
+	var tr transex.T
+	tr.V = args[0]
 	if err := tr.StringToLowerCase(); err != nil {
 		return stderr.ErrInvalidArgs
 	}
@@ -659,7 +652,7 @@ func (me *T) Getcontractstate(args []interface{}, ret *interface{}) error {
 		Index  string
 		Keys   []string
 	}{
-		Target: "adhoccontractstate",
+		Target: "contract",
 		Index:  "hash-height",
 		Keys:   []string{tr.V.(string), "_"},
 	}, &result); err != nil {
@@ -676,7 +669,11 @@ func (me *T) Getcontractstate(args []interface{}, ret *interface{}) error {
 		return stderr.ErrNotFound
 	}
 
-	*ret = json.RawMessage(result)
+	tr.V = result
+	if err := tr.BytesToJSONViaContract(); err != nil {
+		return stderr.ErrNotFound
+	}
+	*ret = tr.V
 	return nil
 }
 
