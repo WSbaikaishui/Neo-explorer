@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+	defer client.Close()
 	defer wg.Wait()
 	reader := bufio.NewReader(os.Stdin)
 	for {

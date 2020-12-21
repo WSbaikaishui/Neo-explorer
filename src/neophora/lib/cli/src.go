@@ -33,3 +33,11 @@ func (me *T) Call(method string, args interface{}, reply interface{}) error {
 	}
 	return nil
 }
+
+// Close ...
+func (me *T) Close() {
+	close(me.Pool)
+	for client := range me.Pool {
+		client.Close()
+	}
+}

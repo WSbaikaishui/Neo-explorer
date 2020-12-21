@@ -24,12 +24,14 @@ func init() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	client := &cli.T{
+		Address: address,
+		Pool:    make(chan *rpc.Client, poolsize),
+	}
+	defer client.Close()
 	rpc.Register(&api.T{
 		Data: &data.T{
-			Client: &cli.T{
-				Address: address,
-				Pool:    make(chan *rpc.Client, poolsize),
-			},
+			Client: client,
 		},
 	})
 }
