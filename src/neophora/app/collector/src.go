@@ -4,17 +4,14 @@ import (
 	"bufio"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
-	"net/url"
+	"neophora/lib/cli"
+	"net/rpc"
 	"os"
-	"path"
 	"strconv"
 	"sync"
 	"time"
-
-	"github.com/gomodule/redigo/redis"
 )
 
 func main() {
@@ -30,30 +27,27 @@ func main() {
 	}
 }
 
-var db *redis.Pool
+var client *cli.T
 var queue chan string
 var wg sync.WaitGroup
 
 func init() {
-	netowrk := os.ExpandEnv("${REDIS_NETWORK}")
-	address := os.ExpandEnv("${REDIS_ADDRESS}")
+	address := os.ExpandEnv("${NEODB_ADDRESS}")
 	bufsize := os.ExpandEnv("${COLLECTOR_BUFSIZE}")
 	threads := os.ExpandEnv("${COLLECTOR_THREADS}")
-	maxidle, err := strconv.Atoi(os.ExpandEnv("${REDIS_MAXIDLE}"))
-	if err != nil {
-		log.Fatalln(err)
-	}
-	db = redis.NewPool(func() (redis.Conn, error) {
-		return redis.Dial(netowrk, address)
-	}, maxidle)
-	size, err := strconv.Atoi(bufsize)
-	if err != nil {
-		log.Fatalln(err)
-	}
 	thread, err := strconv.Atoi(threads)
 	if err != nil {
 		log.Fatalln(err)
 	}
+	client = &cli.T{
+		Address: address,
+		Pool:    make(chan *rpc.Client, thread),
+	}
+	size, err := strconv.Atoi(bufsize)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 	queue = make(chan string, size)
 	for i := 0; i < thread; i++ {
 		wg.Add(1)
@@ -81,54 +75,28 @@ func worker() {
 }
 
 func task(line string) {
-	var data struct {
-		Key string `json:"key"`
-		Val string `json:"val"`
-	}
+	var data map[string]string
 	if err := json.Unmarshal([]byte(line), &data); err != nil {
-		log.Println("[!!!!][JSON]", string(line))
+		log.Println("[!!!!][JSON]", err)
 		return
 	}
-	uri, err := url.Parse(data.Key)
-	if err != nil {
-		log.Println("[!!!!][URI]", data.Key)
-		return
-	}
-	value, err := hex.DecodeString(data.Val)
-	if err != nil {
-		log.Println("[!!!!][HEX]", data.Val)
-		return
-	}
-
-	log.Println("[DATA]", uri)
-
-	run(func() error {
-		_, err := db.Get().Do("SET", uri.String(), value)
-		return err
-	})
-
-	switch fmt.Sprintf("%s://%s", uri.Scheme, uri.Host) {
-	case "hash://height",
-		"contract://hash-height",
-		"storage://hash-height",
-		"asset://hash-height",
-		"account://hash-height":
-		var score uint64
-		if n, err := fmt.Sscanf(path.Base(uri.Path), "%016x", &score); err != nil || n != 1 {
-			log.Println("[!!!!][INDEX]", uri)
-			return
+	args := make(map[string][]byte)
+	for k, v := range data {
+		val, err := hex.DecodeString(v)
+		if err != nil {
+			log.Println("[!!!!][HEX]", v, err)
+			continue
 		}
-		urc := &url.URL{}
-		*urc = *uri
-		urc.Path = path.Join(path.Dir(urc.Path), "_")
-		key := &url.URL{
-			Scheme: "index",
-			Host:   "keys",
-			Path:   urc.String(),
-		}
-		run(func() error {
-			_, err := db.Get().Do("ZADD", key.String(), score, uri.String())
-			return err
-		})
+		args[k] = val
 	}
+	var ret bool
+	for i := time.Second; i < time.Hour; i++ {
+		if err := client.Call("T.Put", args, &ret); err != nil || ret == false {
+			log.Println("[????][CALL]", ret, err)
+			time.Sleep(i)
+			continue
+		}
+		return
+	}
+	log.Println("[!!!!][LOST]")
 }

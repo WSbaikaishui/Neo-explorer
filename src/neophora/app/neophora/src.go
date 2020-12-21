@@ -4,13 +4,12 @@ import (
 	"log"
 	"neophora/biz/api"
 	"neophora/biz/data"
+	"neophora/lib/cli"
 	"neophora/lib/joh"
 	"net/http"
 	"net/rpc"
 	"os"
 	"strconv"
-
-	"github.com/gomodule/redigo/redis"
 )
 
 func main() {
@@ -20,18 +19,17 @@ func main() {
 }
 
 func init() {
-	netowrk := os.ExpandEnv("${REDIS_NETWORK}")
-	address := os.ExpandEnv("${REDIS_ADDRESS}")
-	maxidle, err := strconv.Atoi(os.ExpandEnv("${REDIS_MAXIDLE}"))
+	address := os.ExpandEnv("${NEODB_ADDRESS}")
+	poolsize, err := strconv.Atoi(os.ExpandEnv("${NEODB_POOLSIZE}"))
 	if err != nil {
 		log.Fatalln(err)
 	}
-	db := redis.NewPool(func() (redis.Conn, error) {
-		return redis.Dial(netowrk, address)
-	}, maxidle)
 	rpc.Register(&api.T{
 		Data: &data.T{
-			DB: db,
+			Client: &cli.T{
+				Address: address,
+				Pool:    make(chan *rpc.Client, poolsize),
+			},
 		},
 	})
 }

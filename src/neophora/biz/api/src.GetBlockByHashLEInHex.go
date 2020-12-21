@@ -17,7 +17,7 @@ func (me *T) GetBlockByHashLEInHex(args struct {
 	if err := tr.BytesToHex(); err != nil {
 		return err
 	}
-	return me.Data.GetArgsHex(struct {
+	return me.Data.GetArgsInHex(struct {
 		Target string
 		Index  string
 		Keys   []string

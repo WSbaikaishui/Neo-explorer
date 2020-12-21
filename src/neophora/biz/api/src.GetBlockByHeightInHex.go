@@ -6,7 +6,7 @@ import "fmt"
 func (me *T) GetBlockByHeightInHex(args struct {
 	Height uint64
 }, ret *string) error {
-	return me.Data.GetArgsHex(struct {
+	return me.Data.GetArgsInHex(struct {
 		Target string
 		Index  string
 		Keys   []string
