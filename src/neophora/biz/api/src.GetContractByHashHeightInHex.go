@@ -12,8 +12,8 @@ func (me *T) GetContractByHashHeightInHex(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "contract",
-		Index:  "hash-height",
+		Target: "bins.ctr",
+		Index:  "h160.ctr-uint.hgt",
 		Keys:   []string{args.Hash, fmt.Sprintf("%016x", args.Height)},
 	}, ret)
 }

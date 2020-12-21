@@ -9,8 +9,8 @@ func (me *T) GetTransactionByHashInHex(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "tx",
-		Index:  "hash",
+		Target: "bins.trx",
+		Index:  "h256.trx",
 		Keys:   []string{args.Hash},
 	}, ret)
 }

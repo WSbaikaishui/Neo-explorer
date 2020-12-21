@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"neophora/lib/transex"
+	"neophora/lib/trans"
 )
 
 // GetBlockByHashInJSON ...
@@ -10,19 +10,18 @@ func (me *T) GetBlockByHashInJSON(args struct {
 	Hash string
 }, ret *json.RawMessage) error {
 	var result []byte
-	var tr transex.T
 	if err := me.Data.GetArgs(struct {
 		Target string
 		Index  string
 		Keys   []string
 	}{
-		Target: "block",
-		Index:  "hash",
+		Target: "bins.blk",
+		Index:  "h256.blk",
 		Keys:   []string{args.Hash},
 	}, &result); err != nil {
 		return err
 	}
-	tr.V = result
+	tr := &trans.T{V: result}
 	if err := tr.BytesToJSONViaBlock(); err != nil {
 		return err
 	}

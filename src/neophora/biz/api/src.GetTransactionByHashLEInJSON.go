@@ -5,24 +5,28 @@ import (
 	"neophora/lib/trans"
 )
 
-// GetHeaderByHashInJSON ...
-func (me *T) GetHeaderByHashInJSON(args struct {
+// GetTransactionByHashLEInJSON ...
+func (me *T) GetTransactionByHashLEInJSON(args struct {
 	Hash string
 }, ret *json.RawMessage) error {
 	var result []byte
+	tr := &trans.T{V: args.Hash}
+	if err := tr.HexReverse(); err != nil {
+		return err
+	}
 	if err := me.Data.GetArgs(struct {
 		Target string
 		Index  string
 		Keys   []string
 	}{
-		Target: "bins.hdr",
-		Index:  "h256.blk",
-		Keys:   []string{args.Hash},
+		Target: "bins.trx",
+		Index:  "h256.trx",
+		Keys:   []string{tr.V.(string)},
 	}, &result); err != nil {
 		return err
 	}
-	tr := &trans.T{V: result}
-	if err := tr.BytesToJSONViaHeader(); err != nil {
+	tr.V = result
+	if err := tr.BytesToJSONViaTX(); err != nil {
 		return err
 	}
 	*ret = tr.V.(json.RawMessage)

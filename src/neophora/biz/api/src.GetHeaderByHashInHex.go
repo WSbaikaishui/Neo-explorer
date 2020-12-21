@@ -9,8 +9,8 @@ func (me *T) GetHeaderByHashInHex(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "header",
-		Index:  "hash",
+		Target: "bins.hdr",
+		Index:  "h256.blk",
 		Keys:   []string{args.Hash},
 	}, ret)
 }

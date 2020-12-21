@@ -14,8 +14,8 @@ func (me *T) GetHeightOfTopInUint64(args struct{}, ret *uint64) error {
 		Index  string
 		Keys   []string
 	}{
-		Target: "hash",
-		Index:  "height",
+		Target: "h256.blk",
+		Index:  "uint.hgt",
 		Keys:   []string{},
 	}, &result); err != nil {
 		return err

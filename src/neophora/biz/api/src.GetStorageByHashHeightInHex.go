@@ -12,8 +12,8 @@ func (me *T) GetStorageByHashHeightInHex(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "storage",
-		Index:  "hash-height",
+		Target: "bins.str",
+		Index:  "h256-key-uint.hgt",
 		Keys:   []string{args.Hash, fmt.Sprintf("%016x", args.Height)},
 	}, ret)
 }

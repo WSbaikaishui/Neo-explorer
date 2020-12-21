@@ -2,27 +2,30 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"neophora/lib/trans"
 )
 
-// GetBlockByHeightInJSON ...
-func (me *T) GetBlockByHeightInJSON(args struct {
-	Height uint64
+// GetBlockByHashLEInJSON ...
+func (me *T) GetBlockByHashLEInJSON(args struct {
+	Hash string
 }, ret *json.RawMessage) error {
 	var result []byte
+	tr := &trans.T{V: args.Hash}
+	if err := tr.HexReverse(); err != nil {
+		return err
+	}
 	if err := me.Data.GetArgs(struct {
 		Target string
 		Index  string
 		Keys   []string
 	}{
 		Target: "bins.blk",
-		Index:  "uint.hgt",
-		Keys:   []string{fmt.Sprintf("%016x", args.Height)},
+		Index:  "h256.blk",
+		Keys:   []string{tr.V.(string)},
 	}, &result); err != nil {
 		return err
 	}
-	tr := &trans.T{V: result}
+	tr.V = result
 	if err := tr.BytesToJSONViaBlock(); err != nil {
 		return err
 	}

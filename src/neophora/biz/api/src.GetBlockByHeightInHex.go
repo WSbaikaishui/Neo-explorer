@@ -11,8 +11,8 @@ func (me *T) GetBlockByHeightInHex(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "block",
-		Index:  "height",
+		Target: "bins.blk",
+		Index:  "uint.hgt",
 		Keys:   []string{fmt.Sprintf("%016x", args.Height)},
 	}, ret)
 }

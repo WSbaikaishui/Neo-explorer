@@ -2,8 +2,8 @@ package api
 
 import "neophora/lib/trans"
 
-// GetBlockByHashLEInHex ...
-func (me *T) GetBlockByHashLEInHex(args struct {
+// GetHeaderByHashLEInHex ...
+func (me *T) GetHeaderByHashLEInHex(args struct {
 	Hash string
 }, ret *string) error {
 	tr := &trans.T{V: args.Hash}
@@ -15,7 +15,7 @@ func (me *T) GetBlockByHashLEInHex(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "bins.blk",
+		Target: "bins.hdr",
 		Index:  "h256.blk",
 		Keys:   []string{tr.V.(string)},
 	}, ret)

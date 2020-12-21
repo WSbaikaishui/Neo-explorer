@@ -11,8 +11,8 @@ func (me *T) GetHashByHeightInHex(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "hash",
-		Index:  "height",
+		Target: "h256.blk",
+		Index:  "uint.hgt",
 		Keys:   []string{fmt.Sprintf("%016x", args.Height)},
 	}, ret)
 }

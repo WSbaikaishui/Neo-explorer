@@ -9,8 +9,8 @@ func (me *T) GetBlockByHashInHex(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "block",
-		Index:  "hash",
+		Target: "bins.blk",
+		Index:  "h256.blk",
 		Keys:   []string{args.Hash},
 	}, ret)
 }

@@ -11,8 +11,8 @@ func (me *T) GetHeaderByHeightInHex(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "header",
-		Index:  "height",
+		Target: "bins.hdr",
+		Index:  "uint.hgt",
 		Keys:   []string{fmt.Sprintf("%016x", args.Height)},
 	}, ret)
 }
