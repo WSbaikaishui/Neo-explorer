@@ -7,6 +7,7 @@ import (
 	"github.com/neophora/neo2go/pkg/core/block"
 	"github.com/neophora/neo2go/pkg/core/state"
 	"github.com/neophora/neo2go/pkg/core/transaction"
+	"github.com/neophora/neo2go/pkg/encoding/address"
 	"github.com/neophora/neo2go/pkg/io"
 )
 
@@ -40,7 +41,11 @@ func (me T) JSONViaUTXO() (json.RawMessage, error) {
 	var op transaction.Output
 	reader := io.NewBinReaderFromBuf(me.Val())
 	op.DecodeBinary(reader)
-	ret, err := json.Marshal(op)
+	ret, err := json.Marshal(map[string]interface{}{
+		"asset":   op.AssetID,
+		"value":   op.Amount,
+		"address": address.Uint160ToString(op.ScriptHash),
+	})
 	if err != nil {
 		return nil, err
 	}
