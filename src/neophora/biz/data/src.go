@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/hex"
+	"log"
 	"neophora/lib/cli"
 	"neophora/lib/type/bins"
 	"neophora/var/stderr"
@@ -19,6 +20,7 @@ func (me *T) Get(args struct {
 	Key []byte
 }, ret *[]byte) error {
 	if err := me.Client.Call("T.Get", args, ret); err != nil {
+		log.Println("[RPC][Get]", err)
 		return stderr.ErrUnknown
 	}
 	return nil
@@ -68,6 +70,7 @@ func (me *T) GetLastKey(args struct {
 		Prefix: uint(len(key) - len(args.Keys[len(args.Keys)-1])),
 	}
 	if err := me.Client.Call("T.GetLastKey", parameter, ret); err != nil {
+		log.Println("[RPC][GetLastKey]", err)
 		return stderr.ErrUnknown
 	}
 	return nil
@@ -96,6 +99,7 @@ func (me *T) GetLastVal(args struct {
 		Prefix: uint(len(key) - len(args.Keys[len(args.Keys)-1])),
 	}
 	if err := me.Client.Call("T.GetLastVal", parameter, ret); err != nil {
+		log.Println("[RPC][GetLastVal]", err)
 		return stderr.ErrUnknown
 	}
 	return nil

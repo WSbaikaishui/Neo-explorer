@@ -45,10 +45,11 @@ func (me *T) Get(args struct {
 // GetLastVal ...
 func (me *T) GetLastVal(args struct {
 	Key    []byte
-	Prefix int
+	Prefix uint
 }, ret *[]byte) error {
-	if args.Prefix > len(args.Key) {
-		args.Prefix = len(args.Key)
+	klen := uint(len(args.Key))
+	if args.Prefix > klen {
+		args.Prefix = klen
 	}
 	it := me.DB.NewIterator(me.RO)
 	defer it.Close()
