@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/hex"
 	"neophora/lib/cli"
+	"neophora/lib/type/bins"
 	"neophora/var/stderr"
 	"net/url"
 	"path"
@@ -128,6 +129,9 @@ func (me *T) GetInHex(args struct {
 	if err := me.Get(args, &result); err != nil {
 		return err
 	}
+	if result == nil {
+		return stderr.ErrNotFound
+	}
 	*ret = hex.EncodeToString(result)
 	return nil
 }
@@ -139,6 +143,9 @@ func (me *T) GetStrHex(args struct {
 	var result []byte
 	if err := me.GetStr(args, &result); err != nil {
 		return err
+	}
+	if result == nil {
+		return stderr.ErrNotFound
 	}
 	*ret = hex.EncodeToString(result)
 	return nil
@@ -154,6 +161,9 @@ func (me *T) GetArgsInHex(args struct {
 	if err := me.GetArgs(args, &result); err != nil {
 		return err
 	}
+	if result == nil {
+		return stderr.ErrNotFound
+	}
 	*ret = hex.EncodeToString(result)
 	return nil
 }
@@ -167,6 +177,9 @@ func (me *T) GetLastKeyInStr(args struct {
 	var result []byte
 	if err := me.GetLastKey(args, &result); err != nil {
 		return err
+	}
+	if result == nil {
+		return stderr.ErrNotFound
 	}
 	*ret = string(result)
 	return nil
@@ -200,6 +213,9 @@ func (me *T) GetLastValInHex(args struct {
 	if err := me.GetLastVal(args, &result); err != nil {
 		return err
 	}
+	if result == nil {
+		return stderr.ErrNotFound
+	}
 	*ret = hex.EncodeToString(result)
 	return nil
 }
@@ -213,6 +229,9 @@ func (me *T) GetLastestUint64KeyInStr(args struct {
 	var result []byte
 	if err := me.GetLastestUint64Key(args, &result); err != nil {
 		return err
+	}
+	if result == nil {
+		return stderr.ErrNotFound
 	}
 	*ret = string(result)
 	return nil
@@ -246,6 +265,21 @@ func (me *T) GetLastestUint64ValInHex(args struct {
 	if err := me.GetLastestUint64Val(args, &result); err != nil {
 		return err
 	}
+	if result == nil {
+		return stderr.ErrNotFound
+	}
 	*ret = hex.EncodeToString(result)
+	return nil
+}
+
+// GetArgsInBins ...
+func (me *T) GetArgsInBins(args struct {
+	Target string
+	Index  string
+	Keys   []string
+}, ret *bins.T) error {
+	if err := me.GetArgs(args, (*[]byte)(ret)); err != nil {
+		return err
+	}
 	return nil
 }

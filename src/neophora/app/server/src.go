@@ -12,12 +12,6 @@ import (
 )
 
 func main() {
-	address := os.ExpandEnv("0.0.0.0:${SERVER_PORT}")
-	log.Println("[LISTEN]", address)
-	http.ListenAndServe(address, &joh.T{})
-}
-
-func init() {
 	address := os.ExpandEnv("${NEODB_ADDRESS}")
 	poolsize, err := strconv.Atoi(os.ExpandEnv("${NEODB_POOLSIZE}"))
 	if err != nil {
@@ -31,4 +25,7 @@ func init() {
 	rpc.Register(&data.T{
 		Client: client,
 	})
+	listen := os.ExpandEnv("0.0.0.0:${SERVER_PORT}")
+	log.Println("[LISTEN]", listen)
+	http.ListenAndServe(listen, &joh.T{})
 }

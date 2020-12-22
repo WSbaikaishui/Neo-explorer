@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"neophora/lib/trans"
+	"neophora/var/stderr"
 )
 
 // GetHeaderByHashInJSON ...
@@ -20,6 +21,9 @@ func (me *T) GetHeaderByHashInJSON(args struct {
 		Keys:   []string{args.Hash},
 	}, &result); err != nil {
 		return err
+	}
+	if result == nil {
+		return stderr.ErrNotFound
 	}
 	tr := &trans.T{V: result}
 	if err := tr.BytesToJSONViaHeader(); err != nil {

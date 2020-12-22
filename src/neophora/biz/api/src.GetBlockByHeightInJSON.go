@@ -2,30 +2,37 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
-	"neophora/lib/trans"
+	"neophora/lib/type/bins"
+	"neophora/lib/type/uintval"
+	"neophora/var/stderr"
 )
 
 // GetBlockByHeightInJSON ...
 func (me *T) GetBlockByHeightInJSON(args struct {
-	Height uint64
+	Height uintval.T
 }, ret *json.RawMessage) error {
-	var result []byte
-	if err := me.Data.GetArgs(struct {
+	if args.Height.Valid() == false {
+		return stderr.ErrInvalidArgs
+	}
+	var result bins.T
+	if err := me.Data.GetArgsInBins(struct {
 		Target string
 		Index  string
 		Keys   []string
 	}{
 		Target: "bins.blk",
 		Index:  "uint.hgt",
-		Keys:   []string{fmt.Sprintf("%016x", args.Height)},
+		Keys:   []string{args.Height.Hex()},
 	}, &result); err != nil {
 		return err
 	}
-	tr := &trans.T{V: result}
-	if err := tr.BytesToJSONViaBlock(); err != nil {
-		return err
+	if result.Valid() == false {
+		return stderr.ErrNotFound
 	}
-	*ret = tr.V.(json.RawMessage)
+	js, err := result.JSONViaBlock()
+	if err != nil {
+		return stderr.ErrNotFound
+	}
+	*ret = js
 	return nil
 }

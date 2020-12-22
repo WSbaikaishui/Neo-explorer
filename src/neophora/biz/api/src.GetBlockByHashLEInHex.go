@@ -1,14 +1,16 @@
 package api
 
-import "neophora/lib/trans"
+import (
+	"neophora/lib/type/h256"
+	"neophora/var/stderr"
+)
 
 // GetBlockByHashLEInHex ...
 func (me *T) GetBlockByHashLEInHex(args struct {
-	Hash string
+	Hash h256.T
 }, ret *string) error {
-	tr := &trans.T{V: args.Hash}
-	if err := tr.HexReverse(); err != nil {
-		return err
+	if args.Hash.Valid() == false {
+		return stderr.ErrInvalidArgs
 	}
 	return me.Data.GetArgsInHex(struct {
 		Target string
@@ -17,6 +19,6 @@ func (me *T) GetBlockByHashLEInHex(args struct {
 	}{
 		Target: "bins.blk",
 		Index:  "h256.blk",
-		Keys:   []string{tr.V.(string)},
+		Keys:   []string{args.Hash.RevVal()},
 	}, ret)
 }

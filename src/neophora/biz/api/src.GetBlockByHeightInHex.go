@@ -1,11 +1,17 @@
 package api
 
-import "fmt"
+import (
+	"neophora/lib/type/uintval"
+	"neophora/var/stderr"
+)
 
 // GetBlockByHeightInHex ...
 func (me *T) GetBlockByHeightInHex(args struct {
-	Height uint64
+	Height uintval.T
 }, ret *string) error {
+	if args.Height.Valid() == false {
+		return stderr.ErrInvalidArgs
+	}
 	return me.Data.GetArgsInHex(struct {
 		Target string
 		Index  string
@@ -13,6 +19,6 @@ func (me *T) GetBlockByHeightInHex(args struct {
 	}{
 		Target: "bins.blk",
 		Index:  "uint.hgt",
-		Keys:   []string{fmt.Sprintf("%016x", args.Height)},
+		Keys:   []string{args.Height.Hex()},
 	}, ret)
 }

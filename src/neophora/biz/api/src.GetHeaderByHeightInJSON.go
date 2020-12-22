@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"neophora/lib/trans"
+	"neophora/var/stderr"
 )
 
 // GetHeaderByHeightInJSON ...
@@ -21,6 +22,9 @@ func (me *T) GetHeaderByHeightInJSON(args struct {
 		Keys:   []string{fmt.Sprintf("%016x", args.Height)},
 	}, &result); err != nil {
 		return err
+	}
+	if result == nil {
+		return stderr.ErrNotFound
 	}
 	tr := &trans.T{V: result}
 	if err := tr.BytesToJSONViaHeader(); err != nil {

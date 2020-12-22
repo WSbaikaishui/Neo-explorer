@@ -1,18 +1,21 @@
 package api
 
 import (
-	"fmt"
-	"neophora/lib/trans"
+	"neophora/lib/type/h160"
+	"neophora/lib/type/uintval"
+	"neophora/var/stderr"
 )
 
 // GetContractByHashLEHeightInHex ...
 func (me *T) GetContractByHashLEHeightInHex(args struct {
-	Hash   string
-	Height uint64
+	Hash   h160.T
+	Height uintval.T
 }, ret *string) error {
-	tr := &trans.T{V: args.Hash}
-	if err := tr.HexReverse(); err != nil {
-		return err
+	if args.Hash.Valid() == false {
+		return stderr.ErrInvalidArgs
+	}
+	if args.Height.Valid() == false {
+		return stderr.ErrInvalidArgs
 	}
 	return me.Data.GetLastValInHex(struct {
 		Target string
@@ -21,6 +24,6 @@ func (me *T) GetContractByHashLEHeightInHex(args struct {
 	}{
 		Target: "bins.ctr",
 		Index:  "h160.ctr-uint.hgt",
-		Keys:   []string{tr.V.(string), fmt.Sprintf("%016x", args.Height)},
+		Keys:   []string{args.Hash.RevVal(), args.Height.Hex()},
 	}, ret)
 }
