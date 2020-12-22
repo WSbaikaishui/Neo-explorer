@@ -283,3 +283,27 @@ func (me *T) GetArgsInBins(args struct {
 	}
 	return nil
 }
+
+// GetLastValInBins ...
+func (me *T) GetLastValInBins(args struct {
+	Target string
+	Index  string
+	Keys   []string
+}, ret *bins.T) error {
+	if err := me.GetLastVal(args, (*[]byte)(ret)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// GetLastestUint64ValInBins ...
+func (me *T) GetLastestUint64ValInBins(args struct {
+	Target string
+	Index  string
+	Keys   []string
+}, ret *bins.T) error {
+	if err := me.GetLastestUint64Val(args, (*[]byte)(ret)); err != nil {
+		return err
+	}
+	return nil
+}
