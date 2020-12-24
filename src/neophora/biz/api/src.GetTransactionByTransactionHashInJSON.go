@@ -3,18 +3,15 @@ package api
 import (
 	"encoding/json"
 	"neophora/lib/trans"
+	"neophora/lib/type/h256"
 	"neophora/var/stderr"
 )
 
-// GetTransactionByHashLEInJSON ...
-func (me *T) GetTransactionByHashLEInJSON(args struct {
-	Hash string
+// GetTransactionByTransactionHashInJSON ...
+func (me *T) GetTransactionByTransactionHashInJSON(args struct {
+	TransactionHash h256.T
 }, ret *json.RawMessage) error {
 	var result []byte
-	tr := &trans.T{V: args.Hash}
-	if err := tr.HexReverse(); err != nil {
-		return err
-	}
 	if err := me.Data.GetArgs(struct {
 		Target string
 		Index  string
@@ -22,14 +19,14 @@ func (me *T) GetTransactionByHashLEInJSON(args struct {
 	}{
 		Target: "bins.trx",
 		Index:  "h256.trx",
-		Keys:   []string{tr.V.(string)},
+		Keys:   []string{args.TransactionHash.Val()},
 	}, &result); err != nil {
 		return err
 	}
 	if result == nil {
 		return stderr.ErrNotFound
 	}
-	tr.V = result
+	tr := &trans.T{V: result}
 	if err := tr.BytesToJSONViaTX(); err != nil {
 		return err
 	}

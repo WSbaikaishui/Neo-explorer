@@ -26,6 +26,14 @@ func (me T) Val() []byte {
 	return []byte(me)
 }
 
+// Uint64 ...
+func (me T) Uint64() uint64 {
+	if len(me) != 8 {
+		return 0
+	}
+	return binary.BigEndian.Uint64(me)
+}
+
 // JSONViaBlock ...
 func (me T) JSONViaBlock() (json.RawMessage, error) {
 	var blk block.Block
@@ -123,4 +131,16 @@ func (me T) JSONViaSpentNEO() (json.RawMessage, error) {
 		return nil, stderr.ErrInvalidArgs
 	}
 	return js, nil
+}
+
+// JSONViaTransaction ...
+func (me T) JSONViaTransaction() (json.RawMessage, error) {
+	var tx transaction.Transaction
+	reader := io.NewBinReaderFromBuf(me)
+	tx.DecodeBinary(reader)
+	ret, err := json.Marshal(tx)
+	if err != nil {
+		return nil, err
+	}
+	return json.RawMessage(ret), nil
 }
