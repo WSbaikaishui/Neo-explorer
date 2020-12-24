@@ -1,6 +1,8 @@
 package bins
 
 import (
+	"encoding/binary"
+	"encoding/hex"
 	"encoding/json"
 	"neophora/var/stderr"
 
@@ -96,4 +98,29 @@ func (me T) JSONViaAsset() (json.RawMessage, error) {
 		return nil, err
 	}
 	return json.RawMessage(ret), nil
+}
+
+// JSONViaCoinState ...
+func (me T) JSONViaCoinState() (json.RawMessage, error) {
+	if len(me) == 8 {
+		return json.RawMessage(`"Untracted State: ` + hex.EncodeToString(me) + `"`), nil
+	}
+	return json.RawMessage(`"Invalid State: ` + hex.EncodeToString(me) + `"`), nil
+}
+
+// JSONViaSpentNEO ...
+func (me T) JSONViaSpentNEO() (json.RawMessage, error) {
+	if len(me) != 16 {
+		return nil, stderr.ErrInvalidArgs
+	}
+	mint := binary.BigEndian.Uint64(me[0:8])
+	burn := binary.BigEndian.Uint64(me[8:16])
+	js, err := json.Marshal(map[string]interface{}{
+		"mint": mint,
+		"burn": burn,
+	})
+	if err != nil {
+		return nil, stderr.ErrInvalidArgs
+	}
+	return js, nil
 }
