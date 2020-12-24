@@ -9,6 +9,11 @@ import (
 )
 
 // GetSpentNEOByHashIndexHeightInJSON ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetSpentNEOByHashIndexHeightInJSON(args struct {
 	Hash   h256.T
 	Index  uintval.T

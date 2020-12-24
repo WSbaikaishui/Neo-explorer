@@ -7,6 +7,11 @@ import (
 )
 
 // GetContractByHashHeightInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetContractByHashHeightInHex(args struct {
 	Hash   h160.T
 	Height uintval.T

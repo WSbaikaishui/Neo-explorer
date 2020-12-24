@@ -7,6 +7,12 @@ import (
 )
 
 // GetHeightOfTopInUint64 ...
+// as an example:
+//
+// ```
+// $ curl https://example.neophora.io -d '{"id":1,"jsonrpc":"2.0","method":"GetHeightOfTopInUint64","params":{}}'
+// {"id":1,"result":583121,"error":null}
+// ```
 func (me *T) GetHeightOfTopInUint64(args struct{}, ret *uint64) error {
 	var result url.URL
 	if err := me.Data.GetLastestUint64KeyInURL(struct {

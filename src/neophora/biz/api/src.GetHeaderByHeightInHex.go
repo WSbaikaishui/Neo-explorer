@@ -3,6 +3,11 @@ package api
 import "fmt"
 
 // GetHeaderByHeightInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetHeaderByHeightInHex(args struct {
 	Height uint64
 }, ret *string) error {

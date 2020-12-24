@@ -9,6 +9,11 @@ import (
 )
 
 // GetCoinStateByHashLEIndexHeightInJSON ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetCoinStateByHashLEIndexHeightInJSON(args struct {
 	Hash   h256.T
 	Index  uintval.T

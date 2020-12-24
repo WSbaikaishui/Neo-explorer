@@ -5,6 +5,11 @@ import (
 )
 
 // GetTransactionByTransactionHashLEInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetTransactionByTransactionHashLEInHex(args struct {
 	TransactionHashLE h256.T
 }, ret *string) error {

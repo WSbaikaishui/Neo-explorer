@@ -1,6 +1,11 @@
 package api
 
 // GetHeaderByHashInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetHeaderByHashInHex(args struct {
 	Hash string
 }, ret *string) error {

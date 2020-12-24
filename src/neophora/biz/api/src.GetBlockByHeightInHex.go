@@ -6,6 +6,11 @@ import (
 )
 
 // GetBlockByHeightInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetBlockByHeightInHex(args struct {
 	Height uintval.T
 }, ret *string) error {

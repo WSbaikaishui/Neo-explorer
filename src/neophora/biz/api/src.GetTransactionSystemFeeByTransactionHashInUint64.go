@@ -7,6 +7,11 @@ import (
 )
 
 // GetTransactionSystemFeeByTransactionHashInUint64 ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetTransactionSystemFeeByTransactionHashInUint64(args struct {
 	TransactionHash h256.T
 }, ret *uint64) error {

@@ -8,6 +8,11 @@ import (
 )
 
 // GetHeaderByHeightInJSON ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetHeaderByHeightInJSON(args struct {
 	Height uint64
 }, ret *json.RawMessage) error {

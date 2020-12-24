@@ -8,6 +8,11 @@ import (
 )
 
 // GetBlockByHashLEInJSON ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetBlockByHashLEInJSON(args struct {
 	Hash h256.T
 }, ret *json.RawMessage) error {

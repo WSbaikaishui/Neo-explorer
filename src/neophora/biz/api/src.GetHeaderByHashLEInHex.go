@@ -3,6 +3,11 @@ package api
 import "neophora/lib/trans"
 
 // GetHeaderByHashLEInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetHeaderByHashLEInHex(args struct {
 	Hash string
 }, ret *string) error {

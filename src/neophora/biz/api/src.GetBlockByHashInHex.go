@@ -6,6 +6,11 @@ import (
 )
 
 // GetBlockByHashInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetBlockByHashInHex(args struct {
 	Hash h256.T
 }, ret *string) error {

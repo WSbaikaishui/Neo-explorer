@@ -7,6 +7,11 @@ import (
 )
 
 // GetSpentNEOByHashLEIndexHeightInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetSpentNEOByHashLEIndexHeightInHex(args struct {
 	Hash   h256.T
 	Index  uintval.T

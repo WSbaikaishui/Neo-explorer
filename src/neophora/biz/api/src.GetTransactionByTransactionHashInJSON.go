@@ -8,6 +8,11 @@ import (
 )
 
 // GetTransactionByTransactionHashInJSON ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetTransactionByTransactionHashInJSON(args struct {
 	TransactionHash h256.T
 }, ret *json.RawMessage) error {

@@ -9,6 +9,11 @@ import (
 )
 
 // GetUTXOByHashIndexInJSON ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetUTXOByHashIndexInJSON(args struct {
 	TransactionHash h256.T
 	OutputIndex     uintval.T

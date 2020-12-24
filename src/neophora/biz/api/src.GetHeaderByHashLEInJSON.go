@@ -7,6 +7,11 @@ import (
 )
 
 // GetHeaderByHashLEInJSON ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetHeaderByHashLEInJSON(args struct {
 	Hash string
 }, ret *json.RawMessage) error {

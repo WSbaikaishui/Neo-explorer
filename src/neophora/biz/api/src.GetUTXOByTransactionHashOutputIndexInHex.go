@@ -7,6 +7,11 @@ import (
 )
 
 // GetUTXOByHashIndexInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetUTXOByHashIndexInHex(args struct {
 	TransactionHash h256.T
 	OutputIndex     uintval.T

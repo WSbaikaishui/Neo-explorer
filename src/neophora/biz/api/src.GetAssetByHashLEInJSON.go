@@ -8,6 +8,11 @@ import (
 )
 
 // GetAssetByHashLEInJSON ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetAssetByHashLEInJSON(args struct {
 	Hash h256.T
 }, ret *json.RawMessage) error {

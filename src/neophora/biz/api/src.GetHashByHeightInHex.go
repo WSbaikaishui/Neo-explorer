@@ -3,6 +3,11 @@ package api
 import "fmt"
 
 // GetHashByHeightInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetHashByHeightInHex(args struct {
 	Height uint64
 }, ret *string) error {

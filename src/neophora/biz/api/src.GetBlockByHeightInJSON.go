@@ -8,6 +8,11 @@ import (
 )
 
 // GetBlockByHeightInJSON ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetBlockByHeightInJSON(args struct {
 	Height uintval.T
 }, ret *json.RawMessage) error {

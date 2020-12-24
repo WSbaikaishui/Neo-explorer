@@ -7,6 +7,11 @@ import (
 )
 
 // GetCoinStatebyHashLEIndexHeightInHex ...
+// as an example:
+//
+// ```
+// TODO
+// ```
 func (me *T) GetCoinStatebyHashLEIndexHeightInHex(args struct {
 	Hash   h256.T
 	Index  uintval.T
