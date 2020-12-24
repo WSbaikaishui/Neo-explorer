@@ -1,13 +1,17 @@
 package api
 
-// GetHeaderByHashInHex ...
+import (
+	"neophora/lib/type/h256"
+)
+
+// GetHeaderByBlockHashLEInHex ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetHeaderByHashInHex(args struct {
-	Hash string
+func (me *T) GetHeaderByBlockHashLEInHex(args struct {
+	BlockHashLE h256.T
 }, ret *string) error {
 	return me.Data.GetArgsInHex(struct {
 		Target string
@@ -16,6 +20,6 @@ func (me *T) GetHeaderByHashInHex(args struct {
 	}{
 		Target: "bins.hdr",
 		Index:  "h256.blk",
-		Keys:   []string{args.Hash},
+		Keys:   []string{args.BlockHashLE.RevVal()},
 	}, ret)
 }

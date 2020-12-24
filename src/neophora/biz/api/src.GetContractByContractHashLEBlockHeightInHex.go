@@ -6,20 +6,20 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetContractByHashLEHeightInHex ...
+// GetContractByContractHashLEBlockHeightInHex ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetContractByHashLEHeightInHex(args struct {
-	Hash   h160.T
-	Height uintval.T
+func (me *T) GetContractByContractHashLEBlockHeightInHex(args struct {
+	ContractHashLE h160.T
+	BlockHeight    uintval.T
 }, ret *string) error {
-	if args.Hash.Valid() == false {
+	if args.ContractHashLE.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	if args.Height.Valid() == false {
+	if args.BlockHeight.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	return me.Data.GetLastValInHex(struct {
@@ -29,6 +29,6 @@ func (me *T) GetContractByHashLEHeightInHex(args struct {
 	}{
 		Target: "bins.ctr",
 		Index:  "h160.ctr-uint.hgt",
-		Keys:   []string{args.Hash.RevVal(), args.Height.Hex()},
+		Keys:   []string{args.ContractHashLE.RevVal(), args.BlockHeight.Hex()},
 	}, ret)
 }

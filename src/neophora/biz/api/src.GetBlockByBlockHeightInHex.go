@@ -5,16 +5,16 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetBlockByHeightInHex ...
+// GetBlockByBlockHeightInHex ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetBlockByHeightInHex(args struct {
-	Height uintval.T
+func (me *T) GetBlockByBlockHeightInHex(args struct {
+	BlockHeight uintval.T
 }, ret *string) error {
-	if args.Height.Valid() == false {
+	if args.BlockHeight.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	return me.Data.GetArgsInHex(struct {
@@ -24,6 +24,6 @@ func (me *T) GetBlockByHeightInHex(args struct {
 	}{
 		Target: "bins.blk",
 		Index:  "uint.hgt",
-		Keys:   []string{args.Height.Hex()},
+		Keys:   []string{args.BlockHeight.Hex()},
 	}, ret)
 }

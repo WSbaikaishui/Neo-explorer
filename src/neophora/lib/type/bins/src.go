@@ -144,3 +144,15 @@ func (me T) JSONViaTransaction() (json.RawMessage, error) {
 	}
 	return json.RawMessage(ret), nil
 }
+
+// JSONViaHeader ...
+func (me T) JSONViaHeader() (json.RawMessage, error) {
+	var hd block.Header
+	reader := io.NewBinReaderFromBuf(me)
+	hd.DecodeBinary(reader)
+	ret, err := json.Marshal(hd)
+	if err != nil {
+		return nil, err
+	}
+	return json.RawMessage(ret), nil
+}

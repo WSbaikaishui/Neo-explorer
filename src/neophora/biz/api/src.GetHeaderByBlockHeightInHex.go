@@ -1,15 +1,17 @@
 package api
 
-import "fmt"
+import (
+	"neophora/lib/type/uintval"
+)
 
-// GetHeaderByHeightInHex ...
+// GetHeaderByBlockHeightInHex ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetHeaderByHeightInHex(args struct {
-	Height uint64
+func (me *T) GetHeaderByBlockHeightInHex(args struct {
+	BlockHeight uintval.T
 }, ret *string) error {
 	return me.Data.GetArgsInHex(struct {
 		Target string
@@ -18,6 +20,6 @@ func (me *T) GetHeaderByHeightInHex(args struct {
 	}{
 		Target: "bins.hdr",
 		Index:  "uint.hgt",
-		Keys:   []string{fmt.Sprintf("%016x", args.Height)},
+		Keys:   []string{args.BlockHeight.Hex()},
 	}, ret)
 }

@@ -5,16 +5,16 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetBlockByHashLEInHex ...
+// GetBlockByBlockHashLEInHex ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetBlockByHashLEInHex(args struct {
-	Hash h256.T
+func (me *T) GetBlockByBlockHashLEInHex(args struct {
+	BlockHashLE h256.T
 }, ret *string) error {
-	if args.Hash.Valid() == false {
+	if args.BlockHashLE.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	return me.Data.GetArgsInHex(struct {
@@ -24,6 +24,6 @@ func (me *T) GetBlockByHashLEInHex(args struct {
 	}{
 		Target: "bins.blk",
 		Index:  "h256.blk",
-		Keys:   []string{args.Hash.RevVal()},
+		Keys:   []string{args.BlockHashLE.RevVal()},
 	}, ret)
 }

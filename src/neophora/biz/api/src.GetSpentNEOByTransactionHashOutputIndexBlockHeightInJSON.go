@@ -8,24 +8,24 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetCoinStateByHashLEIndexHeightInJSON ...
+// GetSpentNEOByTransactionHashOutputIndexBlockHeightInJSON ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetCoinStateByHashLEIndexHeightInJSON(args struct {
-	Hash   h256.T
-	Index  uintval.T
-	Height uintval.T
+func (me *T) GetSpentNEOByTransactionHashOutputIndexBlockHeightInJSON(args struct {
+	TransactionHash h256.T
+	OutputIndex     uintval.T
+	BlockHeight     uintval.T
 }, ret *json.RawMessage) error {
-	if args.Hash.Valid() == false {
+	if args.TransactionHash.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	if args.Index.Valid() == false {
+	if args.OutputIndex.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	if args.Height.Valid() == false {
+	if args.BlockHeight.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	var result bins.T
@@ -34,16 +34,16 @@ func (me *T) GetCoinStateByHashLEIndexHeightInJSON(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "uint.cst",
+		Target: "u128.spt",
 		Index:  "h256.trx-uint.num-uint.hgt",
-		Keys:   []string{args.Hash.RevVal(), args.Index.Hex(), args.Height.Hex()},
+		Keys:   []string{args.TransactionHash.Val(), args.OutputIndex.Hex(), args.BlockHeight.Hex()},
 	}, &result); err != nil {
 		return err
 	}
 	if result.Valid() == false {
 		return stderr.ErrNotFound
 	}
-	js, err := result.JSONViaCoinState()
+	js, err := result.JSONViaSpentNEO()
 	if err != nil {
 		return stderr.ErrNotFound
 	}

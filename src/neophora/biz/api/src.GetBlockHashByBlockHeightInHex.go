@@ -1,15 +1,15 @@
 package api
 
-import "fmt"
+import "neophora/lib/type/uintval"
 
-// GetHashByHeightInHex ...
+// GetBlockHashByBlockHeightInHex ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetHashByHeightInHex(args struct {
-	Height uint64
+func (me *T) GetBlockHashByBlockHeightInHex(args struct {
+	BlockHeight uintval.T
 }, ret *string) error {
 	return me.Data.GetArgsInHex(struct {
 		Target string
@@ -18,6 +18,6 @@ func (me *T) GetHashByHeightInHex(args struct {
 	}{
 		Target: "h256.blk",
 		Index:  "uint.hgt",
-		Keys:   []string{fmt.Sprintf("%016x", args.Height)},
+		Keys:   []string{args.BlockHeight.Hex()},
 	}, ret)
 }

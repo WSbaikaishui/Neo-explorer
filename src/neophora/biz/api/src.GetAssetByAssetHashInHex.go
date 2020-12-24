@@ -5,16 +5,16 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetAssetByHashLEInHex ...
+// GetAssetByAssetHashInHex ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetAssetByHashLEInHex(args struct {
-	Hash h256.T
+func (me *T) GetAssetByAssetHashInHex(args struct {
+	AssetHash h256.T
 }, ret *string) error {
-	if args.Hash.Valid() == false {
+	if args.AssetHash.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	return me.Data.GetLastestUint64ValInHex(struct {
@@ -24,6 +24,6 @@ func (me *T) GetAssetByHashLEInHex(args struct {
 	}{
 		Target: "bins.ast",
 		Index:  "h256.ast",
-		Keys:   []string{args.Hash.RevVal()},
+		Keys:   []string{args.AssetHash.Val()},
 	}, ret)
 }

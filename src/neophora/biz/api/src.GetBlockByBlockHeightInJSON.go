@@ -7,16 +7,16 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetBlockByHeightInJSON ...
+// GetBlockByBlockHeightInJSON ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetBlockByHeightInJSON(args struct {
-	Height uintval.T
+func (me *T) GetBlockByBlockHeightInJSON(args struct {
+	BlockHeight uintval.T
 }, ret *json.RawMessage) error {
-	if args.Height.Valid() == false {
+	if args.BlockHeight.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	var result bins.T
@@ -27,7 +27,7 @@ func (me *T) GetBlockByHeightInJSON(args struct {
 	}{
 		Target: "bins.blk",
 		Index:  "uint.hgt",
-		Keys:   []string{args.Height.Hex()},
+		Keys:   []string{args.BlockHeight.Hex()},
 	}, &result); err != nil {
 		return err
 	}

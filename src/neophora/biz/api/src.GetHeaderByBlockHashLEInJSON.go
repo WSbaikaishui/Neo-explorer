@@ -7,34 +7,31 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetAssetByHashLEInJSON ...
+// GetHeaderByBlockHashLEInJSON ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetAssetByHashLEInJSON(args struct {
-	Hash h256.T
+func (me *T) GetHeaderByBlockHashLEInJSON(args struct {
+	BlockHashLE h256.T
 }, ret *json.RawMessage) error {
-	if args.Hash.Valid() == false {
-		return stderr.ErrInvalidArgs
-	}
 	var result bins.T
-	if err := me.Data.GetLastestUint64ValInBins(struct {
+	if err := me.Data.GetArgsInBins(struct {
 		Target string
 		Index  string
 		Keys   []string
 	}{
-		Target: "bins.ast",
-		Index:  "h256.ast",
-		Keys:   []string{args.Hash.RevVal()},
+		Target: "bins.hdr",
+		Index:  "h256.blk",
+		Keys:   []string{args.BlockHashLE.RevVal()},
 	}, &result); err != nil {
 		return err
 	}
 	if result.Valid() == false {
 		return stderr.ErrNotFound
 	}
-	js, err := result.JSONViaAsset()
+	js, err := result.JSONViaHeader()
 	if err != nil {
 		return stderr.ErrNotFound
 	}

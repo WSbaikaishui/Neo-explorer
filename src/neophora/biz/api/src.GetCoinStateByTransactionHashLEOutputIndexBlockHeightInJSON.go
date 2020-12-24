@@ -8,24 +8,24 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetCoinStateByHashIndexHeightInJSON ...
+// GetCoinStateByTransactionHashLEOutputIndexBlockHeightInJSON ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetCoinStateByHashIndexHeightInJSON(args struct {
-	Hash   h256.T
-	Index  uintval.T
-	Height uintval.T
+func (me *T) GetCoinStateByTransactionHashLEOutputIndexBlockHeightInJSON(args struct {
+	TransactionHashLE h256.T
+	OutputIndex       uintval.T
+	BlockHeight       uintval.T
 }, ret *json.RawMessage) error {
-	if args.Hash.Valid() == false {
+	if args.TransactionHashLE.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	if args.Index.Valid() == false {
+	if args.OutputIndex.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	if args.Height.Valid() == false {
+	if args.BlockHeight.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	var result bins.T
@@ -36,7 +36,7 @@ func (me *T) GetCoinStateByHashIndexHeightInJSON(args struct {
 	}{
 		Target: "uint.cst",
 		Index:  "h256.trx-uint.num-uint.hgt",
-		Keys:   []string{args.Hash.Val(), args.Index.Hex(), args.Height.Hex()},
+		Keys:   []string{args.TransactionHashLE.RevVal(), args.OutputIndex.Hex(), args.BlockHeight.Hex()},
 	}, &result); err != nil {
 		return err
 	}
