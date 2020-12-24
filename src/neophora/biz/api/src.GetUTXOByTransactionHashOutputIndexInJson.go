@@ -8,15 +8,15 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetUTXOByHashLEIndexInJSON ...
-func (me *T) GetUTXOByHashLEIndexInJSON(args struct {
-	Hash  h256.T
-	Index uintval.T
+// GetUTXOByHashIndexInJSON ...
+func (me *T) GetUTXOByHashIndexInJSON(args struct {
+	TransactionHash h256.T
+	OutputIndex     uintval.T
 }, ret *json.RawMessage) error {
-	if args.Hash.Valid() == false {
+	if args.TransactionHash.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	if args.Index.Valid() == false {
+	if args.OutputIndex.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	var result bins.T
@@ -27,7 +27,7 @@ func (me *T) GetUTXOByHashLEIndexInJSON(args struct {
 	}{
 		Target: "bins.utx",
 		Index:  "h256.trx-uint.num",
-		Keys:   []string{args.Hash.RevVal(), args.Index.Hex()},
+		Keys:   []string{args.TransactionHash.Val(), args.OutputIndex.Hex()},
 	}, &result); err != nil {
 		return err
 	}

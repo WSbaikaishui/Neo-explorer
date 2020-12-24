@@ -8,13 +8,13 @@ import (
 
 // GetUTXOByHashIndexInHex ...
 func (me *T) GetUTXOByHashIndexInHex(args struct {
-	Hash  h256.T
-	Index uintval.T
+	TransactionHash h256.T
+	OutputIndex     uintval.T
 }, ret *string) error {
-	if args.Hash.Valid() == false {
+	if args.TransactionHash.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	if args.Index.Valid() == false {
+	if args.OutputIndex.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	return me.Data.GetArgsInHex(struct {
@@ -24,6 +24,6 @@ func (me *T) GetUTXOByHashIndexInHex(args struct {
 	}{
 		Target: "bins.utx",
 		Index:  "h256.trx-uint.num",
-		Keys:   []string{args.Hash.Val(), args.Index.Hex()},
+		Keys:   []string{args.TransactionHash.Val(), args.OutputIndex.Hex()},
 	}, ret)
 }
