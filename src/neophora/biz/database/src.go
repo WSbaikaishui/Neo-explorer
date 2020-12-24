@@ -83,3 +83,19 @@ func (me *T) GetLastKey(args struct {
 	copy(*ret, result)
 	return nil
 }
+
+// DeleteRange ...
+func (me *T) DeleteRange(args struct {
+	Key []byte
+}, ret *bool) error {
+	it := me.DB.NewIterator(me.RO)
+	defer it.Close()
+	it.Seek(args.Key)
+	if it.ValidForPrefix(args.Key) {
+		if err := me.DB.Delete(me.WO, it.Key().Data()); err != nil {
+			return err
+		}
+	}
+	*ret = true
+	return nil
+}
