@@ -42,4 +42,4 @@ func (me T) H256() string {
 	return hex.EncodeToString(l2[:])
 }
 
-var re = regexp.MustCompile(`^[0-9a-f]*$`)
+var re = regexp.MustCompile(`^([0-9a-f]{2})*$`)
