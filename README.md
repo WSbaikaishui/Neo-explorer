@@ -5,35 +5,24 @@ NEOPHORA
 # requirements
 
 ```sh
+GOPATH=$(pwd) go get golang.org/x/crypto/ripemd160
+GOPATH=$(pwd) go get github.com/btcsuite/btcutil/base58
 GOPATH=$(pwd) go get github.com/tecbot/gorocksdb
+GOPATH=$(pwd) go get github.com/neophora/neo2go/pkg/core/transaction
 ```
 
-# services
+# build
 
-## cli
-
-neocli service
 
 ```sh
-GOPATH=$(pwd) DBS_ADDRESS="<address_of_dbs>" CLI_PORT="<port>" go run neophora/app/cli/main
+GOPATH=$(pwd) go install neophora/app/collector
+GOPATH=$(pwd) go install neophora/app/neophora
+GOPATH=$(pwd) go install neophora/app/server
+# GOPATH=$(pwd) go install neophora/app/neorpc
+GOPATH=$(pwd) go install neophora/app/neodb
+GOPATH=$(pwd) go install neophora/app/txsender
+GOPATH=$(pwd) go install neophora/app/importer
+GOPATH=$(pwd) go install neophora/app/mrdoc
+GOPATH=$(pwd) go install neophora/app/neop
+GOPATH=$(pwd) go install neophora/app/dbcleaner
 ```
-
-## rpc
-
-jsonrpc service
-
-TODO ...
-
-## dbs
-
-database service
-
-```sh
-GOPATH=$(pwd) DBS_DBPATH="<path_to_database>" DBS_PORT="<port>"  go run neophora/app/dbs/main
-```
-
-# database
-
-key is in url form.
-
-value is in binary form.
