@@ -6,14 +6,14 @@ import (
 	"net/url"
 )
 
-// GetHeightOfTopInUint64 ...
+// GetCurrentBlockHeightInUint64 ...
 // as an example:
 //
 // ```
-// $ curl https://example.neophora.io -d '{"id":1,"jsonrpc":"2.0","method":"GetHeightOfTopInUint64","params":{}}'
+// $ curl https://example.neophora.io -d '{"id":1,"jsonrpc":"2.0","method":"GetCurrentBlockHeightInUint64","params":{}}'
 // {"id":1,"result":583121,"error":null}
 // ```
-func (me *T) GetHeightOfTopInUint64(args struct{}, ret *uint64) error {
+func (me *T) GetCurrentBlockHeightInUint64(args struct{}, ret *uint64) error {
 	var result url.URL
 	if err := me.Data.GetLastestUint64KeyInURL(struct {
 		Target string
