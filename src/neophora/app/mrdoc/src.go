@@ -140,6 +140,20 @@ var dictI = map[string]map[string]interface{}{
 		"pattern":     "[0-9a-f]{64}",
 		"description": "block hash in little endian",
 	},
+	"KeyHash": {
+		"type":        "string",
+		"minLength":   64,
+		"maxLength":   64,
+		"pattern":     "[0-9a-f]{64}",
+		"description": "sha256^2 hash of key in big endian",
+	},
+	"KeyHashLE": {
+		"type":        "string",
+		"minLength":   64,
+		"maxLength":   64,
+		"pattern":     "[0-9a-f]{64}",
+		"description": "sha256^2 hash of key in little endian",
+	},
 	"ContractHash": {
 		"type":        "string",
 		"minLength":   40,

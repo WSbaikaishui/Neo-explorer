@@ -27,4 +27,4 @@ func (me T) RevVal() string {
 	return hex.EncodeToString(bytes)
 }
 
-var re = regexp.MustCompile(`^([0-9a-f]{64})$`)
+var re = regexp.MustCompile(`^[0-9a-f]{64}$`)
