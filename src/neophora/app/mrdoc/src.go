@@ -168,6 +168,11 @@ var dictI = map[string]map[string]interface{}{
 		"pattern":     "[0-9a-f]{40}",
 		"description": "contract hash in little endian",
 	},
+	"HexKey": {
+		"type":        "string",
+		"pattern":     "[0-9a-f]*",
+		"description": "hex encoded key",
+	},
 	"BlockHeight": {
 		"type":        "integer",
 		"minumum":     0,
