@@ -288,6 +288,20 @@ func (me *T) GetArgsInBins(args struct {
 	return nil
 }
 
+// GetArgsInString ...
+func (me *T) GetArgsInString(args struct {
+	Target string
+	Index  string
+	Keys   []string
+}, ret *string) error {
+	var result []byte
+	if err := me.GetArgs(args, &result); err != nil {
+		return err
+	}
+	*ret = string(result)
+	return nil
+}
+
 // GetLastValInBins ...
 func (me *T) GetLastValInBins(args struct {
 	Target string

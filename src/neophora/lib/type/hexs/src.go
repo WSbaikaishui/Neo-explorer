@@ -19,6 +19,15 @@ func (me T) Val() string {
 	return string(me)
 }
 
+// RevVal ...
+func (me T) RevVal() string {
+	bytes, _ := hex.DecodeString(me.Val())
+	for i, j := 0, len(bytes)-1; i < j; i, j = i+1, j-1 {
+		bytes[i], bytes[j] = bytes[j], bytes[i]
+	}
+	return hex.EncodeToString(bytes)
+}
+
 // Decode ...
 func (me T) Decode() []byte {
 	data, _ := hex.DecodeString(me.Val())
