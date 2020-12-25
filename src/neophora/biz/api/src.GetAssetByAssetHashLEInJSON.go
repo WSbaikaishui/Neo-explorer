@@ -20,7 +20,7 @@ func (me *T) GetAssetByAssetHashLEInJSON(args struct {
 		return stderr.ErrInvalidArgs
 	}
 	var result bins.T
-	if err := me.Data.GetLastestUint64ValInBins(struct {
+	if err := me.Data.GetLatestUint64ValInBins(struct {
 		Target string
 		Index  string
 		Keys   []string

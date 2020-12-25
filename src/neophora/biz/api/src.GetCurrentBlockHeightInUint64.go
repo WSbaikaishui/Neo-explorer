@@ -15,7 +15,7 @@ import (
 // ```
 func (me *T) GetCurrentBlockHeightInUint64(args struct{}, ret *uint64) error {
 	var result url.URL
-	if err := me.Data.GetLastestUint64KeyInURL(struct {
+	if err := me.Data.GetLatestUint64KeyInURL(struct {
 		Target string
 		Index  string
 		Keys   []string

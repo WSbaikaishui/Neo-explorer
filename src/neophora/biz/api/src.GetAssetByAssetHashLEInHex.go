@@ -17,7 +17,7 @@ func (me *T) GetAssetByAssetHashLEInHex(args struct {
 	if args.AssetHashLE.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	return me.Data.GetLastestUint64ValInHex(struct {
+	return me.Data.GetLatestUint64ValInHex(struct {
 		Target string
 		Index  string
 		Keys   []string

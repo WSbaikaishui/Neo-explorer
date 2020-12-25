@@ -105,8 +105,8 @@ func (me *T) GetLastVal(args struct {
 	return nil
 }
 
-// GetLastestUint64Key ...
-func (me *T) GetLastestUint64Key(args struct {
+// GetLatestUint64Key ...
+func (me *T) GetLatestUint64Key(args struct {
 	Target string
 	Index  string
 	Keys   []string
@@ -115,8 +115,8 @@ func (me *T) GetLastestUint64Key(args struct {
 	return me.GetLastKey(args, ret)
 }
 
-// GetLastestUint64Val ...
-func (me *T) GetLastestUint64Val(args struct {
+// GetLatestUint64Val ...
+func (me *T) GetLatestUint64Val(args struct {
 	Target string
 	Index  string
 	Keys   []string
@@ -224,14 +224,14 @@ func (me *T) GetLastValInHex(args struct {
 	return nil
 }
 
-// GetLastestUint64KeyInStr ...
-func (me *T) GetLastestUint64KeyInStr(args struct {
+// GetLatestUint64KeyInStr ...
+func (me *T) GetLatestUint64KeyInStr(args struct {
 	Target string
 	Index  string
 	Keys   []string
 }, ret *string) error {
 	var result []byte
-	if err := me.GetLastestUint64Key(args, &result); err != nil {
+	if err := me.GetLatestUint64Key(args, &result); err != nil {
 		return err
 	}
 	if result == nil {
@@ -241,14 +241,14 @@ func (me *T) GetLastestUint64KeyInStr(args struct {
 	return nil
 }
 
-// GetLastestUint64KeyInURL ...
-func (me *T) GetLastestUint64KeyInURL(args struct {
+// GetLatestUint64KeyInURL ...
+func (me *T) GetLatestUint64KeyInURL(args struct {
 	Target string
 	Index  string
 	Keys   []string
 }, ret *url.URL) error {
 	var result string
-	if err := me.GetLastestUint64KeyInStr(args, &result); err != nil {
+	if err := me.GetLatestUint64KeyInStr(args, &result); err != nil {
 		return err
 	}
 	uri, err := url.Parse(result)
@@ -259,14 +259,14 @@ func (me *T) GetLastestUint64KeyInURL(args struct {
 	return nil
 }
 
-// GetLastestUint64ValInHex ...
-func (me *T) GetLastestUint64ValInHex(args struct {
+// GetLatestUint64ValInHex ...
+func (me *T) GetLatestUint64ValInHex(args struct {
 	Target string
 	Index  string
 	Keys   []string
 }, ret *string) error {
 	var result []byte
-	if err := me.GetLastestUint64Val(args, &result); err != nil {
+	if err := me.GetLatestUint64Val(args, &result); err != nil {
 		return err
 	}
 	if result == nil {
@@ -300,13 +300,13 @@ func (me *T) GetLastValInBins(args struct {
 	return nil
 }
 
-// GetLastestUint64ValInBins ...
-func (me *T) GetLastestUint64ValInBins(args struct {
+// GetLatestUint64ValInBins ...
+func (me *T) GetLatestUint64ValInBins(args struct {
 	Target string
 	Index  string
 	Keys   []string
 }, ret *bins.T) error {
-	if err := me.GetLastestUint64Val(args, (*[]byte)(ret)); err != nil {
+	if err := me.GetLatestUint64Val(args, (*[]byte)(ret)); err != nil {
 		return err
 	}
 	return nil
