@@ -23,7 +23,7 @@ func (me *T) GetAssetByAssetHashInHex(args struct {
 		Keys   []string
 	}{
 		Target: "bins.ast",
-		Index:  "h256.ast",
+		Index:  "h256.ast-uint.hgt",
 		Keys:   []string{args.AssetHash.Val()},
 	}, ret)
 }

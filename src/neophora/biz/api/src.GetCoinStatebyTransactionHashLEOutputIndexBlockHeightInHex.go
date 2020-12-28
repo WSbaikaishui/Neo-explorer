@@ -6,13 +6,13 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetCoinstatebyTransactionHashLEOutputIndexBlockHeightInHex ...
+// GetCoinStatebyTransactionHashLEOutputIndexBlockHeightInHex ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetCoinstatebyTransactionHashLEOutputIndexBlockHeightInHex(args struct {
+func (me *T) GetCoinStatebyTransactionHashLEOutputIndexBlockHeightInHex(args struct {
 	TransactionHashLE h256.T
 	OutputIndex       uintval.T
 	BlockHeight       uintval.T

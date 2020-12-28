@@ -26,7 +26,7 @@ func (me *T) GetAssetByAssetHashInJSON(args struct {
 		Keys   []string
 	}{
 		Target: "bins.ast",
-		Index:  "h256.ast",
+		Index:  "h256.ast-uint.hgt",
 		Keys:   []string{args.AssetHash.Val()},
 	}, &result); err != nil {
 		return err
