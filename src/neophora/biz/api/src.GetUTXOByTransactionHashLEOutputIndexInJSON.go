@@ -8,13 +8,14 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetUTXOByHashLEIndexInJSON ...
+// GetUTXOByTransactionHashLEOutputIndexInJSON ...
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"id":1,"jsonrpc":"2.0","method":"GetUTXOByTransactionHashLEOutputIndexInJSON","params":{"TransactionHashLE": "965236998b57b0567fea220981582e338ff3f9e1fadf89447933dfcb97232c0f", "OutputIndex": 0}}'
+// {"id":1,"result":{"address":"ASH41gtWftHvhuYhZz1jj7ee7z9vp9D9wk","asset":"0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7","value":"0.00000001"},"error":null}
 // ```
-func (me *T) GetUTXOByHashLEIndexInJSON(args struct {
+func (me *T) GetUTXOByTransactionHashLEOutputIndexInJSON(args struct {
 	TransactionHashLE h256.T
 	OutputIndex       uintval.T
 }, ret *json.RawMessage) error {
