@@ -5,6 +5,7 @@ import (
 	"log"
 	"neophora/lib/cli"
 	"neophora/lib/type/bins"
+	"neophora/var/pad"
 	"neophora/var/stderr"
 	"net/url"
 	"path"
@@ -111,7 +112,7 @@ func (me *T) GetLatestUint64Key(args struct {
 	Index  string
 	Keys   []string
 }, ret *[]byte) error {
-	args.Keys = append(args.Keys, "ffffffffffffffff")
+	args.Keys = append(args.Keys, pad.MAXUINT64)
 	return me.GetLastKey(args, ret)
 }
 
@@ -121,7 +122,7 @@ func (me *T) GetLatestUint64Val(args struct {
 	Index  string
 	Keys   []string
 }, ret *[]byte) error {
-	args.Keys = append(args.Keys, "ffffffffffffffff")
+	args.Keys = append(args.Keys, pad.MAXUINT64)
 	return me.GetLastVal(args, ret)
 }
 

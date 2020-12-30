@@ -8,13 +8,13 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetCoinstateByTransactionHashLEOutputIndexInJSON ...
+// GetCoinStateByTransactionHashLEOutputIndexInJSON ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetCoinstateByTransactionHashLEOutputIndexInJSON(args struct {
+func (me *T) GetCoinStateByTransactionHashLEOutputIndexInJSON(args struct {
 	TransactionHashLE h256.T
 	OutputIndex       uintval.T
 }, ret *json.RawMessage) error {
