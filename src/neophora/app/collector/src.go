@@ -78,14 +78,14 @@ func worker() {
 func task(line string) {
 	var data map[string]string
 	if err := json.Unmarshal([]byte(line), &data); err != nil {
-		log.Println("[!!!!][JSON]", err)
+		log.Println("[!!!!][JSON]", err, string(line))
 		return
 	}
 	args := make(map[string][]byte)
 	for k, v := range data {
 		val, err := hex.DecodeString(v)
 		if err != nil {
-			log.Println("[!!!!][HEX]", v, err)
+			log.Println("[!!!!][HEX]", k, v, err)
 			continue
 		}
 		args[k] = val
