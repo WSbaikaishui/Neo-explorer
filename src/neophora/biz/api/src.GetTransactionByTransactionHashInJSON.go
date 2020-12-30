@@ -17,6 +17,9 @@ import (
 func (me *T) GetTransactionByTransactionHashInJSON(args struct {
 	TransactionHash h256.T
 }, ret *json.RawMessage) error {
+	if args.TransactionHash.Valid() == false {
+		return stderr.ErrInvalidArgs
+	}
 	var result []byte
 	if err := me.Data.GetArgs(struct {
 		Target string

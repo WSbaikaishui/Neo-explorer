@@ -16,6 +16,9 @@ import (
 func (me *T) GetTransactionSystemFeeByTransactionHashInUint64(args struct {
 	TransactionHash h256.T
 }, ret *uint64) error {
+	if args.TransactionHash.Valid() == false {
+		return stderr.ErrInvalidArgs
+	}
 	var result bins.T
 	if err := me.Data.GetArgsInBins(struct {
 		Target string

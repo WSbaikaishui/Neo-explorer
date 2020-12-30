@@ -16,6 +16,9 @@ import (
 func (me *T) GetTransactionNetworkFeeByTransactionHashLEInUint64(args struct {
 	TransactionHashLE h256.T
 }, ret *uint64) error {
+	if args.TransactionHashLE.Valid() == false {
+		return stderr.ErrInvalidArgs
+	}
 	var result bins.T
 	if err := me.Data.GetArgsInBins(struct {
 		Target string

@@ -2,6 +2,7 @@ package api
 
 import (
 	"neophora/lib/type/h256"
+	"neophora/var/stderr"
 )
 
 // GetTransactionByTransactionHashLEInHex ...
@@ -14,6 +15,9 @@ import (
 func (me *T) GetTransactionByTransactionHashLEInHex(args struct {
 	TransactionHashLE h256.T
 }, ret *string) error {
+	if args.TransactionHashLE.Valid() == false {
+		return stderr.ErrInvalidArgs
+	}
 	return me.Data.GetArgsInHex(struct {
 		Target string
 		Index  string
