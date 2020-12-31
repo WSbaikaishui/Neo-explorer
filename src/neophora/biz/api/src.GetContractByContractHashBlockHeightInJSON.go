@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"neophora/lib/type/bins"
-	"neophora/lib/type/h256"
+	"neophora/lib/type/h160"
 	"neophora/lib/type/uintval"
 	"neophora/var/stderr"
 )
@@ -15,7 +15,7 @@ import (
 // TODO
 // ```
 func (me *T) GetContractByContractHashBlockHeightInJSON(args struct {
-	ContractHash h256.T
+	ContractHash h160.T
 	BlockHeight  uintval.T
 }, ret *json.RawMessage) error {
 	if args.ContractHash.Valid() == false {

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"neophora/lib/type/h160"
 	"neophora/lib/type/h256"
 	"neophora/var/stderr"
 )
@@ -12,7 +13,7 @@ import (
 // TODO
 // ```
 func (me *T) GetStorageByContractHashKeyHashBlockInHex(args struct {
-	ContractHash h256.T
+	ContractHash h160.T
 	KeyHash      h256.T
 }, ret *string) error {
 	if args.ContractHash.Valid() == false {

@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"neophora/lib/type/bins"
-	"neophora/lib/type/h256"
+	"neophora/lib/type/h160"
 	"neophora/var/stderr"
 )
 
@@ -14,7 +14,7 @@ import (
 // TODO
 // ```
 func (me *T) GetContractByContractHashInJSON(args struct {
-	ContractHash h256.T
+	ContractHash h160.T
 }, ret *json.RawMessage) error {
 	if args.ContractHash.Valid() == false {
 		return stderr.ErrInvalidArgs
