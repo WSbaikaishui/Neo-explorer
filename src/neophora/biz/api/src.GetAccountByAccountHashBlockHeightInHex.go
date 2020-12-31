@@ -10,7 +10,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetAccountByAccountHashBlockHeightInHex","params":{"AccountHash":"bf28093023643bb0858a119f0e065b450b14564c","BlockHeight":2400000} }'
+// {"id":1,"result":"00bf28093023643bb0858a119f0e065b450b14564c000002e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c60aaef3a201b0100009b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500e02d98f9000000","error":null}
 // ```
 func (me *T) GetAccountByAccountHashBlockHeightInHex(args struct {
 	AccountHash h160.T

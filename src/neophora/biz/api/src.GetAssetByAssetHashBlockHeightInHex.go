@@ -29,6 +29,6 @@ func (me *T) GetAssetByAssetHashBlockHeightInHex(args struct {
 	}{
 		Target: "bins.ast",
 		Index:  "h256.ast-uint.hgt",
-		Keys:   []string{args.AssetHash.Val(),args.BlockHeight.Hex()},
+		Keys:   []string{args.AssetHash.Val(), args.BlockHeight.Hex()},
 	}, ret)
 }

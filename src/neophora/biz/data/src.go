@@ -126,6 +126,16 @@ func (me *T) GetLatestUint64Val(args struct {
 	return me.GetLastVal(args, ret)
 }
 
+// GetLatestHash160Hash160Hash160Val
+func (me *T) GetLatestHash160Hash160Hash160Val(args struct {
+	Target string
+	Index  string
+	Keys   []string
+}, ret *[]byte) error {
+	args.Keys = append(args.Keys, pad.MAXH160, pad.MAXH160, pad.MAXH160)
+	return me.GetLastVal(args, ret)
+}
+
 // GetInHex ...
 func (me *T) GetInHex(args struct {
 	Key []byte
@@ -284,6 +294,18 @@ func (me *T) GetArgsInBins(args struct {
 	Keys   []string
 }, ret *bins.T) error {
 	if err := me.GetArgs(args, (*[]byte)(ret)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// GetLatestHash160Hash160Hash160ValInBins ...
+func (me *T) GetLatestHash160Hash160Hash160ValInBins(args struct {
+	Target string
+	Index  string
+	Keys   []string
+}, ret *bins.T) error {
+	if err := me.GetLatestHash160Hash160Hash160Val(args, (*[]byte)(ret)); err != nil {
 		return err
 	}
 	return nil
