@@ -29,7 +29,7 @@ func main() {
 			for _, v := range fc.Type.Params.List[0].Type.(*ast.StructType).Fields.List {
 				name := v.Names[0].Name
 				if len(dictI[name]) == 0 {
-					panic("NIL")
+					panic(name)
 				}
 				properties[name] = dictI[name]
 				if filterI[name] {
@@ -168,6 +168,48 @@ var dictI = map[string]map[string]interface{}{
 		"pattern":     "^[0-9a-f]{40}$",
 		"description": "contract hash in little endian",
 	},
+	"AccountHash": {
+		"type":        "string",
+		"minLength":   40,
+		"maxLength":   40,
+		"pattern":     "^[0-9a-f]{40}$",
+		"description": "account hash in big endian",
+	},
+	"AccountHashLE": {
+		"type":        "string",
+		"minLength":   40,
+		"maxLength":   40,
+		"pattern":     "^[0-9a-f]{40}$",
+		"description": "account hash in little endian",
+	},
+	"SRCHash": {
+		"type":        "string",
+		"minLength":   40,
+		"maxLength":   40,
+		"pattern":     "^[0-9a-f]{40}$",
+		"description": "account hash of sender in big endian",
+	},
+	"SRCHashLE": {
+		"type":        "string",
+		"minLength":   40,
+		"maxLength":   40,
+		"pattern":     "^[0-9a-f]{40}$",
+		"description": "account hash of sender in little endian",
+	},
+	"DSTHash": {
+		"type":        "string",
+		"minLength":   40,
+		"maxLength":   40,
+		"pattern":     "^[0-9a-f]{40}$",
+		"description": "account hash of receiver in big endian",
+	},
+	"DSTHashLE": {
+		"type":        "string",
+		"minLength":   40,
+		"maxLength":   40,
+		"pattern":     "^[0-9a-f]{40}$",
+		"description": "account hash of receiver in little endian",
+	},
 	"HexKey": {
 		"type":        "string",
 		"pattern":     "^([0-9a-f]{2})*$",
@@ -182,6 +224,18 @@ var dictI = map[string]map[string]interface{}{
 		"type":        "string",
 		"description": "string data",
 	},
+	"Address": {
+		"type":        "string",
+		"description": "neo address",
+	},
+	"SRCAddress": {
+		"type":        "string",
+		"description": "neo address of sender",
+	},
+	"DSTAddress": {
+		"type":        "string",
+		"description": "neo address of receiver",
+	},
 	"BlockHeight": {
 		"type":        "integer",
 		"minumum":     0,
@@ -193,6 +247,12 @@ var dictI = map[string]map[string]interface{}{
 		"minumum":     0,
 		"default":     0,
 		"description": "output index in a transaction",
+	},
+	"TransferIndex": {
+		"type":        "integer",
+		"minumum":     0,
+		"default":     0,
+		"description": "the index of tranfer event in a transaction",
 	},
 }
 
