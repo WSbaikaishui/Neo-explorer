@@ -12,7 +12,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetAccountByAccountHashLEBlockHeightInJSON","params":{"AccountHashLE":"4c56140b455b060e9f118a85b03b6423300928bf","BlockHeight":2400000}}'
+// {"id":1,"result":{"balances":[{"asset":"e72d286979ee6cb1b7e65dfddfb2e384100b8d148e7758de42e4168b71792c60","value":"12160.16478122"},{"asset":"9b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc5","value":"10720"}],"frozen":false,"script_hash":"0x4c56140b455b060e9f118a85b03b6423300928bf","version":0,"votes":[]},"error":null}
 // ```
 func (me *T) GetAccountByAccountHashLEBlockHeightInJSON(args struct {
 	AccountHashLE h160.T

@@ -12,7 +12,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetCoinStateByTransactionHashLEOutputIndexBlockHeightInJSON","params":{"TransactionHashLE":"e2e209f861f04dab0c93704f0686d52fd35887616caac0204e2284019f2e25db","OutputIndex":0, "BlockHeight":3599999}}'
+// {"id":1,"result":"Untracted State: 0000000000000001","error":null}
 // ```
 func (me *T) GetCoinStateByTransactionHashLEOutputIndexBlockHeightInJSON(args struct {
 	TransactionHashLE h256.T

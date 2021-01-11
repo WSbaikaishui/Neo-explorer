@@ -12,7 +12,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetSpentNEOByTransactionHashOutputIndexBlockHeightInJSON","params":{"TransactionHash":"160edd610771196000b03c4e8b69073fc3d563d6d604e5f8d6530d7f61a1e122","OutputIndex":0,"BlockHeight": 2475663}}'
+// {"id":1,"result":{"burn":2475663,"mint":2400029},"error":null}
 // ```
 func (me *T) GetSpentNEOByTransactionHashOutputIndexBlockHeightInJSON(args struct {
 	TransactionHash h256.T

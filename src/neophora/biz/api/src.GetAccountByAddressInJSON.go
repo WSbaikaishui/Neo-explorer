@@ -11,7 +11,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetAccountByAddressInJSON","params":{"Address":"AZCcft1uYtmZXxzHPr5tY7L6M85zG7Dsrv"}}'
+// {"id":1,"result":{"balances":[{"asset":"9b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc5","value":"1"}],"frozen":false,"script_hash":"0x4be4b57a3835ba5a7ec63f2c83476e58130428bf","version":0,"votes":[]},"error":null}
 // ```
 func (me *T) GetAccountByAddressInJSON(args struct {
 	Address addr.T

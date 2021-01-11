@@ -9,7 +9,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetNEP5TokenNameByContractHashInString","params":{"ContractHash":"972e166ea1f8d3c3b14fd8766e7a0dad4084f9e8"}}'
+// {"id":1,"result":"Experience Token","error":null}
 // ```
 func (me *T) GetNEP5TokenNameByContractHashInString(args struct {
 	ContractHash h160.T

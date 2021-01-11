@@ -10,7 +10,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetBlockHeightByTransactionHashLEInUint64","params":{"TransactionHashLE":"e2e209f861f04dab0c93704f0686d52fd35887616caac0204e2284019f2e25db"}}'
+// {"id":1,"result":3599999,"error":null}
 // ```
 func (me *T) GetBlockHeightByTransactionHashLEInUint64(args struct {
 	TransactionHashLE h256.T

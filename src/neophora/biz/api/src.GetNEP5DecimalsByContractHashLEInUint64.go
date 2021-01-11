@@ -3,25 +3,20 @@ package api
 import (
 	"neophora/lib/type/bins"
 	"neophora/lib/type/h160"
-	"neophora/lib/type/uintval"
 	"neophora/var/stderr"
 )
 
-// GetNEP5TotalSupplyByContractHashLEBlockHeightInUint64 ...
+// GetNEP5DecimalsByContractHashLEInUint64 ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetNEP5TotalSupplyByContractHashLEBlockHeightInUint64(args struct {
+func (me *T) GetNEP5DecimalsByContractHashLEInUint64(args struct {
 	ContractHashLE h160.T
-	BlockHeight    uintval.T
 }, ret *uint64) error {
 	var result bins.T
 	if args.ContractHashLE.Valid() == false {
-		return stderr.ErrInvalidArgs
-	}
-	if args.BlockHeight.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
 	if err := me.Data.GetArgsInBins(struct {
@@ -29,9 +24,9 @@ func (me *T) GetNEP5TotalSupplyByContractHashLEBlockHeightInUint64(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "bigu.tts",
-		Index:  "h160.ctr-uint.hgt",
-		Keys:   []string{args.ContractHashLE.RevVal(), args.BlockHeight.Hex()},
+		Target: "bigu.tde",
+		Index:  "h160.ctr",
+		Keys:   []string{args.ContractHashLE.RevVal()},
 	}, &result); err != nil {
 		return nil
 	}

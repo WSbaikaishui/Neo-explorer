@@ -6,13 +6,14 @@ import (
 	"neophora/var/stderr"
 )
 
-// GetCoinStatebyTransactionHashLEOutputIndexBlockHeightInHex ...
+// GetCoinStateByTransactionHashLEOutputIndexBlockHeightInHex ...
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetCoinStateByTransactionHashLEOutputIndexBlockHeightInHex","params":{"TransactionHashLE":"e2e209f861f04dab0c93704f0686d52fd35887616caac0204e2284019f2e25db","OutputIndex":0, "BlockHeight":3599999}}'
+// {"id":1,"result":"0000000000000001","error":null}
 // ```
-func (me *T) GetCoinStatebyTransactionHashLEOutputIndexBlockHeightInHex(args struct {
+func (me *T) GetCoinStateByTransactionHashLEOutputIndexBlockHeightInHex(args struct {
 	TransactionHashLE h256.T
 	OutputIndex       uintval.T
 	BlockHeight       uintval.T

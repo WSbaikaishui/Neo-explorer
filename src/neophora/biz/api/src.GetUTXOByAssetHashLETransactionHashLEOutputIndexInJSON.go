@@ -12,7 +12,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetUTXOByAssetHashLETransactionHashLEOutputIndexInJSON","params":{"AssetHashLE":"c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b" ,"TransactionHashLE":"2323c44a37212d78ef302e64155217081f32553c1e57f0989f2b3ad737b46a4f","OutputIndex":0}}'
+// {"id":1,"result":{"address":"AZ1QiX5nqgm8dsUY7iRyafKwmKnGP9bUhN","asset":"0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b","value":"24"},"error":null}
 // ```
 func (me *T) GetUTXOByAssetHashLETransactionHashLEOutputIndexInJSON(args struct {
 	AssetHashLE       h256.T
@@ -35,8 +36,8 @@ func (me *T) GetUTXOByAssetHashLETransactionHashLEOutputIndexInJSON(args struct 
 		Keys   []string
 	}{
 		Target: "bins.utx",
-		Index:  "h160.act-h256.trx-uint.num",
-		Keys:   []string{args.AssetHashLE.Val(), args.TransactionHashLE.Val(), args.OutputIndex.Hex()},
+		Index:  "h256.ast-h256.trx-uint.num",
+		Keys:   []string{args.AssetHashLE.RevVal(), args.TransactionHashLE.RevVal(), args.OutputIndex.Hex()},
 	}, &result); err != nil {
 		return err
 	}

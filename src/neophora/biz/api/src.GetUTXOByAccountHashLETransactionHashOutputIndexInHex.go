@@ -11,7 +11,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetUTXOByAccountHashLETransactionHashOutputIndexInHex","params":{"AccountHashLE":"01bafeeafe62e651efc3a530fde170cf2f7b09bd","TransactionHash":"4f6ab437d73a2b9f98f0571e3c55321f08175215642e30ef782d21374ac42323","OutputIndex":0}}'
+// {"id":1,"result":"9b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc500180d8f00000000bd097b2fcf70e1fd30a5c3ef51e662feeafeba01","error":null}
 // ```
 func (me *T) GetUTXOByAccountHashLETransactionHashOutputIndexInHex(args struct {
 	AccountHashLE   h160.T

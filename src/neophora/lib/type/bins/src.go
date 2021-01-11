@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
+	"math/big"
 	"neophora/var/stderr"
 
 	"github.com/neophora/neo2go/pkg/core/block"
@@ -34,6 +35,11 @@ func (me T) Uint64() uint64 {
 		return 0
 	}
 	return binary.BigEndian.Uint64(me)
+}
+
+// BigString ...
+func (me T) BigString() string {
+	return big.NewInt(0).SetBytes(me.Val()).String()
 }
 
 // JSONViaBlock ...

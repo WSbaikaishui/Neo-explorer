@@ -1,23 +1,24 @@
 package api
 
 import (
+	"encoding/json"
 	"neophora/lib/type/bins"
 	"neophora/lib/type/h160"
 	"neophora/lib/type/uintval"
 	"neophora/var/stderr"
 )
 
-// GetNEP5BalanceByAccountHashContractHashBlockHeightInUint64 ...
+// GetNEP5BalanceByAccountHashContractHashBlockHeightInInteger ...
 // as an example:
 //
 // ```
 // TODO
 // ```
-func (me *T) GetNEP5BalanceByAccountHashContractHashBlockHeightInUint64(args struct {
+func (me *T) GetNEP5BalanceByAccountHashContractHashBlockHeightInInteger(args struct {
 	AccountHash  h160.T
 	ContractHash h160.T
 	BlockHeight  uintval.T
-}, ret *uint64) error {
+}, ret *json.RawMessage) error {
 	var result bins.T
 	if args.ContractHash.Valid() == false {
 		return stderr.ErrInvalidArgs
@@ -42,6 +43,6 @@ func (me *T) GetNEP5BalanceByAccountHashContractHashBlockHeightInUint64(args str
 	if result.Valid() == false {
 		return stderr.ErrNotFound
 	}
-	*ret = result.Uint64()
+	*ret = json.RawMessage(result.BigString())
 	return nil
 }

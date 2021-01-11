@@ -13,7 +13,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetUTXOByAccountHashTransactionHashOutputIndexInJSON","params":{"AccountHash":"bd097b2fcf70e1fd30a5c3ef51e662feeafeba01","TransactionHash":"4f6ab437d73a2b9f98f0571e3c55321f08175215642e30ef782d21374ac42323","OutputIndex":0}}'
+// {"id":1,"result":{"address":"AZ1QiX5nqgm8dsUY7iRyafKwmKnGP9bUhN","asset":"0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b","value":"24"},"error":null}
 // ```
 func (me *T) GetUTXOByAccountHashTransactionHashOutputIndexInJSON(args struct {
 	AccountHash     h160.T

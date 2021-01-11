@@ -6,7 +6,8 @@ import "neophora/lib/type/uintval"
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetBlockHashByBlockHeightInHex","params":{"BlockHeight":2100000}}'
+// {"id":1,"result":"c04f6eb83a783a3a3b50aca65a7f4c138c61b1f325bd4330cd75ad2193e363a1","error":null}
 // ```
 func (me *T) GetBlockHashByBlockHeightInHex(args struct {
 	BlockHeight uintval.T
