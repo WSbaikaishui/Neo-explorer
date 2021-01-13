@@ -106,6 +106,40 @@ func (me *T) GetLastVal(args struct {
 	return nil
 }
 
+// GetLatestVal ...
+func (me *T) GetLatestVal(args struct {
+	Target string
+	Index  string
+	Keys   []string
+	C      uint
+}, ret *[]byte) error {
+	if len(args.Keys) == 0 {
+		return stderr.ErrInvalidArgs
+	}
+	uk := &url.URL{
+		Scheme: args.Target,
+		Host:   args.Index,
+		Path:   path.Join(args.Keys...),
+	}
+	up := &url.URL{
+		Scheme: args.Target,
+		Host:   args.Index,
+		Path:   path.Join(args.Keys[:args.C]...),
+	}
+	parameter := struct {
+		Key    []byte
+		Prefix uint
+	}{
+		Key:    []byte(uk.String()),
+		Prefix: uint(len(up.String())),
+	}
+	if err := me.Client.Call("T.GetLastVal", parameter, ret); err != nil {
+		log.Println("[RPC][GetLastVal]", err)
+		return stderr.ErrUnknown
+	}
+	return nil
+}
+
 // GetLatestUint64Key ...
 func (me *T) GetLatestUint64Key(args struct {
 	Target string
@@ -123,16 +157,6 @@ func (me *T) GetLatestUint64Val(args struct {
 	Keys   []string
 }, ret *[]byte) error {
 	args.Keys = append(args.Keys, pad.MAXUINT64)
-	return me.GetLastVal(args, ret)
-}
-
-// GetLatestHash160Hash160Hash160Val
-func (me *T) GetLatestHash160Hash160Hash160Val(args struct {
-	Target string
-	Index  string
-	Keys   []string
-}, ret *[]byte) error {
-	args.Keys = append(args.Keys, pad.MAXH160, pad.MAXH160, pad.MAXH160)
 	return me.GetLastVal(args, ret)
 }
 
@@ -299,18 +323,6 @@ func (me *T) GetArgsInBins(args struct {
 	return nil
 }
 
-// GetLatestHash160Hash160Hash160ValInBins ...
-func (me *T) GetLatestHash160Hash160Hash160ValInBins(args struct {
-	Target string
-	Index  string
-	Keys   []string
-}, ret *bins.T) error {
-	if err := me.GetLatestHash160Hash160Hash160Val(args, (*[]byte)(ret)); err != nil {
-		return err
-	}
-	return nil
-}
-
 // GetArgsInString ...
 func (me *T) GetArgsInString(args struct {
 	Target string
@@ -332,6 +344,19 @@ func (me *T) GetLastValInBins(args struct {
 	Keys   []string
 }, ret *bins.T) error {
 	if err := me.GetLastVal(args, (*[]byte)(ret)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// GetLatestValInBins ...
+func (me *T) GetLatestValInBins(args struct {
+	Target string
+	Index  string
+	Keys   []string
+	C      uint
+}, ret *bins.T) error {
+	if err := me.GetLatestVal(args, (*[]byte)(ret)); err != nil {
 		return err
 	}
 	return nil

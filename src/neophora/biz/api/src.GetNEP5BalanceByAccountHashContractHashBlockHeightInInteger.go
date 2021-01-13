@@ -12,7 +12,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetNEP5BalanceByAccountHashContractHashBlockHeightInInteger","params":{"AccountHash":"30c6c993a33e630056cfd05556361bf128b90fc8", "ContractHash":"972e166ea1f8d3c3b14fd8766e7a0dad4084f9e8","BlockHeight":2400003}}'
+// {"id":1,"result":1694840000000000,"error":null}
 // ```
 func (me *T) GetNEP5BalanceByAccountHashContractHashBlockHeightInInteger(args struct {
 	AccountHash  h160.T

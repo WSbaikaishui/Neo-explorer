@@ -11,7 +11,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetStorageByContractHashHexKeyBlockHeightInHex","params":{"ContractHash":"e345419e7377286ee5b0a39b56e30f6213ab9e4d","HexKey":"736b","BlockHeight":99999999}}'
+// {"id":1,"result":"0007ca56b0fc50b43100","error":null}
 // ```
 func (me *T) GetStorageByContractHashHexKeyBlockHeightInHex(args struct {
 	ContractHash h160.T

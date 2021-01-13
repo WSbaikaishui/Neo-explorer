@@ -1,6 +1,7 @@
 package api
 
 import (
+	"neophora/lib/type/h160"
 	"neophora/lib/type/h256"
 	"neophora/lib/type/uintval"
 	"neophora/var/stderr"
@@ -10,10 +11,11 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetStorageByContractHashLEKeyHashBlockHeightInHex","params":{"ContractHashLE":"4d9eab13620fe3569ba3b0e56e2877739e4145e3","HexKey":"21b103ee94e0feac3577d378d093b0f4be10b3f6989bbfe6be047e37b8236997","BlockHeight":9999999}}'
+// {"id":1,"result":"0007324861c968b43100","error":null}
 // ```
 func (me *T) GetStorageByContractHashLEKeyHashBlockHeightInHex(args struct {
-	ContractHashLE h256.T
+	ContractHashLE h160.T
 	KeyHash        h256.T
 	BlockHeight    uintval.T
 }, ret *string) error {

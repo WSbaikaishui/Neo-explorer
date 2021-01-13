@@ -12,7 +12,8 @@ import (
 // as an example:
 //
 // ```
-// TODO
+// $ curl https://example.neophora.io -d '{"jsonrpc": "2.0","id": 1,"method": "GetCoinStateByTransactionHashLEOutputIndexInJSON","params":{"TransactionHashLE":"e2e209f861f04dab0c93704f0686d52fd35887616caac0204e2284019f2e25db","OutputIndex":0}}'
+// {"id":1,"result":"Untracted State: 0000000000000003","error":null}
 // ```
 func (me *T) GetCoinStateByTransactionHashLEOutputIndexInJSON(args struct {
 	TransactionHashLE h256.T
@@ -30,9 +31,9 @@ func (me *T) GetCoinStateByTransactionHashLEOutputIndexInJSON(args struct {
 		Index  string
 		Keys   []string
 	}{
-		Target: "bins.cst",
+		Target: "uint.cst",
 		Index:  "h256.trx-uint.num-uint.hgt",
-		Keys:   []string{args.TransactionHashLE.Val(), args.OutputIndex.Hex()},
+		Keys:   []string{args.TransactionHashLE.RevVal(), args.OutputIndex.Hex()},
 	}, &result); err != nil {
 		return err
 	}
