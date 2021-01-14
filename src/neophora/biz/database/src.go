@@ -63,6 +63,64 @@ func (me *T) GetLastVal(args struct {
 	return nil
 }
 
+// ListKey ...
+func (me *T) ListKey(args struct {
+	Key    []byte
+	Prefix uint
+	C      uint
+}, ret *[][]byte) error {
+	klen := uint(len(args.Key))
+	if args.Prefix > klen {
+		args.Prefix = klen
+	}
+	if args.C > 0x10000 {
+		args.C = 0x10000
+	}
+	it := me.DB.NewIterator(me.RO)
+	defer it.Close()
+	it.Seek(args.Key)
+	results := make([][]byte, 0, args.C)
+	for i := uint(0); i < args.C; i++ {
+		if it.ValidForPrefix(args.Key[:args.Prefix]) == false {
+			return nil
+		}
+		data := it.Key().Data()
+		result := make([]byte, len(data))
+		copy(result, data)
+		results = append(results, result)
+	}
+	return nil
+}
+
+// ListVal ...
+func (me *T) ListVal(args struct {
+	Key    []byte
+	Prefix uint
+	C      uint
+}, ret *[][]byte) error {
+	klen := uint(len(args.Key))
+	if args.Prefix > klen {
+		args.Prefix = klen
+	}
+	if args.C > 0x10000 {
+		args.C = 0x10000
+	}
+	it := me.DB.NewIterator(me.RO)
+	defer it.Close()
+	it.Seek(args.Key)
+	results := make([][]byte, 0, args.C)
+	for i := uint(0); i < args.C; i++ {
+		if it.ValidForPrefix(args.Key[:args.Prefix]) == false {
+			return nil
+		}
+		data := it.Value().Data()
+		result := make([]byte, len(data))
+		copy(result, data)
+		results = append(results, result)
+	}
+	return nil
+}
+
 // GetLastKey ...
 func (me *T) GetLastKey(args struct {
 	Key    []byte
