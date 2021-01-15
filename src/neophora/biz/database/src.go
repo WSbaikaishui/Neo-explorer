@@ -88,6 +88,7 @@ func (me *T) ListKey(args struct {
 		result := make([]byte, len(data))
 		copy(result, data)
 		results = append(results, result)
+		it.Next()
 	}
 	return nil
 }
@@ -117,6 +118,7 @@ func (me *T) ListVal(args struct {
 		result := make([]byte, len(data))
 		copy(result, data)
 		results = append(results, result)
+		it.Next()
 	}
 	return nil
 }
