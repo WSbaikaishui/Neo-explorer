@@ -21,7 +21,7 @@ func (me *T) GetAccountByAddressInJSON(args struct {
 		return stderr.ErrInvalidArgs
 	}
 	var result bins.T
-	if err := me.Data.GetLastValInBins(struct {
+	if err := me.Data.GetLatestUint64ValInBins(struct {
 		Target string
 		Index  string
 		Keys   []string

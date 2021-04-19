@@ -229,3 +229,16 @@ func (me T) JSONViaHeader() (json.RawMessage, error) {
 	}
 	return json.RawMessage(ret), nil
 }
+
+func (me T) JSONViaApplicationLog() (json.RawMessage, error) {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(me.Val(), &raw); err != nil {
+		return nil,stderr.ErrInvalidArgs
+	}
+	ret, err := json.Marshal(raw)
+	if err != nil {
+		return nil, stderr.ErrInvalidArgs
+	}
+	return json.RawMessage(ret),nil
+}
+
