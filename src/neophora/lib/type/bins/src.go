@@ -4,8 +4,8 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
+	"gopkg.in/neophora/var/stderr"
 	"math/big"
-	"neophora/var/stderr"
 
 	"github.com/neophora/neo2go/pkg/core/block"
 	"github.com/neophora/neo2go/pkg/core/state"
@@ -233,7 +233,7 @@ func (me T) JSONViaHeader() (json.RawMessage, error) {
 func (me T) JSONViaApplicationLog() (json.RawMessage, error) {
 	var raw map[string]interface{}
 	if err := json.Unmarshal(me.Val(), &raw); err != nil {
-		return nil,stderr.ErrInvalidArgs
+		return nil, stderr.ErrInvalidArgs
 	}
 	ret, err := json.Marshal(raw)
 	if err != nil {

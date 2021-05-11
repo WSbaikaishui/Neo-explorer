@@ -1,7 +1,7 @@
 package popper
 
 import (
-	"neophora/lib/bq"
+	"gopkg.in/neophora/lib/bq"
 	"net/http"
 )
 

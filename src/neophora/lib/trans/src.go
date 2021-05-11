@@ -4,7 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"neophora/var/stderr"
+	"gopkg.in/neophora/var/stderr"
 	"regexp"
 	"strings"
 

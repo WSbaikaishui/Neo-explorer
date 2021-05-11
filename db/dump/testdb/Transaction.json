@@ -1,0 +1,7 @@
+{"_id":{"$oid":"6098378282234018fe675a0f"},"hash":"0xe6786d0eff53904e93c9bc48e42611e8c62cc13cb2231475a76bc02717a01202","size":378,"version":0,"nonce":198804
+7347,"sender":"Nd29sK8Wnri8HAAW2vD2APFP8SJJEu3pS4","sysfee":9977780,"netfee":2345040,"validUntilBlock":7396,"signers":[{"account":"0x69fdb9f6d614d393e0a0a30
+1855c015b0e8da5bb","scopes":"None"},{"account":"0x3555537a8d50d0a7738a42ae605f86708e73d0ac","scopes":"CalledByEntry"}],"attributes":[],"script":"CwIA4fUFDBS
+s0HOOcIZfYK5CinOn0FCNelNVNQwUrNBzjnCGX2CuQopzp9BQjXpTVTUUwB8MCHRyYW5zZmVyDBTPduKL0AYsSkeO41VhARMZ88+k0kFifVtSOQ==","witnesses":[{"invocation":"DECB4aoJ498gz
+wKGCXPLLtMXAjDVd4sdyrY8l+P4+ySTuPWkkaq1ZR4oTtUHvlScvbW2Q51JVyUhU/U155qqxXm6","verification":"DCEDsRf4iWBC1rr0WGkcjI6f9GXNQ7Fsz74Obceh877iPElBVuezJw=="},{"in
+vocation":"DECSajeF1SE2Z30PomzayeZrQrK2TNZCluxGO/Fo7Ndr/hUZEN8R4OZbPO7CGtO+NUDabqRI9RvL4DVD5o5aljqc","verification":"DCEDTDUbnbxQmSR1XZeoL8IVWcKjRRzEJeMrxgF
+GTrGrgSpBVuezJw=="}],"blockhash":"0xcf3b61d532f55c3420c45eec75c707fd98342d46b5c0b403f4d64b63d5ea5138","blocktime":1620588418091}

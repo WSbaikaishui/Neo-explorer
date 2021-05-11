@@ -1,7 +1,7 @@
 package bq
 
 import (
-	"neophora/var/stderr"
+	"gopkg.in/neophora/var/stderr"
 	"sync"
 )
 

@@ -1,8 +1,8 @@
 package joh
 
 import (
-	"neophora/lib/rwio"
-	"neophora/lib/scex"
+	"gopkg.in/neophora/lib/rwio"
+	"gopkg.in/neophora/lib/scex"
 	"net/http"
 	"net/rpc"
 )

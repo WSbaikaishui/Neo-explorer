@@ -5,11 +5,11 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"neophora/biz/data"
-	"neophora/lib/bq"
-	"neophora/lib/trans"
-	"neophora/lib/transex"
-	"neophora/var/stderr"
+	"gopkg.in/neophora/biz/data"
+	"gopkg.in/neophora/lib/bq"
+	"gopkg.in/neophora/lib/trans"
+	"gopkg.in/neophora/lib/transex"
+	"gopkg.in/neophora/var/stderr"
 	"net/url"
 )
 

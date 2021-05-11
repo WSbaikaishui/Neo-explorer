@@ -2,11 +2,11 @@ package data
 
 import (
 	"encoding/hex"
+	"gopkg.in/neophora/lib/cli"
+	"gopkg.in/neophora/lib/type/bins"
+	"gopkg.in/neophora/var/pad"
+	"gopkg.in/neophora/var/stderr"
 	"log"
-	"neophora/lib/cli"
-	"neophora/lib/type/bins"
-	"neophora/var/pad"
-	"neophora/var/stderr"
 	"net/url"
 	"path"
 )
