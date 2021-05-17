@@ -7,13 +7,13 @@ import (
 	"neophora/var/stderr"
 )
 
-func (me *T) GetBlock(args struct {
+func (me *T) GetBlockHashByBlockHeight(args struct {
 	BlockHeight uintval.T
 }, ret *json.RawMessage) error {
 	if args.BlockHeight.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	return me.Data.Client.QueryOne(struct {
+	_,err:= me.Data.Client.QueryOne(struct {
 		Collection string
 		Index string
 		Sort bson.M
@@ -23,7 +23,11 @@ func (me *T) GetBlock(args struct {
 		Collection: "Block",
 		Index:  "someIndex",
 		Sort: bson.M{},
-		Filter:   bson.M{"index": args.BlockHeight},
-		Query: []string{},
+		Filter:   bson.M{"index":args.BlockHeight},
+		Query: []string{"hash"},
 	},ret)
+	if err!=nil{
+		return err
+	}
+	return nil
 }

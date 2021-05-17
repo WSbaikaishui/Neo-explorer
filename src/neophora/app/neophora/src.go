@@ -24,7 +24,7 @@ import (
 func main() {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 1000*time.Second)
-	c, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+	c, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://myUserAdmin:abc123@40.76.139.118:27017"))
 	fmt.Println("connected")
 	defer cancel()
 	//address := os.ExpandEnv("${NEODB_ADDRESS}")

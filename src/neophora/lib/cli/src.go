@@ -14,11 +14,11 @@ import (
 
 // T ...
 type T struct {
-	C *mongo.Client
+	C   *mongo.Client
 	Ctx context.Context
 }
 
-func (me *T)ListDatabaseNames() error {
+func (me *T) ListDatabaseNames() error {
 	databases, err := me.C.ListDatabaseNames(me.Ctx, bson.M{})
 	if err != nil {
 		log.Fatal(err)
@@ -27,61 +27,97 @@ func (me *T)ListDatabaseNames() error {
 	return nil
 }
 
-func (me *T) QueryOne(args struct {
-	Collection string
-	Index string
-	Sort bson.M
-	Filter bson.M
-	Query []string
-}, ret *json.RawMessage ) error {
-	var result map[string]interface{}
-	convert := make(map[string]interface{})
-	collection := me.C.Database("testdb").Collection(args.Collection)
-	opts := options.FindOne().SetSort(args.Sort)
-	err := collection.FindOne(me.Ctx, args.Filter ,opts).Decode(&result)
-	if err == mongo.ErrNoDocuments {
-		// TODO
-		return errors.New("NOT FOUND")
-	} else if err != nil {
+func (me *T) ListCollections() error {
+	collections, err := me.C.Database("Neo").ListCollectionNames(me.Ctx, bson.M{})
+	if err != nil {
 		log.Fatal(err)
 	}
-	if len(args.Query)== 0 {
-		convert = result
-	} else  {
-		for _,v := range args.Query {
-			convert[v] = result[v]
-		}
-	}
-	r,err:= json.Marshal(convert)
-	if err!= nil{
-		return err
-	}
-	*ret = json.RawMessage(r)
+	fmt.Println(collections)
 	return nil
 }
 
-
-func (me *T) QueryAll(args struct {
+func (me *T) QueryOne(args struct {
 	Collection string
-	Index string
-	Filter bson.M},
-ret *json.RawMessage) error {
-	collection :=  me.C.Database("testdb").Collection(args.Collection)
-	result, err := collection.Find(me.Ctx,args.Filter)
+	Index      string
+	Sort       bson.M
+	Filter     bson.M
+	Query      []string
+}, ret *json.RawMessage) (map[string]interface{}, error) {
+	var result map[string]interface{}
+	convert := make(map[string]interface{})
+	collection := me.C.Database("Neo").Collection(args.Collection)
+	opts := options.FindOne().SetSort(args.Sort)
+	err := collection.FindOne(me.Ctx, args.Filter, opts).Decode(&result)
 	if err == mongo.ErrNoDocuments {
-		// TODO
-		fmt.Println("record does not exist")
+		return nil, errors.New("NOT FOUND")
 	} else if err != nil {
 		log.Fatal(err)
 	}
-	r, err := json.Marshal(result)
+	if len(args.Query) == 0 {
+		convert = result
+	} else {
+		for _, v := range args.Query {
+			convert[v] = result[v]
+		}
+	}
+	r, err := json.Marshal(convert)
+	if err != nil {
+		return nil, err
+	}
 	*ret = json.RawMessage(r)
-	return nil
+	return convert, err
+}
+
+func (me *T) QueryAll(args struct {
+	Collection string
+	Index      string
+	Sort       bson.M
+	Filter     bson.M
+	Query      []string
+	Limit      int64
+	Skip       int64
+}, ret *json.RawMessage) ([]map[string]interface{}, error) {
+	var results []map[string]interface{}
+	convert := make([]map[string]interface{}, 0)
+	collection := me.C.Database("Neo").Collection(args.Collection)
+	opts := options.FindOptions{
+		Sort:  args.Sort,
+		Limit: &args.Limit,
+		Skip:  &args.Skip,
+	}
+	cursor, err := collection.Find(me.Ctx, args.Filter, &opts)
+	if err == mongo.ErrNoDocuments {
+		return nil, errors.New("NOT FOUNT")
+	}
+	if err != nil {
+		return nil, err
+	}
+	if err = cursor.All(me.Ctx, &results); err != nil {
+		return nil, err
+	}
+	for _, item := range results {
+		if len(args.Query) == 0 {
+			convert = append(convert, item)
+		} else {
+			temp := make(map[string]interface{})
+			for _, v := range args.Query {
+				temp[v] = item[v]
+			}
+			convert = append(convert, temp)
+		}
+	}
+	r, err := json.Marshal(convert)
+	if err != nil {
+		return nil, err
+	}
+	*ret = json.RawMessage(r)
+	return convert, nil
 }
 
 func (me *T) Mutation(Collection string, Index string, Keys []string, reply interface{}) {
 
 }
+
 // Call ...
 func (me *T) Call(method string, args interface{}, reply interface{}) error {
 	//DBs,err := me.C.ListDatabaseNames()
@@ -96,6 +132,7 @@ func (me *T) Call(method string, args interface{}, reply interface{}) error {
 	fmt.Println(res)
 	return nil
 }
+
 //	var client *rpc.Client
 //	var err error
 //	select {

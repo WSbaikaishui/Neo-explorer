@@ -6,7 +6,7 @@ import (
 )
 
 func (me *T) GetBlockCount(args struct {}, ret *json.RawMessage) error {
-	return me.Data.Client.QueryOne(struct {
+	_,err:= me.Data.Client.QueryOne(struct {
 		Collection string
 		Index string
 		Sort bson.M
@@ -19,4 +19,8 @@ func (me *T) GetBlockCount(args struct {}, ret *json.RawMessage) error {
 		Filter:   bson.M{},
 		Query: []string{"index"},
 	},ret)
+	if err!=nil {
+		return err
+	}
+	return nil
 }
