@@ -7,30 +7,31 @@ import (
 	"neophora/var/stderr"
 )
 
-func (me *T) GetNep17TransferByContractHash(args struct {
+func (me *T) GetBalanceByContractHashAddress(args struct {
 	ContractHash h160.T
-	Limit        int64
-	Skip         int64
+	Address      h160.T
 }, ret *json.RawMessage) error {
 	if args.ContractHash.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	_, err := me.Data.Client.QueryAll(struct {
+	if args.Address.Valid() == false {
+		return stderr.ErrInvalidArgs
+	}
+	_, err := me.Data.Client.QueryOne(struct {
 		Collection string
 		Index      string
 		Sort       bson.M
 		Filter     bson.M
 		Query      []string
-		Limit      int64
-		Skip       int64
 	}{
 		Collection: "TransferNotifaction",
 		Index:      "someIndex",
-		Sort:       bson.M{},
-		Filter:     bson.M{"contract": args.ContractHash.Val()},
-		Query:      []string{},
-		Limit:      args.Limit,
-		Skip:       args.Skip,
+		Sort:       bson.M{"_id": -1},
+		Filter: bson.M{"contract": args.ContractHash.Val(), "$or": []interface{}{
+			bson.M{"from": args.Address.Val()},
+			bson.M{"to": args.Address.Val()},
+		}},
+		Query: []string{},
 	}, ret)
 	if err != nil {
 		return err

@@ -2,21 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6a8579d-ece8-4116-b2af-8cff8067cd32" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/neophora.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/.idea/neophora.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetAssetHoldersByContractHash.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetAssetInfoByContractHash.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetAssetsHeldByAddress.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlockByBlockHash.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlockByBlockHeight.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlockHeaderByBlockHash.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlockHeaderByBlockHeight.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetNep17TransferByContractHash.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.ListCollections.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBalanceByContractHashAddress.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetExecutionByTransactionHash.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github.com/DataDog/zstd" beforeDir="false" afterPath="$PROJECT_DIR$/src/github.com/DataDog/zstd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github.com/DataDog/zstd/zstd_ctx.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/github.com/DataDog/zstd/zstd_ctx.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github.com/DataDog/zstd/zstd_stream_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/github.com/DataDog/zstd/zstd_stream_test.go" afterDir="false" />
@@ -71,16 +59,7 @@
       <change beforePath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/readerc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/readerc.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/resolve.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/resolve.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/sorter.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/sorter.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/app/neophora/src.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/app/neophora/src.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBestBlockHash.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBestBlockHash.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlock.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetNep17TransferByTransactionHash.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlockCount.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlockCount.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlockHash.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlockHashByBlockHeight.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBlockHeader.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/biz/api/src.GetRawTransaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetRawTransactionByTransactionHash.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/lib/cli/src.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/lib/cli/src.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/lib/type/h160/src.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/lib/type/h160/src.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/lib/type/h256/src.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/lib/type/h256/src.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/neophora/biz/api/src.GetNep17TransferByContractHash.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetNep17TransferByContractHash.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
