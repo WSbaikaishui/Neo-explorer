@@ -3,6 +3,7 @@ package strval
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"sort"
 )
 
 // T ...
@@ -34,4 +35,13 @@ func (me T) H256() string {
 	l1 := sha256.Sum256(data)
 	l2 := sha256.Sum256(l1[:])
 	return hex.EncodeToString(l2[:])
+}
+
+func (me T) In(str_array []string) bool {
+	sort.Strings(str_array)
+	index := sort.SearchStrings(str_array, me.Val())
+	if index < len(str_array) && str_array[index] == me.Val() { //需要注意此处的判断，先判断 &&左侧的条件，如果不满足则结束此处判断，不会再进行右侧的判断
+		return true
+	}
+	return false
 }

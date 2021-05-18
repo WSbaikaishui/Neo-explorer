@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6a8579d-ece8-4116-b2af-8cff8067cd32" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetBalanceByContractHashAddress.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetExecutionByTransactionHash.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetExecutionByBlockHash.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetExecutionByTrigger.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetNotificationByContractHash.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetRawTransactionBySender.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github.com/DataDog/zstd" beforeDir="false" afterPath="$PROJECT_DIR$/src/github.com/DataDog/zstd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github.com/DataDog/zstd/zstd_ctx.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/github.com/DataDog/zstd/zstd_ctx.go" afterDir="false" />
@@ -59,7 +61,7 @@
       <change beforePath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/readerc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/readerc.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/resolve.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/resolve.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/sorter.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/gopkg.in/yaml.v2/sorter.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/neophora/biz/api/src.GetNep17TransferByContractHash.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/biz/api/src.GetNep17TransferByContractHash.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/neophora/lib/type/strval/src.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/neophora/lib/type/strval/src.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
