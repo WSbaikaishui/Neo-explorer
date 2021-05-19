@@ -9,13 +9,43 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"gopkg.in/yaml.v2"
 	"log"
+	"os"
+	"path/filepath"
 )
 
 // T ...
 type T struct {
 	C   *mongo.Client
 	Ctx context.Context
+}
+
+type Config struct {
+	Database struct {
+		Host   string `yaml:"host"`
+		Port   string `yaml:"port"`
+		User   string `yaml:"user"`
+		Pass   string `yaml:"pass"`
+		Database string `yaml:"database"`
+		DBName string `yaml:"dbname"`
+	} `yaml:"database"`
+}
+
+func (me *T) OpenConfigFile() (Config, error) {
+	absPath, _ := filepath.Abs("./config.yml")
+	f, err := os.Open(absPath)
+	if err != nil {
+		return Config{}, err
+	}
+	defer f.Close()
+	var cfg Config
+	decoder := yaml.NewDecoder(f)
+	err = decoder.Decode(&cfg)
+	if err != nil {
+		return Config{}, err
+	}
+	return cfg, err
 }
 
 func (me *T) ListDatabaseNames() error {
@@ -28,7 +58,11 @@ func (me *T) ListDatabaseNames() error {
 }
 
 func (me *T) ListCollections() error {
-	collections, err := me.C.Database("Neo").ListCollectionNames(me.Ctx, bson.M{})
+	cfg, err := me.OpenConfigFile()
+	if err != nil {
+		return err
+	}
+	collections, err := me.C.Database(cfg.Database.DBName).ListCollectionNames(me.Ctx, bson.M{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,11 +77,15 @@ func (me *T) QueryOne(args struct {
 	Filter     bson.M
 	Query      []string
 }, ret *json.RawMessage) (map[string]interface{}, error) {
+	cfg, err := me.OpenConfigFile()
+	if err != nil {
+		return nil, err
+	}
 	var result map[string]interface{}
 	convert := make(map[string]interface{})
-	collection := me.C.Database("Neo").Collection(args.Collection)
+	collection := me.C.Database(cfg.Database.DBName).Collection(args.Collection)
 	opts := options.FindOne().SetSort(args.Sort)
-	err := collection.FindOne(me.Ctx, args.Filter, opts).Decode(&result)
+	err = collection.FindOne(me.Ctx, args.Filter, opts).Decode(&result)
 	if err == mongo.ErrNoDocuments {
 		return nil, errors.New("NOT FOUND")
 	} else if err != nil {
@@ -77,9 +115,13 @@ func (me *T) QueryAll(args struct {
 	Limit      int64
 	Skip       int64
 }, ret *json.RawMessage) ([]map[string]interface{}, error) {
+	cfg, err := me.OpenConfigFile()
+	if err != nil {
+		return nil, err
+	}
 	var results []map[string]interface{}
 	convert := make([]map[string]interface{}, 0)
-	collection := me.C.Database("Neo").Collection(args.Collection)
+	collection := me.C.Database(cfg.Database.DBName).Collection(args.Collection)
 	opts := options.FindOptions{
 		Sort:  args.Sort,
 		Limit: &args.Limit,
@@ -132,4 +174,5 @@ func (me *T) Call(method string, args interface{}, reply interface{}) error {
 	fmt.Println(res)
 	return nil
 }
+
 //}

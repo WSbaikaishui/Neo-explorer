@@ -24,7 +24,7 @@ func (me *T) GetBalanceByContractHashAddress(args struct {
 		Filter     bson.M
 		Query      []string
 	}{
-		Collection: "TransferNotifaction",
+		Collection: "TransferNotification",
 		Index:      "someIndex",
 		Sort:       bson.M{"_id": -1},
 		Filter: bson.M{"contract": args.ContractHash.Val(), "$or": []interface{}{

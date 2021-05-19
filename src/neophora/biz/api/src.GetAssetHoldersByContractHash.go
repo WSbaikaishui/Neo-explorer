@@ -61,7 +61,6 @@ func (me *T) GetAssetHoldersByContractHash(args struct {
 			return err
 		}
 		r3 = append(r3, r)
-
 	}
 	r, err := json.Marshal(r3)
 	if err != nil {

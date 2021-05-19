@@ -24,7 +24,7 @@ func (me *T) GetNotificationByContractHash(args struct {
 		Limit      int64
 		Skip       int64
 	}{
-		Collection: "Notifaction",
+		Collection: "Notification",
 		Index:      "someIndex",
 		Sort:       bson.M{},
 		Filter:     bson.M{"contract": args.ContractHash.Val()},
