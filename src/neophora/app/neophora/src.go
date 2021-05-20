@@ -40,12 +40,12 @@ func OpenConfigFile() (Config, error) {
 
 type Config struct {
 	Database struct {
-		Host   string `yaml:"host"`
-		Port   string `yaml:"port"`
-		User   string `yaml:"user"`
-		Pass   string `yaml:"pass"`
+		Host     string `yaml:"host"`
+		Port     string `yaml:"port"`
+		User     string `yaml:"user"`
+		Pass     string `yaml:"pass"`
 		Database string `yaml:"database"`
-		DBName string `yaml:"dbname"`
+		DBName   string `yaml:"dbname"`
 	} `yaml:"database"`
 }
 
@@ -55,7 +55,7 @@ func main() {
 		log.Fatalln(err)
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 1000*time.Second)
-	c, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://"+cfg.Database.User+":"+cfg.Database.Pass+"@"+cfg.Database.Host+":"+cfg.Database.Port + "/"+ cfg.Database.Database))
+	c, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://"+cfg.Database.User+":"+cfg.Database.Pass+"@"+cfg.Database.Host+":"+cfg.Database.Port+"/"+cfg.Database.Database))
 	fmt.Println("connected")
 	defer cancel()
 	//address := os.ExpandEnv("${NEODB_ADDRESS}")
