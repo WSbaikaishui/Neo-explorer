@@ -18,6 +18,14 @@ func (me T) Valid() bool {
 	}
 }
 
+func (me T) IsZero() bool{
+	if me.Val() == "0x0000000000000000000000000000000000000000000000000000000000000000" {
+		return true
+	} else {
+		return false
+	}
+}
+
 // Val ...
 func (me T) Val() string {
 	return string(me)

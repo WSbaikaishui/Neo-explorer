@@ -13,3 +13,6 @@ var ErrUnsupportedMethod = errors.New("unsupported method")
 
 // ErrNotFound ...
 var ErrNotFound = errors.New("not found")
+
+// ErrZero
+var ErrZero = errors.New("txid cannot be zero")

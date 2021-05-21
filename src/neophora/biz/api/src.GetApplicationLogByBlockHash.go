@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"neophora/lib/type/h256"
 	"neophora/var/stderr"
@@ -9,9 +10,14 @@ import (
 
 func (me *T) GetApplicationLogByBlockHash(args struct {
 	BlockHash h256.T
+	Limit     int64
+	Skip      int64
 }, ret *json.RawMessage) error {
 	if args.BlockHash.Valid() == false {
 		return stderr.ErrInvalidArgs
+	}
+	if args.BlockHash.IsZero() == true {
+		return stderr.ErrZero
 	}
 	r1, err := me.Data.Client.QueryAll(struct {
 		Collection string
@@ -27,6 +33,8 @@ func (me *T) GetApplicationLogByBlockHash(args struct {
 		Sort:       bson.M{},
 		Filter:     bson.M{"blockhash": args.BlockHash.Val()},
 		Query:      []string{},
+		Limit:      args.Limit,
+		Skip:       args.Skip,
 	}, ret)
 	if err != nil {
 		return err
@@ -44,8 +52,9 @@ func (me *T) GetApplicationLogByBlockHash(args struct {
 		if err != nil {
 			return err
 		}
-		notifications := make([]map[string]interface{},0)
-        for _ , item3 := range r2 {
+		fmt.Println(r2)
+		notifications := make([]map[string]interface{}, 0)
+		for _, item3 := range r2 {
 			r3, err := me.Data.Client.QueryOne(struct {
 				Collection string
 				Index      string
@@ -56,7 +65,7 @@ func (me *T) GetApplicationLogByBlockHash(args struct {
 			if err != nil {
 				return err
 			}
-			notifications = append(notifications,r3)
+			notifications = append(notifications, r3)
 		}
 		if len(notifications) > 0 {
 			item2["notifications"] = notifications
