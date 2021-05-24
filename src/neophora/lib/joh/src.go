@@ -15,7 +15,6 @@ import (
 	"net/url"
 	"path/filepath"
 	"sort"
-
 	// "sort"
 )
 
@@ -27,11 +26,14 @@ type Config struct {
 	Methods struct {
 		Realized []string `yaml:"realized"`
 	} `yaml:"methods"`
+	Proxy struct {
+		URI string `yaml:"uri"`
+	} `yaml:"proxy"`
 }
 
 func (me *T) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)
-	if err!=nil {
+	if err != nil {
 		log.Printf("Error in reading body: %v", err)
 		http.Error(w, "can't read body", http.StatusBadRequest)
 	}
@@ -47,10 +49,12 @@ func (me *T) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		log.Printf("Error decoding in JOSN: %v", err)
 		http.Error(w, "can't decoding in JSON", http.StatusBadRequest)
 	}
+
 	c, err := me.OpenConfigFile()
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 	sort.Strings(c.Methods.Realized)
 	index := sort.SearchStrings(c.Methods.Realized, fmt.Sprintf("%v", request["method"]))
 	if index < len(c.Methods.Realized) && c.Methods.Realized[index] == request["method"] {
@@ -59,22 +63,18 @@ func (me *T) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		codec.Init(conn)
 		rpc.ServeCodec(codec)
 	} else {
-		ForwardHandler(w, r)
+		me.Handle(c.Proxy.URI, w, r)
 	}
 }
 
-func ForwardHandler(writer http.ResponseWriter, request *http.Request) {
-	u, err := url.Parse("https://seed1t.neo.org:20332")
-	if nil != err {
-		log.Println(err)
-		return
-	}
-	proxy := httputil.ReverseProxy{
-		Director: func(request *http.Request) {
-			request.URL = u
-		},
-	}
-	proxy.ServeHTTP(writer, request)
+func (me *T) Handle(target string, w http.ResponseWriter, r *http.Request) {
+	uri, _ := url.Parse(target)
+	proxy := httputil.NewSingleHostReverseProxy(uri)
+	r.URL.Host = uri.Host
+	r.URL.Scheme = uri.Scheme
+	r.Header.Set("X-Forwarded-Host", r.Header.Get("Host"))
+	r.Host = uri.Host
+	proxy.ServeHTTP(w, r)
 }
 
 func (me *T) OpenConfigFile() (Config, error) {
