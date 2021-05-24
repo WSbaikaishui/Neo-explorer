@@ -54,7 +54,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 1000*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1000000*time.Hour)
 	c, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://"+cfg.Database.User+":"+cfg.Database.Pass+"@"+cfg.Database.Host+":"+cfg.Database.Port+"/"+cfg.Database.Database))
 	fmt.Println("connected")
 	defer cancel()
