@@ -73,7 +73,7 @@ func main() {
 			Client: client,
 		},
 	})
-	listen := os.ExpandEnv("0.0.0.0:${NEOPHORA_PORT}")
+	listen := os.ExpandEnv("0.0.0.0:${NEOFURA_PORT}")
 	log.Println("[LISTEN]", listen)
 	http.ListenAndServe(listen, &joh.T{})
 }

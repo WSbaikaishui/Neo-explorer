@@ -40,8 +40,6 @@ func (me *T) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	r := req.Clone(req.Context())
 	req.Body = ioutil.NopCloser(bytes.NewReader(body))
 	r.Body = ioutil.NopCloser(bytes.NewReader(body))
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 
 	request := make(map[string]interface{})
 	err = json.Unmarshal(body, &request)
@@ -58,6 +56,8 @@ func (me *T) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	sort.Strings(c.Methods.Realized)
 	index := sort.SearchStrings(c.Methods.Realized, fmt.Sprintf("%v", request["method"]))
 	if index < len(c.Methods.Realized) && c.Methods.Realized[index] == request["method"] {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 		conn := &rwio.T{R: req.Body, W: w}
 		codec := &scex.T{}
 		codec.Init(conn)
