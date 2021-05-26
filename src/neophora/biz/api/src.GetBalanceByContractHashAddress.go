@@ -17,7 +17,7 @@ func (me *T) GetBalanceByContractHashAddress(args struct {
 	if args.Address.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	_, err := me.Data.Client.QueryOne(struct {
+	r1, err := me.Data.Client.QueryOne(struct {
 		Collection string
 		Index      string
 		Sort       bson.M
@@ -36,5 +36,15 @@ func (me *T) GetBalanceByContractHashAddress(args struct {
 	if err != nil {
 		return err
 	}
+	if r1["from"] == args.Address {
+		r1["balance"] = r1["frombalance"]
+	} else {
+		r1["balance"] = r1["tobalance"]
+	}
+	r, err := json.Marshal(r1)
+	if err != nil {
+		return err
+	}
+	*ret = json.RawMessage(r)
 	return nil
 }

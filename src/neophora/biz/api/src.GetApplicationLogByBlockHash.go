@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"neophora/lib/type/h256"
 	"neophora/var/stderr"
@@ -52,7 +51,6 @@ func (me *T) GetApplicationLogByBlockHash(args struct {
 		if err != nil {
 			return err
 		}
-		fmt.Println(r2)
 		notifications := make([]map[string]interface{}, 0)
 		for _, item3 := range r2 {
 			r3, err := me.Data.Client.QueryOne(struct {
