@@ -42,7 +42,6 @@ func (me *T) GetBalanceByContractHashAddress(args struct {
 	r2 := make(map[string]interface{})
 	r2["latesttx"] = r1
 	if r1["from"].(string) == args.Address.Val() {
-		fmt.Println("here")
 		r2["balance"] = r1["frombalance"]
 	} else {
 		r2["balance"] = r1["tobalance"]
