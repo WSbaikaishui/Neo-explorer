@@ -122,12 +122,11 @@ func (me *T) QueryAll(args struct {
 	var results []map[string]interface{}
 	convert := make([]map[string]interface{}, 0)
 	collection := me.C.Database(cfg.Database.DBName).Collection(args.Collection)
-	opts := options.FindOptions{
-		Sort:  args.Sort,
-		Limit: &args.Limit,
-		Skip:  &args.Skip,
-	}
-	cursor, err := collection.Find(me.Ctx, args.Filter, &opts)
+	op := options.Find()
+	op.SetSort(args.Sort)
+	op.SetLimit(args.Limit)
+	op.SetSkip(args.Skip)
+	cursor, err := collection.Find(me.Ctx, args.Filter, op)
 	if err == mongo.ErrNoDocuments {
 		return nil, errors.New("NOT FOUNT")
 	}
