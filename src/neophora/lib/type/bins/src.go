@@ -239,6 +239,5 @@ func (me T) JSONViaApplicationLog() (json.RawMessage, error) {
 	if err != nil {
 		return nil, stderr.ErrInvalidArgs
 	}
-	return json.RawMessage(ret),nil
+	return json.RawMessage(ret), nil
 }
-

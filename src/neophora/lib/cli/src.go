@@ -23,12 +23,12 @@ type T struct {
 
 type Config struct {
 	Database struct {
-		Host   string `yaml:"host"`
-		Port   string `yaml:"port"`
-		User   string `yaml:"user"`
-		Pass   string `yaml:"pass"`
+		Host     string `yaml:"host"`
+		Port     string `yaml:"port"`
+		User     string `yaml:"user"`
+		Pass     string `yaml:"pass"`
 		Database string `yaml:"database"`
-		DBName string `yaml:"dbname"`
+		DBName   string `yaml:"dbname"`
 	} `yaml:"database"`
 }
 

@@ -13,20 +13,20 @@ func (me *T) GetBlockHashByBlockHeight(args struct {
 	if args.BlockHeight.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	_,err:= me.Data.Client.QueryOne(struct {
+	_, err := me.Data.Client.QueryOne(struct {
 		Collection string
-		Index string
-		Sort bson.M
-		Filter   bson.M
-		Query []string
+		Index      string
+		Sort       bson.M
+		Filter     bson.M
+		Query      []string
 	}{
 		Collection: "Block",
-		Index:  "someIndex",
-		Sort: bson.M{},
-		Filter:   bson.M{"index":args.BlockHeight},
-		Query: []string{"hash"},
-	},ret)
-	if err!=nil{
+		Index:      "someIndex",
+		Sort:       bson.M{},
+		Filter:     bson.M{"index": args.BlockHeight},
+		Query:      []string{"hash"},
+	}, ret)
+	if err != nil {
 		return err
 	}
 	return nil

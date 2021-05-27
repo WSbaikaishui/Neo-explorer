@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"neophora/lib/type/h160"
 	"neophora/var/stderr"
@@ -60,8 +61,15 @@ func (me *T) GetAssetsHeldByAddress(args struct {
 		if err != nil {
 			return err
 		}
+		balance, err := me.GetBalanceByContractHashAddress(struct {
+			ContractHash h160.T
+			Address      h160.T
+		}{ContractHash: h160.T(fmt.Sprint(r["hash"])), Address: args.Address}, ret)
+		if err != nil {
+			return err
+		}
+		r["balanceinfo"] = balance
 		r3 = append(r3, r)
-
 	}
 	r, err := json.Marshal(r3)
 	if err != nil {

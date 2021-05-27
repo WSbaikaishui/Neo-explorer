@@ -13,20 +13,20 @@ func (me *T) GetExecutionByTransactionHash(args struct {
 	if args.TransactionHash.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	_,err:= me.Data.Client.QueryOne(struct {
+	_, err := me.Data.Client.QueryOne(struct {
 		Collection string
-		Index string
-		Sort bson.M
-		Filter   bson.M
-		Query []string
+		Index      string
+		Sort       bson.M
+		Filter     bson.M
+		Query      []string
 	}{
 		Collection: "Execution",
-		Index:  "someIndex",
-		Sort: bson.M{},
-		Filter:   bson.M{"txid":args.TransactionHash.Val()},
-		Query: []string{},
-	},ret)
-	if err!=nil{
+		Index:      "someIndex",
+		Sort:       bson.M{},
+		Filter:     bson.M{"txid": args.TransactionHash.Val()},
+		Query:      []string{},
+	}, ret)
+	if err != nil {
 		return err
 	}
 	return nil

@@ -10,12 +10,12 @@ import (
 func (me *T) GetBalanceByContractHashAddress(args struct {
 	ContractHash h160.T
 	Address      h160.T
-}, ret *json.RawMessage) error {
+}, ret *json.RawMessage) (map[string]interface{}, error) {
 	if args.ContractHash.Valid() == false {
-		return stderr.ErrInvalidArgs
+		return nil, stderr.ErrInvalidArgs
 	}
 	if args.Address.Valid() == false {
-		return stderr.ErrInvalidArgs
+		return nil, stderr.ErrInvalidArgs
 	}
 	r1, err := me.Data.Client.QueryOne(struct {
 		Collection string
@@ -34,17 +34,19 @@ func (me *T) GetBalanceByContractHashAddress(args struct {
 		Query: []string{},
 	}, ret)
 	if err != nil {
-		return err
+		return nil, err
 	}
+	r2 := make(map[string]interface{})
+	r2["latesttx"] = r1
 	if r1["from"] == args.Address {
-		r1["balance"] = r1["frombalance"]
+		r2["balance"] = r1["frombalance"]
 	} else {
-		r1["balance"] = r1["tobalance"]
+		r2["balance"] = r1["tobalance"]
 	}
-	r, err := json.Marshal(r1)
+	r, err := json.Marshal(r2)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	*ret = json.RawMessage(r)
-	return nil
+	return r2, nil
 }
