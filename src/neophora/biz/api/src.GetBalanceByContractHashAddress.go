@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"neophora/lib/type/h160"
 	"neophora/var/stderr"
@@ -10,12 +11,14 @@ import (
 func (me *T) GetBalanceByContractHashAddress(args struct {
 	ContractHash h160.T
 	Address      h160.T
-}, ret *json.RawMessage) (map[string]interface{}, error) {
+	Filter       map[string]interface{}
+	Raw          *map[string]interface{}
+}, ret *json.RawMessage) error {
 	if args.ContractHash.Valid() == false {
-		return nil, stderr.ErrInvalidArgs
+		return stderr.ErrInvalidArgs
 	}
 	if args.Address.Valid() == false {
-		return nil, stderr.ErrInvalidArgs
+		return stderr.ErrInvalidArgs
 	}
 	r1, err := me.Data.Client.QueryOne(struct {
 		Collection string
@@ -34,19 +37,25 @@ func (me *T) GetBalanceByContractHashAddress(args struct {
 		Query: []string{},
 	}, ret)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	r2 := make(map[string]interface{})
 	r2["latesttx"] = r1
-	if r1["from"] == args.Address {
+	if r1["from"].(string) == args.Address.Val() {
+		fmt.Println("here")
 		r2["balance"] = r1["frombalance"]
 	} else {
 		r2["balance"] = r1["tobalance"]
 	}
+	r2, err = me.Filter(r2, args.Filter)
+	if err != nil {
+		return err
+	}
 	r, err := json.Marshal(r2)
 	if err != nil {
-		return nil, err
+		return err
 	}
+	*args.Raw = r2
 	*ret = json.RawMessage(r)
-	return r2, nil
+	return nil
 }

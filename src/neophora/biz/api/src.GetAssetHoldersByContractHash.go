@@ -12,11 +12,11 @@ func (me *T) GetAssetHoldersByContractHash(args struct {
 	ContractHash h160.T
 	Limit        int64
 	Skip         int64
+	Filter       map[string]interface{}
 }, ret *json.RawMessage) error {
 	if args.ContractHash.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	// Step1
 	var r1 map[string]interface{}
 	r1, err := me.Data.Client.QueryOne(struct {
 		Collection string
@@ -34,7 +34,6 @@ func (me *T) GetAssetHoldersByContractHash(args struct {
 	if err != nil {
 		return err
 	}
-	// Step2
 	r2, err := me.Data.Client.QueryAll(
 		struct {
 			Collection string
@@ -48,7 +47,6 @@ func (me *T) GetAssetHoldersByContractHash(args struct {
 	if err != nil {
 		return err
 	}
-	// Step 3
 	r3 := make([]map[string]interface{}, 0)
 	for _, item := range r2 {
 		r, err := me.Data.Client.QueryOne(struct {
@@ -61,15 +59,33 @@ func (me *T) GetAssetHoldersByContractHash(args struct {
 		if err != nil {
 			return err
 		}
-		balance, err := me.GetBalanceByContractHashAddress(struct {
+		var raw map[string]interface{}
+		var filter map[string]interface{}
+		if args.Filter["balanceinfo"] == nil {
+			filter = nil
+		} else {
+			filter = args.Filter["balanceinfo"].(map[string]interface{})
+		}
+		err = me.GetBalanceByContractHashAddress(struct {
 			ContractHash h160.T
 			Address      h160.T
-		}{ContractHash: args.ContractHash, Address: h160.T(fmt.Sprint(r["address"]))}, ret)
+			Filter       map[string]interface{}
+			Raw          *map[string]interface{}
+		}{
+			ContractHash: args.ContractHash,
+			Address:      h160.T(fmt.Sprint(r["address"])),
+			Filter:       filter,
+			Raw:          &raw,
+		}, ret)
 		if err != nil {
 			return err
 		}
-		r["balanceinfo"] = balance
+		r["balanceinfo"] = raw
 		r3 = append(r3, r)
+	}
+	r3, err = me.FilterArray(r3, args.Filter)
+	if err != nil {
+		return err
 	}
 	r, err := json.Marshal(r3)
 	if err != nil {
