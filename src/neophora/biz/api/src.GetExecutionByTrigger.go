@@ -12,6 +12,9 @@ func (me *T) GetExecutionByTrigger(args struct {
 	Limit   int64
 	Skip    int64
 }, ret *json.RawMessage) error {
+	if args.Limit == 0 {
+		args.Limit = 200
+	}
 	in := args.Trigger.In([]string{"OnPersist", "PostPersist", "Application", "Verification", "System", "All"})
 	if in == false {
 		return stderr.ErrInvalidArgs
