@@ -2,6 +2,8 @@ package h160
 
 import (
 	"encoding/hex"
+	"github.com/joeqian10/neo3-gogogo/crypto"
+	"github.com/joeqian10/neo3-gogogo/helper"
 	"regexp"
 )
 
@@ -21,6 +23,16 @@ func (me T) Valid() bool {
 // Val ...
 func (me T) Val() string {
 	return string(me)
+}
+
+func (me T) ToByte() []byte {
+	return []byte(me.Val()[2:len(me.Val())])
+}
+
+// ScriptHashToAddress ...
+func (me T) ScriptHashToAddress() string {
+	u := helper.UInt160FromBytes(me.ToByte())
+	return crypto.ScriptHashToAddress(u,0x35)
 }
 
 // RevVal ...
