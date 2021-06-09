@@ -27,12 +27,16 @@ type Config struct {
 		Realized []string `yaml:"realized"`
 	} `yaml:"methods"`
 	Proxy struct {
-		URI string `yaml:"uri"`
+		URI []string `yaml:"uri"`
 	} `yaml:"proxy"`
 }
 
+// To repost to every nodes in queue
+var repostMode int = 0
+
 func (me *T) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)
+
 	if err != nil {
 		log.Printf("Error in reading body: %v", err)
 		http.Error(w, "can't read body", http.StatusBadRequest)
@@ -63,7 +67,8 @@ func (me *T) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		codec.Init(conn)
 		rpc.ServeCodec(codec)
 	} else {
-		me.Handle(c.Proxy.URI, w, r)
+		me.Handle(c.Proxy.URI[repostMode], w, r)
+		repostMode = (repostMode + 1) % 5
 	}
 }
 
