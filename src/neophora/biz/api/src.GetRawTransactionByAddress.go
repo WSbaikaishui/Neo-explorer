@@ -9,8 +9,8 @@ import (
 
 func (me *T) GetRawTransactionByAddress(args struct {
 	Address h160.T
-	Limit  int64
-	Skip   int64
+	Limit   int64
+	Skip    int64
 }, ret *json.RawMessage) error {
 	if args.Address.Valid() == false {
 		return stderr.ErrInvalidArgs

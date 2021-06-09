@@ -26,12 +26,12 @@ func (me *T) GetNotificationByEvent(args struct {
 		Collection: "Notification",
 		Index:      "someIndex",
 		Sort:       bson.M{},
-		Filter:     bson.M{
+		Filter: bson.M{
 			"eventname": args.Event.Val(),
 		},
-		Query:      []string{},
-		Limit:      args.Limit,
-		Skip:       args.Skip,
+		Query: []string{},
+		Limit: args.Limit,
+		Skip:  args.Skip,
 	}, ret)
 	if err != nil {
 		return err

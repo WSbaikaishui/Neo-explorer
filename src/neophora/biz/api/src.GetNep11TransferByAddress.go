@@ -9,8 +9,8 @@ import (
 
 func (me *T) GetNep11TransferByAddress(args struct {
 	Address h160.T
-	Limit        int64
-	Skip         int64
+	Limit   int64
+	Skip    int64
 }, ret *json.RawMessage) error {
 	if args.Address.Valid() == false {
 		return stderr.ErrInvalidArgs
@@ -31,9 +31,9 @@ func (me *T) GetNep11TransferByAddress(args struct {
 			bson.M{"from": args.Address.Val()},
 			bson.M{"to": args.Address.Val()},
 		}},
-		Query:      []string{},
-		Limit:      args.Limit,
-		Skip:       args.Skip,
+		Query: []string{},
+		Limit: args.Limit,
+		Skip:  args.Skip,
 	}, ret)
 	if err != nil {
 		return err

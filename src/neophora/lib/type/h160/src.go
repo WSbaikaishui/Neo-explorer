@@ -32,7 +32,7 @@ func (me T) ToByte() []byte {
 // ScriptHashToAddress ...
 func (me T) ScriptHashToAddress() string {
 	u := helper.UInt160FromBytes(me.ToByte())
-	return crypto.ScriptHashToAddress(u,0x35)
+	return crypto.ScriptHashToAddress(u, 0x35)
 }
 
 // RevVal ...

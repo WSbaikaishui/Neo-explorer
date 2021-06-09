@@ -53,7 +53,7 @@ func (me *T) GetBalanceByContractHashAddress(args struct {
 	if err != nil {
 		return err
 	}
-	if (args.Raw != nil ){
+	if args.Raw != nil {
 		*args.Raw = r2
 	}
 	*ret = json.RawMessage(r)

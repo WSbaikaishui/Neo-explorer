@@ -7,7 +7,7 @@ import (
 	"neophora/var/stderr"
 )
 
-func (me *T) GetContractByContractHash(args struct{
+func (me *T) GetContractByContractHash(args struct {
 	ContractHash h160.T
 }, ret *json.RawMessage) error {
 	if args.ContractHash.Valid() == false {
@@ -23,7 +23,7 @@ func (me *T) GetContractByContractHash(args struct{
 		Collection: "Contract",
 		Index:      "someIndex",
 		Sort:       bson.M{"_id": -1},
-		Filter:     bson.M{"hash":args.ContractHash},
+		Filter:     bson.M{"hash": args.ContractHash},
 		Query:      []string{},
 	}, ret)
 	if err != nil {

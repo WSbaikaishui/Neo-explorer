@@ -7,6 +7,7 @@ import (
 	"neophora/var/stderr"
 )
 
+// this function may be not supported any more, we only support address in the formart of script hash
 func (me *T) GetRawTransactionBySender(args struct {
 	Sender addr.T
 	Limit  int64
