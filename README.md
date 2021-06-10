@@ -10,3 +10,9 @@ docker build . -t neo3fura
 docker run -p 1926:1926 neo3fura
 ```
 
+OR
+
+```
+docker-compose up -d
+```
+
