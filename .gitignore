@@ -18,3 +18,10 @@
 .DS_Store
 .idea/
 *.yml
+
+# dependencies
+/gihub.com/*
+/go.mongodb.org/*
+/golang.org/*
+/gopkg.in/*
+/pkg/*
