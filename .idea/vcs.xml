@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/contrib.go.opencensus.io/exporter/zipkin" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/DataDog/zstd" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/Workiva/go-datastructures" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/beorn7/perks" vcs="Git" />
@@ -18,19 +19,26 @@
     <mapping directory="$PROJECT_DIR$/src/github.com/golang/snappy" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/gomodule/redigo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/google/flatbuffers" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/google/uuid" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/gorilla/websocket" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/joeqian10/neo3-gogogo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/keymetrics/pm2-io-apm-go" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/matttproud/golang_protobuf_extensions" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/mr-tron/base58" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/neophora/neo2go" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/neophora/neo2go/pkg/vm/testdata/neo-vm" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/nspcc-dev/rfc6979" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/openzipkin/zipkin-go" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/pbnjay/memory" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/pkg/errors" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/prometheus/client_golang" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/prometheus/client_model" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/prometheus/common" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/prometheus/procfs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/shirou/gopsutil" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/syndtr/goleveldb" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/tecbot/gorocksdb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/tklauser/go-sysconf" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/go.etcd.io/bbolt" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/go.mongodb.org/mongo-driver" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/go.opencensus.io" vcs="Git" />
