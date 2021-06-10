@@ -20,8 +20,8 @@
 *.yml
 
 # dependencies
-/gihub.com/*
-/go.mongodb.org/*
-/golang.org/*
-/gopkg.in/*
-/pkg/*
+github.com/
+go.mongodb.org/
+golang.org
+gopkg.in/
+pkg/
