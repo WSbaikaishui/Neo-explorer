@@ -34,7 +34,7 @@ func (me *T) GetAssetsHeldByAddress(args struct {
 	if err != nil {
 		return err
 	}
-	r2, err := me.Data.Client.QueryAll(
+	r2, count, err := me.Data.Client.QueryAll(
 		struct {
 			Collection string
 			Index      string
@@ -83,11 +83,11 @@ func (me *T) GetAssetsHeldByAddress(args struct {
 		r["balanceinfo"] = raw
 		r3 = append(r3, r)
 	}
-	r3, err = me.FilterArray(r3, args.Filter)
+	r4, err := me.FilterArrayAndAppendCount(r3, count, args.Filter)
 	if err != nil {
 		return err
 	}
-	r, err := json.Marshal(r3)
+	r, err := json.Marshal(r4)
 	if err != nil {
 		return err
 	}

@@ -11,7 +11,7 @@ func (me *T) GetRawTransactionByBlockHash(args struct {
 	BlockHash h256.T
 	Limit     int64
 	Skip      int64
-	Query     []string
+	Filter    map[string]interface{}
 }, ret *json.RawMessage) error {
 	if args.Limit == 0 {
 		args.Limit = 200
@@ -19,7 +19,7 @@ func (me *T) GetRawTransactionByBlockHash(args struct {
 	if args.BlockHash.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	_, err := me.Data.Client.QueryAll(struct {
+	r1, count, err := me.Data.Client.QueryAll(struct {
 		Collection string
 		Index      string
 		Sort       bson.M
@@ -39,5 +39,14 @@ func (me *T) GetRawTransactionByBlockHash(args struct {
 	if err != nil {
 		return err
 	}
+	r2, err := me.FilterArrayAndAppendCount(r1, count, args.Filter)
+	if err != nil {
+		return err
+	}
+	r, err := json.Marshal(r2)
+	if err != nil {
+		return err
+	}
+	*ret = json.RawMessage(r)
 	return nil
 }

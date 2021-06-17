@@ -9,11 +9,12 @@ import (
 
 func (me *T) GetAssetInfoByTokenName(args struct {
 	TokenName strval.T
+	Filter    map[string]interface{}
 }, ret *json.RawMessage) error {
 	if args.TokenName.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	_, err := me.Data.Client.QueryOne(struct {
+	r1, err := me.Data.Client.QueryOne(struct {
 		Collection string
 		Index      string
 		Sort       bson.M
@@ -26,8 +27,14 @@ func (me *T) GetAssetInfoByTokenName(args struct {
 		Filter:     bson.M{"tokenname": args.TokenName.Val()},
 		Query:      []string{},
 	}, ret)
+	r1, err = me.Filter(r1, args.Filter)
 	if err != nil {
 		return err
 	}
+	r, err := json.Marshal(r1)
+	if err != nil {
+		return err
+	}
+	*ret = json.RawMessage(r)
 	return nil
 }

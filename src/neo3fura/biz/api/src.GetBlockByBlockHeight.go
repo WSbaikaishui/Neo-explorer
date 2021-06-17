@@ -9,11 +9,12 @@ import (
 
 func (me *T) GetBlockByBlockHeight(args struct {
 	BlockHeight uintval.T
+	Filter      map[string]interface{}
 }, ret *json.RawMessage) error {
 	if args.BlockHeight.Valid() == false {
 		return stderr.ErrInvalidArgs
 	}
-	_, err := me.Data.Client.QueryOne(struct {
+	r1, err := me.Data.Client.QueryOne(struct {
 		Collection string
 		Index      string
 		Sort       bson.M
@@ -29,5 +30,14 @@ func (me *T) GetBlockByBlockHeight(args struct {
 	if err != nil {
 		return err
 	}
+	r1, err = me.Filter(r1, args.Filter)
+	if err != nil {
+		return err
+	}
+	r, err := json.Marshal(r1)
+	if err != nil {
+		return err
+	}
+	*ret = json.RawMessage(r)
 	return nil
 }

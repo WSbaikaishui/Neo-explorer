@@ -9,6 +9,7 @@ import (
 
 func (me *T) GetApplicationLogByTransactionHash(args struct {
 	TransactionHash h256.T
+	Filter          map[string]interface{}
 }, ret *json.RawMessage) error {
 	if args.TransactionHash.Valid() == false {
 		return stderr.ErrInvalidArgs
@@ -32,7 +33,7 @@ func (me *T) GetApplicationLogByTransactionHash(args struct {
 	if err != nil {
 		return err
 	}
-	r2, err := me.Data.Client.QueryAll(struct {
+	r2, _, err := me.Data.Client.QueryAll(struct {
 		Collection string
 		Index      string
 		Sort       bson.M
@@ -63,7 +64,10 @@ func (me *T) GetApplicationLogByTransactionHash(args struct {
 	} else {
 		r1["notifications"] = []map[string]interface{}{}
 	}
-
+	r1, err = me.Filter(r1, args.Filter)
+	if err != nil {
+		return err
+	}
 	r, err := json.Marshal(r1)
 	if err != nil {
 		return err

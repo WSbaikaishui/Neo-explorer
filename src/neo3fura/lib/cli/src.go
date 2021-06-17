@@ -114,10 +114,10 @@ func (me *T) QueryAll(args struct {
 	Query      []string
 	Limit      int64
 	Skip       int64
-}, ret *json.RawMessage) ([]map[string]interface{}, error) {
+}, ret *json.RawMessage) ([]map[string]interface{}, int64, error) {
 	cfg, err := me.OpenConfigFile()
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	var results []map[string]interface{}
 	convert := make([]map[string]interface{}, 0)
@@ -126,15 +126,17 @@ func (me *T) QueryAll(args struct {
 	op.SetSort(args.Sort)
 	op.SetLimit(args.Limit)
 	op.SetSkip(args.Skip)
+	co := options.CountOptions{}
+	count, err := collection.CountDocuments(me.Ctx, args.Filter, &co)
 	cursor, err := collection.Find(me.Ctx, args.Filter, op)
 	if err == mongo.ErrNoDocuments {
-		return nil, errors.New("NOT FOUNT")
+		return nil, 0, errors.New("NOT FOUNT")
 	}
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	if err = cursor.All(me.Ctx, &results); err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	for _, item := range results {
 		if len(args.Query) == 0 {
@@ -149,10 +151,10 @@ func (me *T) QueryAll(args struct {
 	}
 	r, err := json.Marshal(convert)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	*ret = json.RawMessage(r)
-	return convert, nil
+	return convert, count, nil
 }
 
 func (me *T) Mutation(Collection string, Index string, Keys []string, reply interface{}) {

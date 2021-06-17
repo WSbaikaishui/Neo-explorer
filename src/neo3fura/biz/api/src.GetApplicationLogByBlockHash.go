@@ -11,6 +11,7 @@ func (me *T) GetApplicationLogByBlockHash(args struct {
 	BlockHash h256.T
 	Limit     int64
 	Skip      int64
+	Filter    map[string]interface{}
 }, ret *json.RawMessage) error {
 	if args.BlockHash.Valid() == false {
 		return stderr.ErrInvalidArgs
@@ -18,7 +19,7 @@ func (me *T) GetApplicationLogByBlockHash(args struct {
 	if args.BlockHash.IsZero() == true {
 		return stderr.ErrZero
 	}
-	r1, err := me.Data.Client.QueryAll(struct {
+	r1, count, err := me.Data.Client.QueryAll(struct {
 		Collection string
 		Index      string
 		Sort       bson.M
@@ -39,7 +40,7 @@ func (me *T) GetApplicationLogByBlockHash(args struct {
 		return err
 	}
 	for _, item2 := range r1 {
-		r2, err := me.Data.Client.QueryAll(struct {
+		r2, _, err := me.Data.Client.QueryAll(struct {
 			Collection string
 			Index      string
 			Sort       bson.M
@@ -72,7 +73,11 @@ func (me *T) GetApplicationLogByBlockHash(args struct {
 		}
 
 	}
-	r, err := json.Marshal(r1)
+	r4, err := me.FilterArrayAndAppendCount(r1, count, args.Filter)
+	if err != nil {
+		return nil
+	}
+	r, err := json.Marshal(r4)
 	if err != nil {
 		return err
 	}

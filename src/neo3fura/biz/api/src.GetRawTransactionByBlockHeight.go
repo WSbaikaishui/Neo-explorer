@@ -11,6 +11,7 @@ func (me *T) GetRawTransactionByBlockHeight(args struct {
 	BlockHeight uintval.T
 	Limit       int64
 	Skip        int64
+	Filter      map[string]interface{}
 }, ret *json.RawMessage) error {
 	if args.Limit == 0 {
 		args.Limit = 200
@@ -34,7 +35,7 @@ func (me *T) GetRawTransactionByBlockHeight(args struct {
 	if err != nil {
 		return err
 	}
-	_, err = me.Data.Client.QueryAll(struct {
+	r2, count, err := me.Data.Client.QueryAll(struct {
 		Collection string
 		Index      string
 		Sort       bson.M
@@ -54,6 +55,15 @@ func (me *T) GetRawTransactionByBlockHeight(args struct {
 	if err != nil {
 		return err
 	}
+	r3, err := me.FilterArrayAndAppendCount(r2, count, args.Filter)
+	if err != nil {
+		return err
+	}
+	r, err := json.Marshal(r3)
+	if err != nil {
+		return err
+	}
+	*ret = json.RawMessage(r)
 	return nil
 
 }

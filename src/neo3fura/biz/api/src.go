@@ -26,23 +26,21 @@ func (me *T) Filter(data map[string]interface{}, filter map[string]interface{}) 
 	for k, _ := range filter {
 		if data[k] != nil {
 			switch data[k].(type) {
-			case string:
-				res[k] = data[k]
-			case int:
-				res[k] = data[k]
-			case interface{}:
+			case map[string]interface{}:
 				r, err := me.Filter(data[k].(map[string]interface{}), filter[k].(map[string]interface{}))
 				if err != nil {
 					return nil, err
 				}
 				res[k] = r
+			default:
+				res[k] = data[k]
 			}
 		}
 	}
 	return res, nil
 }
 
-func (me *T) FilterArray(data []map[string]interface{}, filter map[string]interface{}) ([]map[string]interface{}, error) {
+func (me *T) FilterArrayAndAppendCount(data []map[string]interface{}, count int64, filter map[string]interface{}) (map[string]interface{}, error) {
 	res := make([]map[string]interface{}, 0)
 	for _, item := range data {
 		r, err := me.Filter(item, filter)
@@ -51,5 +49,8 @@ func (me *T) FilterArray(data []map[string]interface{}, filter map[string]interf
 		}
 		res = append(res, r)
 	}
-	return res, nil
+	res2 := make(map[string]interface{})
+	res2["totalCount"] = count
+	res2["result"] = res
+	return res2, nil
 }

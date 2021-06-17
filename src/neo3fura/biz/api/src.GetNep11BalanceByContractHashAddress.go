@@ -23,7 +23,7 @@ func (me *T) GetNep11BalanceByContractHashAddress(args struct {
 	}
 	var r1 []map[string]interface{}
 	var err error
-	r1, err = me.Data.Client.QueryAll(struct {
+	r1, count, err := me.Data.Client.QueryAll(struct {
 		Collection string
 		Index      string
 		Sort       bson.M
@@ -57,11 +57,11 @@ func (me *T) GetNep11BalanceByContractHashAddress(args struct {
 		temp["latesttx"] = item
 		r2 = append(r2, temp)
 	}
-	r2, err = me.FilterArray(r2, args.Filter)
+	r3, err := me.FilterArrayAndAppendCount(r2, count, args.Filter)
 	if err != nil {
 		return err
 	}
-	r, err := json.Marshal(r2)
+	r, err := json.Marshal(r3)
 	if err != nil {
 		return err
 	}
