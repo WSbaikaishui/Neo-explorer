@@ -17,11 +17,10 @@
 
 .DS_Store
 .idea/
-*.yml
+config.yml
 
 # dependencies
 github.com/
 go.mongodb.org/
-golang.org
 gopkg.in/
 pkg/
