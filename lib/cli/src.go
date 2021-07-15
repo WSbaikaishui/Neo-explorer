@@ -3,6 +3,7 @@ package cli
 import "C"
 import (
 	"context"
+	"encoding/binary"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -72,6 +73,40 @@ func (me *T) ListCollections() error {
 	fmt.Println(collections)
 	return nil
 }
+func Int64ToBytes(i int64) []byte {
+	var buf = make([]byte, 8)
+	binary.BigEndian.PutUint64(buf, uint64(i))
+	return buf
+}
+
+
+func(me *T) QueryDocument(args struct {
+	Collection string
+	Index      string
+	Sort       bson.M
+	Filter     bson.M
+}, ret *json.RawMessage) (map[string]interface{}, error) {
+	cfg, err := me.OpenConfigFile()
+	if err != nil {
+		return nil, err
+	}
+	co := options.CountOptions{}
+	collection := me.C.Database(cfg.Database.DBName).Collection(args.Collection)
+	count, _ := collection.CountDocuments(me.Ctx,args.Filter,&co)
+
+	if err == mongo.ErrNoDocuments {
+		return nil, errors.New("NOT FOUNT")
+	}
+	convert := make(map[string]interface{})
+	convert["total counts:"] = count
+	r, err := json.Marshal(convert)
+	if err != nil {
+		return nil, err
+	}
+	*ret = json.RawMessage(r)
+	return convert,nil
+
+}
 
 func (me *T) QueryOne(args struct {
 	Collection string
@@ -88,6 +123,7 @@ func (me *T) QueryOne(args struct {
 	convert := make(map[string]interface{})
 	collection := me.C.Database(cfg.Database.DBName).Collection(args.Collection)
 	opts := options.FindOne().SetSort(args.Sort)
+
 	err = collection.FindOne(me.Ctx, args.Filter, opts).Decode(&result)
 	if err == mongo.ErrNoDocuments {
 		return nil, errors.New("NOT FOUND")
@@ -159,6 +195,8 @@ func (me *T) QueryAll(args struct {
 	*ret = json.RawMessage(r)
 	return convert, count, nil
 }
+
+
 
 func (me *T) Mutation(Collection string, Index string, Keys []string, reply interface{}) {
 
