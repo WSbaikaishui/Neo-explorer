@@ -21,7 +21,7 @@ func (me *T) GetCandidate(args struct {
 	}{
 		Collection: "Candidate",
 		Index:      "someIndex",
-		Sort:       bson.M{},
+		Sort:       bson.M{"votesOfCandidate":-1},
 		Filter:     bson.M{},
 		Query:      []string{},
 		Limit:      args.Limit,

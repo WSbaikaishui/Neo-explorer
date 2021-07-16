@@ -195,6 +195,44 @@ func (me *T) QueryAll(args struct {
 	*ret = json.RawMessage(r)
 	return convert, count, nil
 }
+func (me *T) QuerySum(args struct {
+	Collection string
+	Index      string
+	Sort       bson.M
+	Filter     bson.M
+	Query      []string
+}, ret *json.RawMessage) (map[string]int64, error) {
+	cfg, err := me.OpenConfigFile()
+	if err != nil {
+		return nil, err
+	}
+	var results []map[string]interface{}
+	convert := make(map[string]int64)
+	collection := me.C.Database(cfg.Database.DBName).Collection(args.Collection)
+	op := options.Find()
+	op.SetSort(args.Sort)
+	cursor, err := collection.Find(me.Ctx, args.Filter, op)
+	if err == mongo.ErrNoDocuments {
+		return nil, errors.New("NOT FOUNT")
+	}
+	if err != nil {
+		return nil, err
+	}
+	if err = cursor.All(me.Ctx, &results); err != nil {
+		return nil, err
+	}
+	for _, item := range results {
+
+		convert["Total Sys Fee"]+=item["sysfee"].(int64)
+	}
+	r, err := json.Marshal(convert)
+	if err != nil {
+		return nil, err
+	}
+	*ret = json.RawMessage(r)
+	return convert, nil
+
+}
 
 
 
