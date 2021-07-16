@@ -34,15 +34,13 @@ func (me *T) GetBlockInfoList(args struct {
 	}
 	r2 := make([]map[string]interface{}, 0)
 	for _, item := range r1 {
-		_, count, err := me.Data.Client.QueryAll(
+		r3, err := me.Data.Client.QueryDocument(
 			struct {
 			Collection string
 			Index      string
 			Sort       bson.M
 			Filter     bson.M
-			Query      []string
-			Limit      int64
-			Skip       int64
+
 		}{  Collection: "[Block~Transaction(Transactions)]",
 			Index: "someIndex",
 			Sort: bson.M{},
@@ -51,7 +49,7 @@ func (me *T) GetBlockInfoList(args struct {
 		if err != nil {
 			return err
 		}
-		item["transactionNumber"] = count
+		item["transactionNumber"] = r3["total counts"]
 		//delete(item,"_id")
 		r2 = append(r2, item)
 
@@ -63,3 +61,5 @@ func (me *T) GetBlockInfoList(args struct {
 	*ret = json.RawMessage(r)
 	return nil
 }
+
+
