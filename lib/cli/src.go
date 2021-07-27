@@ -223,7 +223,7 @@ func (me *T) QuerySum(args struct {
 	}
 	for _, item := range results {
 
-		convert["Total Sys Fee"]+=item["sysfee"].(int64)
+		convert["Total Votes"]+=item["votesOfCandidate"].(int64)
 	}
 	r, err := json.Marshal(convert)
 	if err != nil {

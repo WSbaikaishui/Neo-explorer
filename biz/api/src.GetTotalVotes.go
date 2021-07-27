@@ -7,7 +7,7 @@ import (
 	"neo3fura/var/stderr"
 )
 
-func (me *T) GetTotalSystemFeeByBlockHash(args struct {
+func (me *T) GetTotalVotes(args struct {
 	BlockHash h256.T
 	Limit     int64
 	Skip      int64
@@ -27,11 +27,11 @@ func (me *T) GetTotalSystemFeeByBlockHash(args struct {
 		Query      []string
 
 	}{
-		Collection: "Transaction",
+		Collection: "Candidate",
 		Index:      "someIndex",
 		Sort:       bson.M{},
-		Filter:     bson.M{"blockhash": args.BlockHash.Val()},
-		Query:      []string{"sysfee"},
+		Filter:     bson.M{},
+		Query:      []string{"votesOfCandidate"},
 	}, ret)
 	if err != nil {
 		return err
