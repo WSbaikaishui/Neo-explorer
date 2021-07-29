@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (me *T) GetAssetHoldersByContractHash(args struct {
+func (me *T) GetNep11HoldersByContractHash(args struct {
 	ContractHash h160.T
 	Limit        int64
 	Skip         int64
@@ -68,28 +68,32 @@ func (me *T) GetAssetHoldersByContractHash(args struct {
 		} else {
 			item["percentage"] = -1
 		}
-		var raw map[string]interface{}
+		var raw []map[string]interface{}
 		var filter map[string]interface{}
 		if args.Filter["balanceinfo"] == nil {
 			filter = nil
 		} else {
 			filter = args.Filter["balanceinfo"].(map[string]interface{})
 		}
-		err = me.GetBalanceByContractHashAddress(struct {
+		err = me.GetNep11BalanceByContractHashAddress(struct {
 			ContractHash h160.T
 			Address      h160.T
 			Filter       map[string]interface{}
-			Raw          *map[string]interface{}
+			Raw          *[]map[string]interface{}
+			Limit        int64
+			Skip         int64
 		}{
 			ContractHash: args.ContractHash,
 			Address:      h160.T(fmt.Sprint(item["address"])),
 			Filter:       filter,
 			Raw:          &raw,
+			Limit:        1000000,
+			Skip:         0,
 		}, ret)
 		if err != nil {
 			return err
 		}
-		item["lasttx"] = raw["latesttx"]
+		item["tokenlist"] = raw
 	}
 	r4, err := me.FilterArrayAndAppendCount(r2, count, args.Filter)
 	if err != nil {

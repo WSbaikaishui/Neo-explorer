@@ -2,21 +2,15 @@ package api
 
 import (
 	"encoding/json"
-	"neo3fura/lib/type/h160"
-	"neo3fura/var/stderr"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (me *T) GetNep17TransferByContractHash(args struct {
-	ContractHash h160.T
-	Limit        int64
-	Skip         int64
-	Filter       map[string]interface{}
+func (me *T) GetTokenList(args struct {
+	Limit  int64
+	Skip   int64
+	Filter map[string]interface{}
 }, ret *json.RawMessage) error {
-	if args.ContractHash.Valid() == false {
-		return stderr.ErrInvalidArgs
-	}
 	r1, count, err := me.Data.Client.QueryAll(struct {
 		Collection string
 		Index      string
@@ -26,11 +20,11 @@ func (me *T) GetNep17TransferByContractHash(args struct {
 		Limit      int64
 		Skip       int64
 	}{
-		Collection: "TransferNotification",
+		Collection: "Asset",
 		Index:      "someIndex",
-		Sort:       bson.M{"_id": -1},
-		Filter:     bson.M{"contract": args.ContractHash.Val()},
-		Query:      []string{},
+		Sort:       bson.M{},
+		Filter:     bson.M{},
+		Query:      []string{"hash", "tokenname", "symbol", "_id"},
 		Limit:      args.Limit,
 		Skip:       args.Skip,
 	}, ret)
@@ -38,24 +32,35 @@ func (me *T) GetNep17TransferByContractHash(args struct {
 		return err
 	}
 	for _, item := range r1 {
-		r, err := me.Data.Client.QueryOne(struct {
+		r, err := me.Data.Client.QueryDocument(struct {
+			Collection string
+			Index      string
+			Sort       bson.M
+			Filter     bson.M
+		}{
+			Collection: "Address-Asset",
+			Index:      "someIndex",
+			Sort:       bson.M{},
+			Filter:     bson.M{"asset": item["hash"]},
+		}, ret)
+		item["total_holders"] = r["total counts:"]
+		_, err = me.Data.Client.QueryOne(struct {
 			Collection string
 			Index      string
 			Sort       bson.M
 			Filter     bson.M
 			Query      []string
 		}{
-			Collection: "Block",
-			Index:      "someIndex",
-			Sort:       bson.M{},
-			Filter:     bson.M{"hash": item["blockhash"]},
-			Query:      []string{"timestamp"},
+			Collection: "TransferNotification", Index: "someIndex", Sort: bson.M{}, Filter: bson.M{"contract": item["hash"]}, Query: []string{},
 		}, ret)
 		if err != nil {
-			return err
+			item["standard"] = "NEP11"
+		} else {
+			item["standard"] = "NEP17"
 		}
-		item["time"] = r["timestamp"]
+		delete(item, "_id")
 	}
+
 	r2, err := me.FilterArrayAndAppendCount(r1, count, args.Filter)
 	if err != nil {
 		return err
