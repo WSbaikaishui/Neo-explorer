@@ -93,13 +93,13 @@ func(me *T) QueryDocument(args struct {
 	}
 	co := options.CountOptions{}
 	collection := me.C.Database(cfg.Database.DBName).Collection(args.Collection)
-	count, _ := collection.CountDocuments(me.Ctx,args.Filter,&co)
+	count, err := collection.CountDocuments(me.Ctx,args.Filter,&co)
 
 	if err == mongo.ErrNoDocuments {
 		return nil, errors.New("NOT FOUNT")
 	}
 	convert := make(map[string]interface{})
-	convert["total counts:"] = count
+	convert["total counts"] = count
 	r, err := json.Marshal(convert)
 	if err != nil {
 		return nil, err
@@ -190,34 +190,6 @@ func (me *T) QueryAggregate(args struct {
 	}
 	*ret = json.RawMessage(r)
 	return convert, nil
-}
-
-func (me *T) QueryDocument(args struct {
-	Collection string
-	Index      string
-	Sort       bson.M
-	Filter     bson.M
-}, ret *json.RawMessage) (map[string]interface{}, error) {
-	cfg, err := me.OpenConfigFile()
-	if err != nil {
-		return nil, err
-	}
-	co := options.CountOptions{}
-	collection := me.C.Database(cfg.Database.DBName).Collection(args.Collection)
-	count, _ := collection.CountDocuments(me.Ctx, args.Filter, &co)
-
-	if err == mongo.ErrNoDocuments {
-		return nil, errors.New("NOT FOUNT")
-	}
-	convert := make(map[string]interface{})
-	convert["total counts:"] = count
-	r, err := json.Marshal(convert)
-	if err != nil {
-		return nil, err
-	}
-	*ret = json.RawMessage(r)
-	return convert, nil
-
 }
 
 func (me *T) QueryAll(args struct {

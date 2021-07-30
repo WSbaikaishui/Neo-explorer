@@ -28,6 +28,10 @@ func (me *T) GetAssetInfoByContractHash(args struct {
 		Filter:     bson.M{"hash": args.ContractHash.Val()},
 		Query:      []string{},
 	}, ret)
+
+	if err != nil {
+		return err
+	}
 	r2, err := me.Data.Client.QueryDocument(struct {
 		Collection string
 		Index      string
